@@ -479,3 +479,12 @@ Changes from the design above, made during implementation:
 - **The downsample rule** is the smallest power-of-two `inSampleSize` that brings the long edge to ≤ 3508 px. There is no second rescale pass, which avoids a temporary second full-size bitmap.
 - **Routes are owned by each feature module** (`EditorDestination`, `CameraDestination`, …). `:app` composes the graphs.
 - **Share-in limitation in testing:** `adb shell am start --grant-read-uri-permission` cannot grant MediaStore URIs it doesn't own. Test share-in with a real sender app, and test import end to end via the Photo Picker.
+
+## 13. Implementation notes — M2 (processing engine)
+
+- **Confidence rule:** in addition to LLD §5.3 (area ≥ 20%, angles 45–135°), a quad is rejected if **any side lies along the frame border** (both endpoints within 2% of the same border). This covers screenshots, already-cropped scans and pages partly out of shot (QA T11–T13): the full image is kept.
+- **Detection passes:** adaptive Canny (0.66/1.33 × median), then a low fixed Canny (30/90) for light pages on light surfaces, then Otsu. The first confident quad wins.
+- **Renderer decode size** is chosen from the **cropped** area, so crops aren't under-resolved. Preview bases are cached by `(path, corners, target)` and the cache is checked before the file is touched.
+- **`PageRepository.upsert` was removed.** Imports finish with a targeted `completeImport` UPDATE (status, corners, `edit_version + 1`), so a page deleted during import can never be resurrected. Edits will use similar targeted updates (M3/M4).
+- **Mat lifetimes:** every OpenCV `Mat` is created through `withMats { track(...) }` and released in `finally`. `keep()` hands ownership to the caller.
+- **The OpenCV version is pinned to 4.9.0.** See the ADR-0009 implementation note (SVE SIGILL on Apple-silicon emulators).

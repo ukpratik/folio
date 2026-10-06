@@ -3,6 +3,7 @@ package io.github.ukpratik.folio.core.data.repo
 
 import io.github.ukpratik.folio.core.data.db.DocumentDao
 import io.github.ukpratik.folio.core.data.db.PageDao
+import io.github.ukpratik.folio.core.data.db.encode
 import io.github.ukpratik.folio.core.data.db.newDocumentEntity
 import io.github.ukpratik.folio.core.data.db.toEntity
 import io.github.ukpratik.folio.core.data.db.toModel
@@ -15,6 +16,7 @@ import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.Quad
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -58,7 +60,8 @@ internal class RoomPageRepository @Inject constructor(
 
     override suspend fun insertAll(pages: List<Page>) = dao.insertAll(pages.map { it.toEntity() })
 
-    override suspend fun upsert(page: Page) = dao.upsert(page.toEntity())
+    override suspend fun completeImport(id: PageId, autoCorners: Quad?, corners: Quad?) =
+        dao.completeImport(id.value, autoCorners?.encode(), corners?.encode())
 
     override suspend fun setStatus(id: PageId, status: PageStatus) = dao.setStatus(id.value, status.name)
 

@@ -6,6 +6,7 @@ import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.Quad
 import io.github.ukpratik.folio.core.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 
@@ -26,8 +27,10 @@ interface PageRepository {
     /** Highest order index in use, or -1 for an empty document. */
     suspend fun maxOrder(documentId: DocumentId): Int
     suspend fun insertAll(pages: List<Page>)
-    suspend fun upsert(page: Page)
     suspend fun setStatus(id: PageId, status: PageStatus)
+
+    /** Marks an imported page READY with its detected corners. Never resurrects a deleted row. */
+    suspend fun completeImport(id: PageId, autoCorners: Quad?, corners: Quad?)
     suspend fun reorder(documentId: DocumentId, orderedIds: List<PageId>)
     suspend fun softDelete(id: PageId)
     suspend fun restore(id: PageId)

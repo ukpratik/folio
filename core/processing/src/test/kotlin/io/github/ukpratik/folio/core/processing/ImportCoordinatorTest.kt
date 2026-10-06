@@ -9,6 +9,8 @@ import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.PointF01
+import io.github.ukpratik.folio.core.model.Quad
 import io.github.ukpratik.folio.core.processing.image.ImageNormalizer
 import io.github.ukpratik.folio.core.processing.image.NormalizedImage
 import io.github.ukpratik.folio.core.processing.image.UnsupportedImageException
@@ -28,6 +30,7 @@ class ImportCoordinatorTest {
     private val pages = FakePageRepository()
     private val files = FakeDocumentFiles()
     private val doc = DocumentId("doc")
+    private val detectedQuad = Quad(PointF01(0.1f, 0.1f), PointF01(0.9f, 0.1f), PointF01(0.9f, 0.9f), PointF01(0.1f, 0.9f))
 
     /** "content://ok/…" decodes; "content://bad/…" is damaged; anything else can't be opened. */
     private val normalizer = object : ImageNormalizer {
@@ -50,6 +53,7 @@ class ImportCoordinatorTest {
             }
         },
         normalizer = normalizer,
+        analyzer = { detectedQuad },
         files = files,
         pages = pages,
         config = ProcessingConfig(parallelism = 2),
@@ -76,6 +80,8 @@ class ImportCoordinatorTest {
         assertThat(pages.current.map { it.id.value to it.status }).containsExactly("p0" to PageStatus.READY, "p3" to PageStatus.READY)
         assertThat(files.sourceFile(doc, "s0").readBytes()).isEqualTo(byteArrayOf(1, 2, 3))
         assertThat(files.sourceFile(doc, "s1").exists()).isFalse()
+        assertThat(pages.current.first().corners).isEqualTo(detectedQuad)
+        assertThat(pages.current.first().autoCorners).isEqualTo(detectedQuad)
     }
 
     @Test fun pageDeletedDuringImportLeavesNoSource() = runTest {

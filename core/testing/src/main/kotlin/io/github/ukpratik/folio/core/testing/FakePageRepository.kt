@@ -6,6 +6,7 @@ import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.Quad
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -42,8 +43,8 @@ class FakePageRepository(private val clock: FakeClock = FakeClock()) : PageRepos
         rows.value = rows.value + pages.associate { it.id to Row(it) }
     }
 
-    override suspend fun upsert(page: Page) {
-        rows.value = rows.value + (page.id to Row(page, rows.value[page.id]?.deletedAt))
+    override suspend fun completeImport(id: PageId, autoCorners: Quad?, corners: Quad?) = edit(id) {
+        it.copy(page = it.page.copy(status = PageStatus.READY, autoCorners = autoCorners, corners = corners, editVersion = it.page.editVersion + 1))
     }
 
     override suspend fun setStatus(id: PageId, status: PageStatus) = edit(id) { it.copy(page = it.page.copy(status = status)) }

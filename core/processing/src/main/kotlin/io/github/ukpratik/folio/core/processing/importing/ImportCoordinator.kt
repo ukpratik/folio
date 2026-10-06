@@ -10,7 +10,7 @@ import io.github.ukpratik.folio.core.domain.engine.ImportProgress
 import io.github.ukpratik.folio.core.domain.files.DocumentFiles
 import io.github.ukpratik.folio.core.domain.repository.PageRepository
 import io.github.ukpratik.folio.core.model.DocumentId
-import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.Quad
 import io.github.ukpratik.folio.core.processing.ProcessingConfig
 import io.github.ukpratik.folio.core.processing.image.ImageNormalizer
 import java.io.File
@@ -39,6 +39,7 @@ import timber.log.Timber
 internal class ImportCoordinator @Inject constructor(
     private val opener: ContentOpener,
     private val normalizer: ImageNormalizer,
+    private val analyzer: ImportAnalyzer,
     private val files: DocumentFiles,
     private val pages: PageRepository,
     config: ProcessingConfig,
@@ -78,6 +79,9 @@ internal class ImportCoordinator @Inject constructor(
     private suspend fun process(job: ImportJob) {
         val succeeded = try {
             importOne(job)
+            val corners = detectCornersSafely(job)
+            // Single targeted UPDATE: a page deleted meanwhile stays deleted (no upsert resurrection).
+            pages.completeImport(job.pageId, autoCorners = corners, corners = corners)
             true
         } catch (e: CancellationException) {
             throw e
@@ -89,9 +93,7 @@ internal class ImportCoordinator @Inject constructor(
             false
         }
 
-        if (succeeded && pages.get(job.pageId) != null) {
-            pages.setStatus(job.pageId, PageStatus.READY)
-        } else {
+        if (!succeeded || pages.get(job.pageId) == null) {
             // Failed, or the page/document was deleted while importing: leave nothing behind.
             pages.deleteHard(listOf(job.pageId))
             files.deleteSource(job.documentId, job.sourceId)
@@ -101,6 +103,14 @@ internal class ImportCoordinator @Inject constructor(
             val next = if (succeeded) entry.copy(done = entry.done + 1) else entry.copy(failed = entry.failed + 1)
             current + (job.documentId to next)
         }
+    }
+
+    /** Detection is best-effort: a failure keeps the full image instead of failing the import. */
+    private fun detectCornersSafely(job: ImportJob): Quad? = try {
+        analyzer.detectCorners(files.sourceFile(job.documentId, job.sourceId))
+    } catch (e: Exception) {
+        Timber.w(e, "Corner detection failed")
+        null
     }
 
     private suspend fun importOne(job: ImportJob) {

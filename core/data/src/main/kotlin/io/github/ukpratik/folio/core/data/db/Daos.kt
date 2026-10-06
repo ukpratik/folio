@@ -46,8 +46,11 @@ interface PageDao {
     @Insert
     suspend fun insertAll(pages: List<PageEntity>)
 
-    @Upsert
-    suspend fun upsert(page: PageEntity)
+    @Query(
+        "UPDATE page SET status = 'READY', auto_corners = :autoCorners, corners = :corners, " +
+            "edit_version = edit_version + 1 WHERE id = :id",
+    )
+    suspend fun completeImport(id: String, autoCorners: String?, corners: String?)
 
     @Query("UPDATE page SET status = :status WHERE id = :id")
     suspend fun setStatus(id: String, status: String)

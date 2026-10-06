@@ -13,9 +13,15 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.exifinterface)
     implementation(libs.timber)
-    // OpenCV (core + imgproc) arrives in M2 (ADR-0009).
+    // Maven AAR for now; a slim core+imgproc source build replaces it before F-Droid (ADR-0009, ADR-0021).
+    implementation(libs.opencv)
 
     testImplementation(project(":core:testing"))
     testImplementation(libs.robolectric)
     testImplementation(libs.turbine)
+
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

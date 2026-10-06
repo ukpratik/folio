@@ -15,7 +15,7 @@ class MovePageTest {
     private val repo = FakePageRepository()
 
     private suspend fun seed(n: Int) = (0 until n).map { i ->
-        Page(id = PageId("p$i"), documentId = doc, order = i, sourceId = "s$i").also { repo.upsert(it) }
+        Page(id = PageId("p$i"), documentId = doc, order = i, sourceId = "s$i").also { repo.insertAll(listOf(it)) }
     }
 
     @Test fun movesPageAndKeepsOrderDense() = runTest {

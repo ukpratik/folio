@@ -12,7 +12,15 @@ import dagger.hilt.components.SingletonComponent
 import io.github.ukpratik.folio.core.domain.concurrency.ProcessingDispatcher
 import io.github.ukpratik.folio.core.domain.engine.ImportEngine
 import io.github.ukpratik.folio.core.processing.ProcessingConfig
+import io.github.ukpratik.folio.core.processing.detect.EdgeDetector
+import io.github.ukpratik.folio.core.processing.detect.OpenCvEdgeDetector
+import io.github.ukpratik.folio.core.processing.enhance.ImageEnhancer
+import io.github.ukpratik.folio.core.processing.enhance.OpenCvEnhancer
 import io.github.ukpratik.folio.core.processing.image.BitmapImageNormalizer
+import io.github.ukpratik.folio.core.processing.importing.EdgeDetectingImportAnalyzer
+import io.github.ukpratik.folio.core.processing.importing.ImportAnalyzer
+import io.github.ukpratik.folio.core.processing.render.OpenCvPageRenderer
+import io.github.ukpratik.folio.core.processing.render.PageRenderer
 import io.github.ukpratik.folio.core.processing.image.ImageNormalizer
 import io.github.ukpratik.folio.core.processing.importing.ContentOpener
 import io.github.ukpratik.folio.core.processing.importing.ContentResolverOpener
@@ -46,4 +54,12 @@ internal abstract class ProcessingBindsModule {
     @Binds abstract fun normalizer(impl: BitmapImageNormalizer): ImageNormalizer
 
     @Binds abstract fun opener(impl: ContentResolverOpener): ContentOpener
+
+    @Binds abstract fun edgeDetector(impl: OpenCvEdgeDetector): EdgeDetector
+
+    @Binds abstract fun enhancer(impl: OpenCvEnhancer): ImageEnhancer
+
+    @Binds abstract fun renderer(impl: OpenCvPageRenderer): PageRenderer
+
+    @Binds abstract fun importAnalyzer(impl: EdgeDetectingImportAnalyzer): ImportAnalyzer
 }

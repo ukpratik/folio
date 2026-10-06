@@ -13,6 +13,8 @@ android {
         applicationId = "io.github.ukpratik.folio" // permanent after first upload (ADR-0022)
         versionCode = 1
         versionName = "0.1.0"
+        // Phones are ARM. Dropping x86/x86_64 keeps OpenCV's native code out of the APK (NFR-08).
+        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
     }
 
     buildTypes {

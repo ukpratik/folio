@@ -26,7 +26,7 @@
 | Database | Room (KTX, KSP) | Apache 2.0 | [ADR-0007](adr/0007-persistence-room-datastore-files.md) |
 | Preferences | DataStore (Preferences) | Apache 2.0 | |
 | Camera | CameraX (core, camera2, lifecycle, view) | Apache 2.0 | [ADR-0008](adr/0008-camera-camerax.md) |
-| Image processing | OpenCV for Android (slim build: core + imgproc) | Apache 2.0 | [ADR-0009](adr/0009-image-processing-opencv.md) |
+| Image processing | OpenCV for Android 4.9.0 AAR now; slim core + imgproc source build before F-Droid (see ADR-0009 note) | Apache 2.0 | [ADR-0009](adr/0009-image-processing-opencv.md) |
 | EXIF | `androidx.exifinterface` | Apache 2.0 | |
 | Thumbnails | Coil 3 (`coil-compose` **without** any `coil-network-*` artifact) | Apache 2.0 | [ADR-0016](adr/0016-image-loading-coil.md) |
 | Grid reorder | `sh.calvin.reorderable` | Apache 2.0 | D-33 |
