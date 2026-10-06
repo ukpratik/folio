@@ -40,4 +40,6 @@ data class Page(
     val adjustments: Adjustments = Adjustments(),
     val status: PageStatus = PageStatus.IMPORTING,
     val editVersion: Long = 0,
+    /** Epoch millis. Lets startup recovery ignore pages created in the current session. */
+    val createdAt: Long = 0,
 )

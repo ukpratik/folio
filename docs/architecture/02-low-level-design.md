@@ -466,3 +466,16 @@ Bitmaps live in native memory on API 26+. We still bound them because the low-me
 | PdfWriter | JVM golden tests, parsed with Apache PDFBox (test-only); `qpdf --check` in CI |
 | Coordinators | `TestScope` + `StandardTestDispatcher`, Turbine for Flows |
 | UI | Compose UI tests; Roborazzi screenshot tests (light, dark, 200% font, 360 dp) |
+
+## 12. Implementation notes — M1 (import pipeline)
+
+Changes from the design above, made during implementation:
+
+- **`page.created_at`** was added to the v1 schema. Startup recovery only touches IMPORTING, FAILED or soft-deleted rows created or deleted **before the current session started** (`SessionInfo`, injected eagerly in `FolioApp`). This stops recovery racing with a share-in import, or with an Undo snackbar, that began after launch.
+- **`DocumentFiles` lives in `:core:domain`** and is implemented by `FileStore` in `:core:data`. Processing and use cases depend on the interface, so `:core:processing` never depends on `:core:data` (ADR-0005).
+- **`RecoverOnStartup` is a domain use case** (pure Kotlin, tested with fakes). It is not a data-layer class.
+- **Page rows are created by `AddPages`**, before the engine runs, so order is decided in the domain and the editor shows placeholders immediately. `ImportEngine` only fills existing rows. On failure it removes the row and its source.
+- **Format detection is by magic bytes** (`ImageFormatSniffer`): JPEG, PNG, WebP, BMP, GIF, HEIF. HEIF uses `ImageDecoder` on API 28+. Everything else uses `BitmapFactory` plus a manual EXIF transform.
+- **The downsample rule** is the smallest power-of-two `inSampleSize` that brings the long edge to ≤ 3508 px. There is no second rescale pass, which avoids a temporary second full-size bitmap.
+- **Routes are owned by each feature module** (`EditorDestination`, `CameraDestination`, …). `:app` composes the graphs.
+- **Share-in limitation in testing:** `adb shell am start --grant-read-uri-permission` cannot grant MediaStore URIs it doesn't own. Test share-in with a real sender app, and test import end to end via the Photo Picker.

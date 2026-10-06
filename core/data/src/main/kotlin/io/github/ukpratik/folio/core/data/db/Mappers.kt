@@ -77,6 +77,7 @@ internal fun PageEntity.toModel() = Page(
     adjustments = Adjustments(brightness, contrast),
     status = PageStatus.valueOf(status),
     editVersion = editVersion,
+    createdAt = createdAt,
 )
 
 internal fun Page.toEntity() = PageEntity(
@@ -92,6 +93,7 @@ internal fun Page.toEntity() = PageEntity(
     contrast = adjustments.contrast,
     status = status.name,
     editVersion = editVersion,
+    createdAt = createdAt,
 )
 
 internal fun Quad.encode(): String = listOf(tl, tr, br, bl).joinToString(";") { "${it.x},${it.y}" }

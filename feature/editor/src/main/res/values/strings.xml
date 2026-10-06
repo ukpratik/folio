@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="editor_back">Back</string>
+    <string name="editor_create_pdf">Create PDF</string>
+    <string name="editor_page_ready">Ready</string>
+    <string name="editor_page_importing">Adding…</string>
+    <string name="editor_page_failed">Couldn\'t add</string>
+    <string name="editor_page_row">Page %1$d · %2$s</string>
+    <plurals name="editor_page_count">
+        <item quantity="one">%1$d page</item>
+        <item quantity="other">%1$d pages</item>
+    </plurals>
+    <plurals name="import_adding">
+        <item quantity="one">Adding %1$d photo… %2$d done</item>
+        <item quantity="other">Adding %1$d photos… %2$d done</item>
+    </plurals>
+    <plurals name="import_failed">
+        <item quantity="one">%1$d image couldn\'t be added (unsupported or damaged).</item>
+        <item quantity="other">%1$d images couldn\'t be added (unsupported or damaged).</item>
+    </plurals>
+</resources>

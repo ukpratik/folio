@@ -7,16 +7,9 @@ import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.Quad
 import io.github.ukpratik.folio.core.processing.pdf.PdfPageSpec
 import java.io.File
-import java.io.InputStream
 import java.io.OutputStream
 
 /** Processing-engine contracts (LLD §5.1). Implementations land with epics E2–E7 after spikes S1–S4. */
-
-data class NormalizeResult(val sourceId: String, val widthPx: Int, val heightPx: Int)
-
-interface ImageNormalizer {
-    suspend fun normalize(input: InputStream, mime: String?, out: File): NormalizeResult
-}
 
 data class Detection(val quad: Quad, val confidence: Float)
 

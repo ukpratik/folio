@@ -5,6 +5,8 @@ import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
+import io.github.ukpratik.folio.core.model.PageStatus
+import io.github.ukpratik.folio.core.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface DocumentRepository {
@@ -12,13 +14,34 @@ interface DocumentRepository {
     fun observe(id: DocumentId): Flow<Document?>
     suspend fun create(title: String): Document
     suspend fun rename(id: DocumentId, title: String)
+    suspend fun touch(id: DocumentId)
     suspend fun delete(id: DocumentId)
 }
 
 interface PageRepository {
     fun observePages(documentId: DocumentId): Flow<List<Page>>
+    suspend fun get(id: PageId): Page?
+    suspend fun count(documentId: DocumentId): Int
+
+    /** Highest order index in use, or -1 for an empty document. */
+    suspend fun maxOrder(documentId: DocumentId): Int
+    suspend fun insertAll(pages: List<Page>)
     suspend fun upsert(page: Page)
+    suspend fun setStatus(id: PageId, status: PageStatus)
     suspend fun reorder(documentId: DocumentId, orderedIds: List<PageId>)
     suspend fun softDelete(id: PageId)
     suspend fun restore(id: PageId)
+
+    /** Permanently removes rows. Callers are responsible for source-file reference counting. */
+    suspend fun deleteHard(ids: List<PageId>)
+
+    /** Rows (including soft-deleted ones) that still use [sourceId]. */
+    suspend fun countSourceReferences(documentId: DocumentId, sourceId: String): Int
+    suspend fun findWithStatusCreatedBefore(status: PageStatus, before: Long): List<Page>
+    suspend fun findSoftDeletedBefore(before: Long): List<Page>
+}
+
+interface PreferencesRepository {
+    val preferences: Flow<UserPreferences>
+    suspend fun update(transform: (UserPreferences) -> UserPreferences)
 }

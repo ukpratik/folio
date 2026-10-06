@@ -29,16 +29,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import android.widget.Toast
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.Limits
+import io.github.ukpratik.folio.core.ui.text.resolveWith
 
 /** Photo Picker import cap per document (FR-01). */
-private const val MAX_PICK = 100
+private const val MAX_PICK = Limits.MAX_PAGES
 
 @Composable
 fun HomeRoute(
@@ -51,12 +55,14 @@ fun HomeRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     // Photo Picker: no storage permission on any API level (ADR-0014).
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_PICK)) { uris ->
-        viewModel.onImagesPicked(uris.size)
+        viewModel.onIntent(HomeIntent.ImagesPicked(uris.map { it.toString() }))
     }
+    val context = LocalContext.current
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 is HomeEffect.OpenEditor -> onOpenDocument(effect.documentId)
+                is HomeEffect.ShowMessage -> Toast.makeText(context, effect.text.resolveWith(context), Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -15,4 +15,5 @@
     <string name="privacy_headline">Your documents never leave your phone</string>
     <string name="privacy_body">Folio has no internet access, no account, no ads and no tracking. Everything happens on your phone, and Folio doesn\'t back up your documents to any cloud. When you share or save a file to another app, that app receives it.</string>
     <string name="back">Back</string>
+    <string name="import_page_limit">You can add up to %1$d pages per document.</string>
 </resources>

@@ -2,47 +2,45 @@
 package io.github.ukpratik.folio
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
-import io.github.ukpratik.folio.feature.capture.CameraScreen
-import io.github.ukpratik.folio.feature.editor.EditorScreen
-import io.github.ukpratik.folio.feature.export.ExportScreen
-import io.github.ukpratik.folio.feature.home.HomeRoute
-import io.github.ukpratik.folio.feature.home.PrivacyScreen
-import io.github.ukpratik.folio.feature.home.SettingsScreen
-import kotlinx.serialization.Serializable
+import io.github.ukpratik.folio.feature.capture.CameraDestination
+import io.github.ukpratik.folio.feature.capture.cameraScreen
+import io.github.ukpratik.folio.feature.editor.editorScreen
+import io.github.ukpratik.folio.feature.editor.navigateToEditor
+import io.github.ukpratik.folio.feature.export.ExportDestination
+import io.github.ukpratik.folio.feature.export.exportScreen
+import io.github.ukpratik.folio.feature.home.HomeDestination
+import io.github.ukpratik.folio.feature.home.PrivacyDestination
+import io.github.ukpratik.folio.feature.home.SettingsDestination
+import io.github.ukpratik.folio.feature.home.homeGraph
+import kotlinx.coroutines.flow.Flow
 
-// Type-safe routes carry IDs only; screens load state from Room (ADR-0015, LLD §7).
-@Serializable data object HomeDestination
-@Serializable data object SettingsDestination
-@Serializable data object PrivacyDestination
-@Serializable data class CameraDestination(val documentId: String? = null)
-@Serializable data class EditorDestination(val documentId: String)
-@Serializable data class ExportDestination(val documentId: String)
-
+/** Composes the feature graphs. Features never reference each other; all cross-feature navigation lives here. */
 @Composable
-fun FolioNavHost() {
+fun FolioNavHost(mainEffects: Flow<MainEffect>) {
     val nav = rememberNavController()
+    LaunchedEffect(nav) {
+        mainEffects.collect { effect ->
+            when (effect) {
+                is MainEffect.OpenEditor -> nav.navigateToEditor(effect.documentId)
+            }
+        }
+    }
     NavHost(navController = nav, startDestination = HomeDestination) {
-        composable<HomeDestination> {
-            HomeRoute(
-                onScan = { nav.navigate(CameraDestination()) },
-                onOpenDocument = { nav.navigate(EditorDestination(it.value)) },
-                onSettings = { nav.navigate(SettingsDestination) },
-                onPrivacy = { nav.navigate(PrivacyDestination) },
-            )
-        }
-        composable<SettingsDestination> {
-            SettingsScreen(onBack = nav::popBackStack, onPrivacy = { nav.navigate(PrivacyDestination) })
-        }
-        composable<PrivacyDestination> { PrivacyScreen(onBack = nav::popBackStack) }
-        composable<CameraDestination> { CameraScreen(onBack = nav::popBackStack) }
-        composable<EditorDestination> { entry ->
-            val id = entry.toRoute<EditorDestination>().documentId
-            EditorScreen(onBack = nav::popBackStack, detail = "Document $id")
-        }
-        composable<ExportDestination> { ExportScreen(onBack = nav::popBackStack) }
+        homeGraph(
+            onScan = { nav.navigate(CameraDestination()) },
+            onOpenDocument = nav::navigateToEditor,
+            onOpenSettings = { nav.navigate(SettingsDestination) },
+            onOpenPrivacy = { nav.navigate(PrivacyDestination) },
+            onBack = { nav.popBackStack() },
+        )
+        cameraScreen(onBack = { nav.popBackStack() })
+        editorScreen(
+            onBack = { nav.popBackStack() },
+            onCreatePdf = { nav.navigate(ExportDestination(it.value)) },
+        )
+        exportScreen(onBack = { nav.popBackStack() })
     }
 }

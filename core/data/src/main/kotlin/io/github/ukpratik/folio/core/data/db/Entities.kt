@@ -40,7 +40,7 @@ data class DocumentEntity(
             onDelete = ForeignKey.CASCADE,
         ),
     ],
-    indices = [Index(value = ["document_id", "order_index"]), Index(value = ["source_id"])],
+    indices = [Index(value = ["document_id", "order_index"]), Index(value = ["document_id", "source_id"]), Index(value = ["status"])],
 )
 data class PageEntity(
     @PrimaryKey val id: String,
@@ -56,5 +56,6 @@ data class PageEntity(
     val contrast: Float,
     val status: String,
     @ColumnInfo(name = "edit_version") val editVersion: Long,
+    @ColumnInfo(name = "created_at") val createdAt: Long,
     @ColumnInfo(name = "deleted_at") val deletedAt: Long? = null,
 )

@@ -5,7 +5,7 @@ plugins {
 
 dependencies {
     api(project(":core:model"))
-    implementation(project(":core:domain"))
+    api(project(":core:domain"))
     api(libs.kotlinx.coroutines.test)
     api(libs.junit)
     api(libs.truth)

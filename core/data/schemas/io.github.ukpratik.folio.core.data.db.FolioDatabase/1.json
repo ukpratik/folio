@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "17b3746c121e89e1a4d2cc658a8fe49d",
+    "identityHash": "682a9c85cb9272f344cee81df96e5f64",
     "entities": [
       {
         "tableName": "document",
@@ -130,7 +130,7 @@
       },
       {
         "tableName": "page",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `document_id` TEXT NOT NULL, `order_index` INTEGER NOT NULL, `source_id` TEXT NOT NULL, `corners` TEXT, `auto_corners` TEXT, `rotation` INTEGER NOT NULL, `mode` TEXT NOT NULL, `brightness` REAL NOT NULL, `contrast` REAL NOT NULL, `status` TEXT NOT NULL, `edit_version` INTEGER NOT NULL, `deleted_at` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`document_id`) REFERENCES `document`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `document_id` TEXT NOT NULL, `order_index` INTEGER NOT NULL, `source_id` TEXT NOT NULL, `corners` TEXT, `auto_corners` TEXT, `rotation` INTEGER NOT NULL, `mode` TEXT NOT NULL, `brightness` REAL NOT NULL, `contrast` REAL NOT NULL, `status` TEXT NOT NULL, `edit_version` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, `deleted_at` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`document_id`) REFERENCES `document`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -203,6 +203,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
             "fieldPath": "deletedAt",
             "columnName": "deleted_at",
             "affinity": "INTEGER"
@@ -226,13 +232,23 @@
             "createSql": "CREATE INDEX IF NOT EXISTS `index_page_document_id_order_index` ON `${TABLE_NAME}` (`document_id`, `order_index`)"
           },
           {
-            "name": "index_page_source_id",
+            "name": "index_page_document_id_source_id",
             "unique": false,
             "columnNames": [
+              "document_id",
               "source_id"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_page_source_id` ON `${TABLE_NAME}` (`source_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_page_document_id_source_id` ON `${TABLE_NAME}` (`document_id`, `source_id`)"
+          },
+          {
+            "name": "index_page_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_page_status` ON `${TABLE_NAME}` (`status`)"
           }
         ],
         "foreignKeys": [
@@ -252,7 +268,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17b3746c121e89e1a4d2cc658a8fe49d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682a9c85cb9272f344cee81df96e5f64')"
     ]
   }
 }

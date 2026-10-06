@@ -12,10 +12,14 @@ import dagger.hilt.components.SingletonComponent
 import io.github.ukpratik.folio.core.data.db.DocumentDao
 import io.github.ukpratik.folio.core.data.db.FolioDatabase
 import io.github.ukpratik.folio.core.data.db.PageDao
+import io.github.ukpratik.folio.core.data.files.FileStore
+import io.github.ukpratik.folio.core.data.prefs.DataStorePreferencesRepository
 import io.github.ukpratik.folio.core.data.repo.RoomDocumentRepository
 import io.github.ukpratik.folio.core.data.repo.RoomPageRepository
 import io.github.ukpratik.folio.core.domain.repository.DocumentRepository
+import io.github.ukpratik.folio.core.domain.files.DocumentFiles
 import io.github.ukpratik.folio.core.domain.repository.PageRepository
+import io.github.ukpratik.folio.core.domain.repository.PreferencesRepository
 import javax.inject.Singleton
 
 @Module
@@ -36,4 +40,8 @@ internal abstract class RepositoryModule {
     @Binds abstract fun documents(impl: RoomDocumentRepository): DocumentRepository
 
     @Binds abstract fun pages(impl: RoomPageRepository): PageRepository
+
+    @Binds abstract fun preferences(impl: DataStorePreferencesRepository): PreferencesRepository
+
+    @Binds @Singleton abstract fun files(impl: FileStore): DocumentFiles
 }
