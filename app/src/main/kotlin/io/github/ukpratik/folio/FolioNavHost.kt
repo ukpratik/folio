@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import io.github.ukpratik.folio.feature.capture.CameraDestination
 import io.github.ukpratik.folio.feature.capture.cameraScreen
+import io.github.ukpratik.folio.feature.editor.detail.navigateToPageDetail
+import io.github.ukpratik.folio.feature.editor.detail.pageDetailScreen
 import io.github.ukpratik.folio.feature.editor.editorScreen
 import io.github.ukpratik.folio.feature.editor.navigateToEditor
 import io.github.ukpratik.folio.feature.export.ExportDestination
@@ -40,9 +42,10 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
         editorScreen(
             onClose = { nav.popBackStack() },
             onScan = { nav.navigate(CameraDestination(it.value)) },
-            onOpenPage = { _, _ -> /* Page detail arrives in M4. */ },
+            onOpenPage = nav::navigateToPageDetail,
             onCreatePdf = { nav.navigate(ExportDestination(it.value)) },
         )
+        pageDetailScreen(onClose = { nav.popBackStack() })
         exportScreen(onBack = { nav.popBackStack() })
     }
 }

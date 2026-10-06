@@ -73,7 +73,12 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
         return gray
     }
 
-    /** Adaptive threshold handles uneven lighting across a photographed page. */
+    /**
+     * Adaptive threshold handles uneven lighting across a photographed page, but on its own it hollows out any
+     * dark area larger than its block (filled stamps, bold headings, photos become outlines). So a pixel is also
+     * black when it is clearly dark for the whole page: below [SOLID_DARK_FRACTION] of the midpoint between the
+     * ink and paper means (split by Otsu). Paper in shadow stays well above that line.
+     */
     private fun MatScope.blackAndWhite(rgb: Mat): Mat {
         val gray = track(Mat())
         Imgproc.cvtColor(rgb, gray, Imgproc.COLOR_RGB2GRAY)
@@ -81,6 +86,16 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
         val block = max(15, gray.cols() / 30) or 1 // odd
         val bw = track(Mat())
         Imgproc.adaptiveThreshold(gray, bw, 255.0, Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C, Imgproc.THRESH_BINARY, block, 10.0)
+
+        val paperMask = track(Mat())
+        Imgproc.threshold(gray, paperMask, 0.0, 255.0, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU)
+        val inkMask = track(Mat())
+        Core.bitwise_not(paperMask, inkMask)
+        val paperMean = Core.mean(gray, paperMask).`val`[0]
+        val inkMean = Core.mean(gray, inkMask).`val`[0]
+        val notSolidDark = track(Mat())
+        Imgproc.threshold(gray, notSolidDark, (inkMean + paperMean) / 2 * SOLID_DARK_FRACTION, 255.0, Imgproc.THRESH_BINARY)
+        Core.bitwise_and(bw, notSolidDark, bw) // black if either says black
         return bw
     }
 
@@ -125,6 +140,8 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
         /** Pixels at or above this luminance percentile are treated as paper for white balance. */
         const val PAPER_PERCENTILE = 0.90
         const val MIN_GAIN = 0.85
+        /** Pixels darker than this fraction of the ink/paper midpoint stay solid black in B&W. */
+        const val SOLID_DARK_FRACTION = 0.8
         const val MAX_GAIN = 1.2
     }
 }

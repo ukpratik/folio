@@ -55,6 +55,27 @@ interface PageDao {
     @Query("UPDATE page SET rotation = :degrees, edit_version = edit_version + 1 WHERE id = :id")
     suspend fun setRotation(id: String, degrees: Int)
 
+    @Query("UPDATE page SET corners = :corners, edit_version = edit_version + 1 WHERE id = :id")
+    suspend fun setCorners(id: String, corners: String?)
+
+    @Query(
+        "UPDATE page SET mode = :mode, brightness = :brightness, contrast = :contrast, " +
+            "edit_version = edit_version + 1 WHERE id = :id",
+    )
+    suspend fun setEnhancement(id: String, mode: String, brightness: Float, contrast: Float)
+
+    /** Apply-to-all and its Undo write every page in one transaction. */
+    @Transaction
+    suspend fun setEnhancements(changes: List<Triple<String, String, Pair<Float, Float>>>) {
+        changes.forEach { (id, mode, adj) -> setEnhancement(id, mode, adj.first, adj.second) }
+    }
+
+    @Query(
+        "UPDATE page SET corners = auto_corners, rotation = 0, mode = 'AUTO', brightness = 0, contrast = 0, " +
+            "edit_version = edit_version + 1 WHERE id = :id",
+    )
+    suspend fun reset(id: String)
+
     @Transaction
     suspend fun insertAndReorder(page: PageEntity, orderedIds: List<String>) {
         insertAll(listOf(page))

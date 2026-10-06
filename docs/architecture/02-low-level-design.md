@@ -500,3 +500,16 @@ Changes from the design above, made during implementation:
 - **Detected corners are inset by 2.5 px** (at analysis scale) to remove the thin line of table that Canny plus dilation left along the crop edges.
 - **The grid has no item fade-in.** Placement animation stays for reordering. Note: the software-rendered emulator stalls frames until input, so screenshots taken without a tap can show mid-animation states. That is an emulator artefact, not an app bug.
 - **Screenshot tests:** Roborazzi (Robolectric, native graphics) is wired through the feature convention plugin. Golden images live in `feature/*/src/test/screenshots/`. Record with `./gradlew testDebugUnitTest -Proborazzi.test.record=true`; verify with `verifyRoborazziDebug`.
+
+## 15. Implementation notes — M4 (page detail)
+
+- **Screen:** `PageDetailDestination(documentId, pageId)`, a `HorizontalPager` over the document's pages (swipe disabled on the Crop tab), with the shared header (back · Page x of n · ⋮ Reset · Done) and Crop / Rotate / Enhance tabs. It is always dark (design S4).
+- **Commit model (D-29):** corners save on finger-up; mode, rotate, Auto/Full image and Reset save immediately; sliders show a **draft** at once and persist after a 150 ms debounce. The debounce flow keeps the **latest** value (`DROP_OLDEST`). A test caught an earlier version that dropped newer values and saved the first slider position.
+- **Apply to all pages** writes every page in one Room transaction and returns the previous looks. Undo (5 s snackbar) restores each page exactly.
+- **Crop editor:** Compose `Canvas` showing the unedited source (loaded through Coil at about 1080 px), the image dimmed outside the quad, 48 dp handles (hit radius 72 dp), and a 2× loupe drawn from the same bitmap. The maths (fit rect, mapping, nearest handle, 1% nudge) is in pure `CropMath`, unit-tested. Each corner is an invisible focusable node with TalkBack nudge actions.
+- **Thumbnail cache key** is now the render inputs (source, corners, rotation, mode, adjustments, size) instead of `editVersion`. Different views of one page (the original in the crop tab vs. the edited preview) can't collide, and identical duplicates share cache entries.
+- **Theme:** M3 `secondary*` roles set to teal (selected chips, nav indicator, slider tracks were baseline purple).
+- **Enhancement fixes found on the device:**
+  - **B&W** adaptive threshold hollowed out solid dark areas, so a filled block became an outline. Pixels below 80% of the ink/paper midpoint (Otsu split) are now kept black.
+  - Mode selector: four equal icon tiles with labels underneath. Chips truncated "Grayscale" at 390 dp.
+- **Known minor issue:** a faint 1 px dotted edge can remain on one side of tightly cropped B&W pages. Track in QA (T01/T10).

@@ -12,6 +12,7 @@ import io.github.ukpratik.folio.core.domain.repository.PageRepository
 import io.github.ukpratik.folio.core.domain.time.Clock
 import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.Enhancement
 import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
@@ -62,6 +63,14 @@ internal class RoomPageRepository @Inject constructor(
     override suspend fun insertAll(pages: List<Page>) = dao.insertAll(pages.map { it.toEntity() })
 
     override suspend fun setRotation(id: PageId, rotation: Rotation) = dao.setRotation(id.value, rotation.degrees)
+
+    override suspend fun setCorners(id: PageId, corners: Quad?) = dao.setCorners(id.value, corners?.encode())
+
+    override suspend fun setEnhancements(changes: Map<PageId, Enhancement>) = dao.setEnhancements(
+        changes.map { (id, e) -> Triple(id.value, e.mode.name, e.adjustments.brightness to e.adjustments.contrast) },
+    )
+
+    override suspend fun reset(id: PageId) = dao.reset(id.value)
 
     override suspend fun insertAndReorder(page: Page, orderedIds: List<PageId>) =
         dao.insertAndReorder(page.toEntity(), orderedIds.map { it.value })

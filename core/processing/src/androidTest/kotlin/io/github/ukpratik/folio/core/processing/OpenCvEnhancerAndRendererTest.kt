@@ -59,6 +59,20 @@ class OpenCvEnhancerAndRendererTest {
         listOf(src, auto, gray).forEach(Mat::release)
     }
 
+    /** Regression: adaptive threshold alone turned a filled red block into a hollow outline. */
+    @Test fun blackAndWhiteKeepsSolidDarkAreasFilled() {
+        val pixels = IntArray(400 * 500) { i ->
+            val x = i % 400
+            val y = i / 400
+            if (x in 80..320 && y in 100..260) Color.rgb(200, 40, 40) else Color.rgb(242, 242, 236)
+        }
+        val src = rgbOf(Bitmap.createBitmap(pixels, 400, 500, Bitmap.Config.ARGB_8888))
+        val bw = enhancer.enhance(src, EnhancementMode.BW, Adjustments())
+        assertThat(bw.get(180, 200)[0]).isEqualTo(0.0) // centre of the block is black, not white
+        assertThat(bw.get(400, 200)[0]).isEqualTo(255.0) // paper stays white
+        listOf(src, bw).forEach(Mat::release)
+    }
+
     /** Regression: a per-channel stretch turned a blue stamp black and tinted white paper yellow. */
     @Test fun autoKeepsColoursNatural() {
         val pixels = IntArray(300 * 400) { i ->

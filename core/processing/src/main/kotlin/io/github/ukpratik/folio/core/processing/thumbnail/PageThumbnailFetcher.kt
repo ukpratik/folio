@@ -37,8 +37,12 @@ class PageThumbnailFetcherFactory @Inject internal constructor(
         PageThumbnailFetcher(data, renderer, files)
 }
 
-/** Any edit bumps editVersion, so exactly that page's thumbnail is re-rendered. */
+/**
+ * The key is the render's inputs: same source + same edits + same size → same pixels. Any edit changes it, and
+ * different views of one page (e.g. the unedited original in the crop tab) never collide.
+ */
 class PageThumbnailKeyer @Inject constructor() : Keyer<PageThumbnail> {
-    override fun key(data: PageThumbnail, options: Options): String =
-        "page:${data.page.sourceId}:${data.page.id.value}:${data.page.editVersion}:${data.sizePx}"
+    override fun key(data: PageThumbnail, options: Options): String = with(data.page) {
+        "page:${documentId.value}:$sourceId:$corners:${rotation.degrees}:$mode:${adjustments.brightness}:${adjustments.contrast}:${data.sizePx}"
+    }
 }

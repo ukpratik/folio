@@ -15,12 +15,21 @@ enum class Rotation(val degrees: Int) {
     R0(0), R90(90), R180(180), R270(270);
 
     fun clockwise(): Rotation = entries[(ordinal + 1) % entries.size]
+
+    fun counterClockwise(): Rotation = entries[(ordinal + entries.size - 1) % entries.size]
 }
 
 enum class EnhancementMode { ORIGINAL, AUTO, GRAYSCALE, BW }
 
 /** Brightness and contrast, each -1..1 (0 = unchanged). */
-data class Adjustments(val brightness: Float = 0f, val contrast: Float = 0f)
+data class Adjustments(val brightness: Float = 0f, val contrast: Float = 0f) {
+    init {
+        require(brightness in -1f..1f && contrast in -1f..1f) { "Adjustments must be within -1..1" }
+    }
+}
+
+/** A page's look (FR-12/13): what "Apply to all pages" copies. */
+data class Enhancement(val mode: EnhancementMode, val adjustments: Adjustments)
 
 enum class PageStatus { IMPORTING, READY, FAILED }
 
@@ -42,4 +51,6 @@ data class Page(
     val editVersion: Long = 0,
     /** Epoch millis. Lets startup recovery ignore pages created in the current session. */
     val createdAt: Long = 0,
-)
+) {
+    val enhancement: Enhancement get() = Enhancement(mode, adjustments)
+}

@@ -2,7 +2,10 @@
 package io.github.ukpratik.folio.core.testing
 
 import io.github.ukpratik.folio.core.domain.repository.PageRepository
+import io.github.ukpratik.folio.core.model.Adjustments
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.Enhancement
+import io.github.ukpratik.folio.core.model.EnhancementMode
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
@@ -46,6 +49,23 @@ class FakePageRepository(private val clock: FakeClock = FakeClock()) : PageRepos
 
     override suspend fun setRotation(id: PageId, rotation: Rotation) = edit(id) {
         it.copy(page = it.page.copy(rotation = rotation, editVersion = it.page.editVersion + 1))
+    }
+
+    override suspend fun setCorners(id: PageId, corners: Quad?) = edit(id) {
+        it.copy(page = it.page.copy(corners = corners, editVersion = it.page.editVersion + 1))
+    }
+
+    override suspend fun setEnhancements(changes: Map<PageId, Enhancement>) = changes.forEach { (id, e) ->
+        edit(id) { it.copy(page = it.page.copy(mode = e.mode, adjustments = e.adjustments, editVersion = it.page.editVersion + 1)) }
+    }
+
+    override suspend fun reset(id: PageId) = edit(id) {
+        it.copy(
+            page = it.page.copy(
+                corners = it.page.autoCorners, rotation = Rotation.R0, mode = EnhancementMode.AUTO,
+                adjustments = Adjustments(), editVersion = it.page.editVersion + 1,
+            ),
+        )
     }
 
     override suspend fun insertAndReorder(page: Page, orderedIds: List<PageId>) {

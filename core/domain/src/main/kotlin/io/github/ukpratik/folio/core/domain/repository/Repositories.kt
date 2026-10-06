@@ -3,6 +3,7 @@ package io.github.ukpratik.folio.core.domain.repository
 
 import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.Enhancement
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
@@ -32,6 +33,13 @@ interface PageRepository {
 
     /** Sets the rotation and bumps the edit version (thumbnail cache key). */
     suspend fun setRotation(id: PageId, rotation: Rotation)
+
+    /** Each of these targeted updates bumps the edit version (thumbnail cache, LLD §5.4). */
+    suspend fun setCorners(id: PageId, corners: Quad?)
+    suspend fun setEnhancements(changes: Map<PageId, Enhancement>)
+
+    /** FR-11: back to the imported state — auto-detected crop, no rotation, Auto mode, no adjustments. */
+    suspend fun reset(id: PageId)
 
     /** Inserts [page] and rewrites the document's order to [orderedIds] in one transaction. */
     suspend fun insertAndReorder(page: Page, orderedIds: List<PageId>)
