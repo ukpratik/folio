@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Creating PDF</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 0 32px 40px">
+
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; width: 100%">
+    <div aria-hidden="true" style="position: relative; width: 140px; height: 168px">
+      <div style="position: absolute; left: 0; top: 18px; width: 104px; height: 140px; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 10px; transform: rotate(-6deg)"></div>
+      <div style="position: absolute; left: 30px; top: 6px; width: 104px; height: 140px; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 10px; box-shadow: 0 6px 18px rgba(21,24,28,0.1); box-sizing: border-box; padding: 18px 14px; display: flex; flex-direction: column; gap: 8px">
+        <div style="height: 7px; width: 60%; background: #0D6B62; border-radius: 4px"></div>
+        <div style="height: 5px; background: #E3E5E8; border-radius: 3px"></div>
+        <div style="height: 5px; background: #E3E5E8; border-radius: 3px"></div>
+        <div style="height: 5px; width: 70%; background: #E3E5E8; border-radius: 3px"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 700">{{headline}}</h1>
+      <p role="status" style="margin: 0; font-size: 15px; color: #545B63">{{status}}</p>
+    </div>
+
+    <div role="progressbar" aria-label="PDF progress" aria-valuemin="0" aria-valuemax="6" aria-valuenow="{{step}}" style="width: 100%; height: 8px; border-radius: 4px; background: #E3E5E8; overflow: hidden">
+      <div style="width: {{pct}}; height: 100%; border-radius: 4px; background: #0D6B62; transition: width 300ms"></div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #0A524B">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      Made on your phone. Nothing is uploaded.
+    </div>
+  </div>
+
+  <a href="Editor.dc.html" style="width: 100%; height: 52px; border-radius: 14px; border: 1.5px solid #C9CDD2; box-sizing: border-box; color: #15181C; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600">Cancel</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 1 };
+  }
+  componentDidMount() {
+    this.timer = setInterval(() => this.setState({ step: this.state.step >= 9 ? 1 : this.state.step + 1 }), 900);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  renderVals() {
+    const st = this.state.step;
+    const shrinking = st > 6;
+    return {
+      step: Math.min(st, 6),
+      pct: shrinking ? '100%' : Math.round(st / 6 * 100) + '%',
+      headline: shrinking ? 'Making it smaller…' : 'Creating your PDF…',
+      status: shrinking ? 'Fitting under 500 KB' : 'Page ' + st + ' of 6'
+    };
+  }
+}
+</script>
+</body>
+</html>

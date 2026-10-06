@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Result — size limit not met</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+
+  <header style="display: flex; align-items: center; padding: 24px 4px 0">
+    <a href="Home-Recents.dc.html" aria-label="Back to home" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #15181C">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="flex: 1; font-size: 17px; font-weight: 600">Almost there</div>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 12px 20px 0">
+    <div style="display: flex; gap: 16px; align-items: center; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 16px; padding: 14px">
+      <div style="width: 72px; height: 96px; flex-shrink: 0; border: 1px solid #E3E5E8; border-radius: 8px; box-sizing: border-box; padding: 12px 10px; display: flex; flex-direction: column; gap: 6px">
+        <div style="height: 5px; width: 60%; background: #8E9196; border-radius: 3px"></div>
+        <div style="height: 4px; background: #D5D8DC; border-radius: 2px"></div>
+        <div style="height: 4px; background: #D5D8DC; border-radius: 2px"></div>
+        <div style="height: 14px; background: #E2F0EE; border-radius: 3px"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+        <div style="font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Marksheet_Class12</div>
+        <div style="font-size: 14px; color: #545B63">3 pages · 142 KB</div>
+      </div>
+    </div>
+
+    <section aria-labelledby="missTitle" style="background: #FFF3E3; border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; gap: 12px; align-items: flex-start">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9A4A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px"><path d="M12 3l10 18H2z"></path><path d="M12 10v5"></path><path d="M12 18v.01"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h2 id="missTitle" style="margin: 0; font-size: 17px; font-weight: 700; color: #6B3300">Couldn't get under 100 KB</h2>
+          <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #6B3300">The smallest file that keeps text readable is <b>142 KB</b>. Try one of these:</p>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <a href="Processing.dc.html" style="height: 52px; border-radius: 14px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; padding: 0 16px; font-size: 15px; font-weight: 600">Try black &amp; white</a>
+        <a href="Editor.dc.html" style="height: 52px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #C9CDD2; box-sizing: border-box; color: #15181C; text-decoration: none; display: flex; align-items: center; padding: 0 16px; font-size: 15px; font-weight: 600">Remove pages</a>
+        <a href="Result-OverLimit.dc.html" style="height: 52px; border-radius: 14px; background: #FFFFFF; border: 1.5px solid #C9CDD2; box-sizing: border-box; color: #15181C; text-decoration: none; display: flex; align-items: center; padding: 0 16px; font-size: 15px; font-weight: 600">Keep the 142 KB file</a>
+      </div>
+    </section>
+  </main>
+
+  <div style="padding: 0 20px 32px">
+    <div style="font-size: 13px; color: #545B63; text-align: center; line-height: 1.5">Tip: for limits of 100 KB or less, black &amp; white works best for text.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

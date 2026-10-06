@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Export — more options</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: rgba(14,16,18,0.48); color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; overflow: hidden">
+
+  <section role="dialog" aria-labelledby="moTitle" style="position: absolute; left: 0; right: 0; bottom: 0; top: 48px; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 12px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+    <div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #C9CDD2"></div>
+    <h2 id="moTitle" style="margin: 0; font-size: 22px; font-weight: 700">Create PDF</h2>
+
+    <a href="Export-Sheet.dc.html" style="display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 12px; background: #F6F7F5; color: #15181C; text-decoration: none">
+      <span style="font-size: 15px; font-weight: 600">Folio_20261006_1430.pdf</span>
+      <span style="font-size: 13px; color: #545B63">PDF · Balanced · Max 500 KB</span>
+    </a>
+
+    <div style="display: flex; align-items: center; justify-content: space-between; height: 40px; border-top: 1px solid #E3E5E8; padding-top: 8px">
+      <span style="font-size: 15px; font-weight: 600">More options</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#545B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"></path></svg>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Page size</span>
+      <div role="radiogroup" aria-label="Page size" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{sizes}}" as="o" hint-placeholder-count="4">
+          <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="height: 84px; border-radius: 12px; border: {{o.border}}; background: {{o.bg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font: 600 13px 'Plus Jakarta Sans', sans-serif; color: #15181C">
+            <span style="width: {{o.iw}}; height: {{o.ih}}; border: 1.5px solid {{o.stroke}}; border-radius: 3px; background: #FFFFFF"></span>
+            {{o.label}}
+          </button>
+        </sc-for>
+      </div>
+      <span style="font-size: 13px; color: #545B63">Default follows your region (A4 in India).</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Orientation</span>
+      <div role="radiogroup" aria-label="Orientation" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{orients}}" as="o" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="height: 44px; border-radius: 10px; border: {{o.border}}; background: {{o.bg}}; color: {{o.fg}}; font: 600 14px 'Plus Jakarta Sans', sans-serif">{{o.label}}</button>
+        </sc-for>
+      </div>
+      <span style="font-size: 13px; color: #545B63">Auto turns each page to match its photo.</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Margins</span>
+      <div role="radiogroup" aria-label="Margins" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{margins}}" as="o" hint-placeholder-count="2">
+          <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="height: 44px; border-radius: 10px; border: {{o.border}}; background: {{o.bg}}; color: {{o.fg}}; font: 600 14px 'Plus Jakarta Sans', sans-serif">{{o.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <a href="Processing.dc.html" style="margin-top: auto; height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">Create</a>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { size: 'A4', orient: 'Auto', margin: 'None' };
+  }
+  chip(on) {
+    return on
+      ? { border: '1.5px solid #0D6B62', bg: '#0D6B62', fg: '#FFFFFF', checked: 'true' }
+      : { border: '1.5px solid #C9CDD2', bg: '#FFFFFF', fg: '#15181C', checked: 'false' };
+  }
+  renderVals() {
+    const shapes = { A4: ['21px', '30px'], Letter: ['22px', '28px'], Legal: ['20px', '33px'], 'Fit to image': ['30px', '22px'] };
+    const sizes = Object.keys(shapes).map((k) => {
+      const on = k === this.state.size;
+      return {
+        label: k, iw: shapes[k][0], ih: shapes[k][1],
+        border: on ? '2px solid #0D6B62' : '1.5px solid #C9CDD2',
+        bg: on ? '#E2F0EE' : '#FFFFFF',
+        stroke: on ? '#0D6B62' : '#9AA1A9',
+        checked: on ? 'true' : 'false',
+        pick: () => this.setState({ size: k })
+      };
+    });
+    const orients = ['Auto', 'Portrait', 'Landscape'].map((k) =>
+      Object.assign({ label: k, pick: () => this.setState({ orient: k }) }, this.chip(k === this.state.orient)));
+    const margins = ['None', 'Small'].map((k) =>
+      Object.assign({ label: k, pick: () => this.setState({ margin: k }) }, this.chip(k === this.state.margin)));
+    return { sizes, orients, margins };
+  }
+}
+</script>
+</body>
+</html>

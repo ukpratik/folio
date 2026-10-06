@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home — recents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; padding: 28px 12px 4px 20px">
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em">Folio</h1>
+    <a href="Settings.dc.html" aria-label="Settings" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #15181C">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10"></path><path d="M18 7h2"></path><path d="M4 17h4"></path><path d="M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>
+    </a>
+  </header>
+
+  <a href="Privacy.dc.html" style="margin: 4px 20px 0; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #0A524B; text-decoration: none">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+    <span>Works offline. Your documents never leave your phone.</span>
+  </a>
+
+  <h2 style="margin: 24px 20px 8px; font-size: 15px; font-weight: 700; color: #545B63">Recent</h2>
+
+  <ul style="list-style: none; margin: 0; padding: 0 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: hidden">
+    <sc-for list="{{docs}}" as="d" hint-placeholder-count="5">
+      <li style="display: flex; align-items: center; gap: 4px; background: #FFFFFF; border-radius: 16px; padding: 10px 4px 10px 10px">
+        <a href="{{d.href}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; color: #15181C; text-decoration: none">
+          <div style="width: 48px; height: 64px; flex-shrink: 0; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 6px; box-sizing: border-box; padding: 8px 7px; display: flex; flex-direction: column; gap: 4px">
+            <div style="height: 4px; width: 60%; background: #C9CDD2; border-radius: 2px"></div>
+            <div style="height: 3px; background: #E3E5E8; border-radius: 2px"></div>
+            <div style="height: 3px; background: #E3E5E8; border-radius: 2px"></div>
+            <div style="height: 3px; width: 70%; background: #E3E5E8; border-radius: 2px"></div>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <div style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{d.name}}</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #545B63">
+              <sc-if value="{{d.failed}}" hint-placeholder-val="{{false}}">
+                <span style="padding: 2px 8px; border-radius: 6px; background: #FFF3E3; color: #9A4A00; font-size: 12px; font-weight: 600">Export didn't finish</span>
+              </sc-if>
+              <sc-if value="{{d.draftOnly}}" hint-placeholder-val="{{false}}">
+                <span style="padding: 2px 8px; border-radius: 6px; background: #EEF0F2; color: #545B63; font-size: 12px; font-weight: 600">Draft</span>
+              </sc-if>
+              <span>{{d.meta}}</span>
+            </div>
+            <div style="font-size: 12px; color: #6B7280">{{d.when}}</div>
+          </div>
+        </a>
+        <button type="button" aria-label="More options for {{d.name}}" style="width: 48px; height: 48px; border: 0; background: transparent; color: #545B63; display: flex; align-items: center; justify-content: center; border-radius: 24px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="12" cy="19" r="1.8"></circle></svg>
+        </button>
+      </li>
+    </sc-for>
+  </ul>
+
+  <nav style="display: flex; gap: 12px; padding: 16px 20px 32px; background: #F6F7F5; border-top: 1px solid #E3E5E8">
+    <a href="Camera-Permission.dc.html" style="flex: 1; height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+      Scan
+    </a>
+    <a href="Editor.dc.html" style="flex: 1; height: 56px; border-radius: 16px; background: #FFFFFF; border: 1.5px solid #C9CDD2; box-sizing: border-box; color: #15181C; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="8.5" cy="9.5" r="1.5"></circle><path d="M21 16l-5-5-9 9"></path></svg>
+      Import images
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      docs: [
+        { name: 'Folio_20261006_1430', meta: '6 pages · 438 KB', when: 'Today, 2:30 PM', draft: false, href: 'Result-Success.dc.html' },
+        { name: 'Marksheet_Class12', meta: '3 pages', when: 'Today, 11:05 AM', draft: true, failed: true, href: 'Editor.dc.html' },
+        { name: 'Rent_Receipt_Sept', meta: '1 page · 182 KB', when: 'Yesterday', draft: false, href: 'Result-Success.dc.html' },
+        { name: 'Degree_Certificate', meta: '2 pages · 1.2 MB', when: '2 Oct', draft: false, href: 'Result-Success.dc.html' },
+        { name: 'Folio_20260928_0915', meta: '4 pages · 96 KB', when: '28 Sept', draft: false, href: 'Result-Success.dc.html' }
+      ].map((d) => Object.assign({ failed: false }, d, { draftOnly: d.draft && !d.failed }))
+    };
+  }
+}
+</script>
+</body>
+</html>

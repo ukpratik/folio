@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dark theme roles</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6FD3C4}a:hover{color:#A8F0E4}
+</style>
+</helmet>
+<div style="width: 640px; height: 900px; box-sizing: border-box; padding: 48px 40px; background: #101314; color: #E6E8EA; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 24px">
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6FD3C4">Dark theme</div>
+    <h1 style="margin: 0; font-size: 28px; font-weight: 700">Same roles, dark values</h1>
+    <div style="font-size: 14px; color: #A9B0B6; line-height: 1.5">Follows the system setting. Camera and page-detail screens are dark in both themes.</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+    <sc-for list="{{roles}}" as="r" hint-placeholder-count="10">
+      <div style="display: flex; gap: 10px; align-items: center">
+        <div style="width: 40px; height: 40px; border-radius: 10px; background: {{r.hex}}; border: 1px solid #3A4146"></div>
+        <div style="font-size: 12px; line-height: 1.4"><b>{{r.name}}</b><br><span style="color: #A9B0B6">{{r.hex}}</span></div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; background: #191D1F; border-radius: 16px; padding: 18px">
+    <div style="display: flex; align-items: center; gap: 14px; background: #23282B; border-radius: 14px; padding: 10px">
+      <div style="width: 40px; height: 54px; border-radius: 6px; background: #E6E8EA"></div>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px; font-weight: 600">Rent_Receipt_Sept</span><span style="font-size: 13px; color: #A9B0B6">1 page · 182 KB</span></div>
+    </div>
+    <div style="display: flex; gap: 10px">
+      <button type="button" style="flex: 1; height: 52px; border: 0; border-radius: 14px; background: #6FD3C4; color: #00372F; font: 600 15px 'Plus Jakarta Sans', sans-serif">Scan</button>
+      <button type="button" style="flex: 1; height: 52px; border: 1.5px solid #3A4146; border-radius: 14px; background: transparent; color: #E6E8EA; font: 600 15px 'Plus Jakarta Sans', sans-serif">Import images</button>
+    </div>
+    <div style="display: flex; gap: 8px">
+      <span style="padding: 6px 10px; border-radius: 8px; background: #0F4F48; color: #A8F0E4; font-size: 13px; font-weight: 600">✓ Under 500 KB</span>
+      <span style="padding: 6px 10px; border-radius: 8px; background: #3D2300; color: #FFB77A; font-size: 13px; font-weight: 600">Over limit</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":640,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      roles: [
+        { name: 'primary', hex: '#6FD3C4' },
+        { name: 'onPrimary', hex: '#00372F' },
+        { name: 'primaryContainer', hex: '#0F4F48' },
+        { name: 'onPrimaryContainer', hex: '#A8F0E4' },
+        { name: 'background', hex: '#101314' },
+        { name: 'surface', hex: '#191D1F' },
+        { name: 'surfaceVariant', hex: '#23282B' },
+        { name: 'onSurface', hex: '#E6E8EA' },
+        { name: 'onSurfaceVariant', hex: '#A9B0B6' },
+        { name: 'outline', hex: '#3A4146' },
+        { name: 'warning on container', hex: '#FFB77A' },
+        { name: 'error', hex: '#FFB4AB' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

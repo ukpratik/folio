@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Folio foundations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="width: 1280px; height: 900px; box-sizing: border-box; padding: 48px 56px; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 40px; row-gap: 32px; align-content: start">
+
+  <div style="grid-column: 1 / 4; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid #E3E5E8; padding-bottom: 20px">
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #0D6B62">Foundations</div>
+      <h1 style="margin: 0; font-size: 36px; font-weight: 700; letter-spacing: -0.02em">Folio: Doc Maker</h1>
+      <div style="font-size: 15px; color: #545B63">Calm, trustworthy utility. Material 3 structure, one accent, generous space.</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 48px; height: 48px; border-radius: 14px; background: #0D6B62; display: flex; align-items: center; justify-content: center">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"></path><path d="M14 3v4h4"></path><path d="M9 13l2 2 4-4"></path></svg>
+      </div>
+      <div style="font-size: 13px; color: #545B63; line-height: 1.4">App icon<br>placeholder</div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <h2 style="margin: 0; font-size: 17px; font-weight: 700">Color roles (light)</h2>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #0D6B62"></div><div style="font-size: 12px; line-height: 1.4"><b>primary</b><br>#0D6B62</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #E2F0EE"></div><div style="font-size: 12px; line-height: 1.4"><b>primaryContainer</b><br>#E2F0EE</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #15181C"></div><div style="font-size: 12px; line-height: 1.4"><b>onSurface</b><br>#15181C</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #545B63"></div><div style="font-size: 12px; line-height: 1.4"><b>onSurfaceVariant</b><br>#545B63</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #F6F7F5; border: 1px solid #E3E5E8"></div><div style="font-size: 12px; line-height: 1.4"><b>background</b><br>#F6F7F5</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #FFFFFF; border: 1px solid #E3E5E8"></div><div style="font-size: 12px; line-height: 1.4"><b>surface</b><br>#FFFFFF</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #E3E5E8"></div><div style="font-size: 12px; line-height: 1.4"><b>outline</b><br>#E3E5E8</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #0E1012"></div><div style="font-size: 12px; line-height: 1.4"><b>camera surface</b><br>#0E1012</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #9A4A00"></div><div style="font-size: 12px; line-height: 1.4"><b>warning</b><br>#9A4A00 on #FFF3E3</div></div>
+      <div style="display: flex; gap: 10px; align-items: center"><div style="width: 40px; height: 40px; border-radius: 10px; background: #B42318"></div><div style="font-size: 12px; line-height: 1.4"><b>error</b><br>#B42318</div></div>
+    </div>
+    <div style="font-size: 12px; color: #545B63; line-height: 1.5">Text on primary is white (6.5:1). Status always pairs an icon and words with color.</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <h2 style="margin: 0; font-size: 17px; font-weight: 700">Type — Plus Jakarta Sans</h2>
+    <div style="display: flex; flex-direction: column; gap: 10px; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 16px; padding: 18px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em">Headline</span><span style="font-size: 12px; color: #545B63">28 / 34 · 700</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 22px; font-weight: 700">Title large</span><span style="font-size: 12px; color: #545B63">22 / 28 · 700</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 17px; font-weight: 600">Title</span><span style="font-size: 12px; color: #545B63">17 / 24 · 600</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px">Body</span><span style="font-size: 12px; color: #545B63">15 / 22 · 400</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 15px; font-weight: 600">Button label</span><span style="font-size: 12px; color: #545B63">15 / 20 · 600</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 13px; color: #545B63">Supporting text</span><span style="font-size: 12px; color: #545B63">13 / 18 · 400</span></div>
+    </div>
+    <div style="font-size: 12px; color: #545B63; line-height: 1.5">Use sp units; layouts must survive 200% font scale.</div>
+    <h2 style="margin: 6px 0 0; font-size: 17px; font-weight: 700">Spacing &amp; shape</h2>
+    <div style="font-size: 13px; line-height: 1.7; color: #15181C">4-pt grid: 4 · 8 · 12 · 16 · 24 · 32<br>Screen padding 20 · Card radius 16 · Button radius 14<br>Chips radius 10 · Sheet top radius 24 · Touch target ≥ 48 dp</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 14px">
+    <h2 style="margin: 0; font-size: 17px; font-weight: 700">Components</h2>
+    <div style="display: flex; flex-direction: column; gap: 10px; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 16px; padding: 18px">
+      <button type="button" style="height: 52px; border: 0; border-radius: 14px; background: #0D6B62; color: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif">Primary · Create PDF</button>
+      <button type="button" style="height: 52px; border: 1.5px solid #C9CDD2; border-radius: 14px; background: #FFFFFF; color: #15181C; font: 600 15px 'Plus Jakarta Sans', sans-serif">Secondary · Save to device</button>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <span style="height: 36px; padding: 0 14px; border-radius: 10px; background: #0D6B62; color: #FFFFFF; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Balanced</span>
+        <span style="height: 36px; padding: 0 14px; border-radius: 10px; border: 1.5px solid #C9CDD2; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center">Small</span>
+        <span style="height: 36px; padding: 0 14px; border-radius: 10px; border: 1.5px solid #C9CDD2; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center">High</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <span style="padding: 6px 10px; border-radius: 8px; background: #E2F0EE; color: #0A524B; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Under 500 KB</span>
+        <span style="padding: 6px 10px; border-radius: 8px; background: #FFF3E3; color: #9A4A00; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2z"></path><path d="M12 10v5"></path><path d="M12 18v.01"></path></svg>Over limit</span>
+        <span style="padding: 6px 10px; border-radius: 8px; background: #EEF0F2; color: #545B63; font-size: 13px; font-weight: 600">Draft</span>
+      </div>
+      <div style="display: flex; align-items: center; justify-content: space-between; background: #22262B; color: #FFFFFF; border-radius: 12px; padding: 12px 16px; font-size: 14px">Page deleted<span style="color: #7FD3C8; font-weight: 700; font-size: 13px; letter-spacing: 0.04em">UNDO</span></div>
+    </div>
+    <div style="display: flex; gap: 14px; align-items: flex-start">
+      <div style="width: 96px; display: flex; flex-direction: column; gap: 6px; align-items: center">
+        <div style="position: relative; width: 96px; height: 128px; background: #FFFFFF; border: 1px solid #E3E5E8; border-radius: 10px; box-shadow: 0 1px 3px rgba(21,24,28,0.08); box-sizing: border-box; padding: 14px 12px; display: flex; flex-direction: column; gap: 6px">
+          <div style="height: 6px; width: 60%; background: #C9CDD2; border-radius: 3px"></div>
+          <div style="height: 4px; background: #E3E5E8; border-radius: 2px"></div>
+          <div style="height: 4px; background: #E3E5E8; border-radius: 2px"></div>
+          <div style="height: 4px; width: 80%; background: #E3E5E8; border-radius: 2px"></div>
+          <div style="position: absolute; left: 6px; bottom: 6px; min-width: 22px; height: 22px; border-radius: 11px; background: #15181C; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">1</div>
+        </div>
+        <div style="font-size: 12px; color: #545B63">Page thumb</div>
+      </div>
+      <div style="flex: 1; font-size: 12px; color: #545B63; line-height: 1.6">Icons: Material Symbols Rounded, 24 dp, 2 dp weight.<br>photo_camera · photo_library · settings · lock · more_vert · arrow_back · close · flashlight_on · add · rotate_right · crop · auto_fix_high · share · download · edit · check · warning · delete · content_copy · description</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

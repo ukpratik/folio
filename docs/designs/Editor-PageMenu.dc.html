@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Page menu and undo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="display: flex; align-items: center; gap: 4px; padding: 24px 4px 8px">
+    <a href="Home-Recents.dc.html" aria-label="Back" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #15181C">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="flex: 1; font-size: 17px; font-weight: 600; padding: 0 4px">Folio_20261006_1430</div>
+    <div style="width: 48px"></div>
+  </header>
+  <div style="padding: 0 20px 12px; font-size: 13px; color: #545B63">4 pages · Hold and drag a page to reorder</div>
+
+  <div style="flex: 1; overflow: hidden; padding: 0 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; align-content: start">
+    <sc-for list="{{pages}}" as="p" hint-placeholder-count="4">
+      <div style="position: relative; height: 176px; background: #FFFFFF; border-radius: 12px; box-sizing: border-box; padding: 20px 18px; display: flex; flex-direction: column; gap: 7px; border: {{p.border}}">
+        <span style="height: 8px; width: 58%; background: #8E9196; border-radius: 3px"></span>
+        <span style="height: 5px; background: #D5D8DC; border-radius: 3px"></span>
+        <span style="height: 5px; background: #D5D8DC; border-radius: 3px"></span>
+        <span style="height: 5px; width: 78%; background: #D5D8DC; border-radius: 3px"></span>
+        <span style="height: 22px; border-radius: 4px; background: #EDEEF0"></span>
+        <span style="position: absolute; left: 8px; bottom: 8px; min-width: 26px; height: 26px; border-radius: 13px; background: #15181C; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{p.n}}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <div role="menu" aria-label="Page 2 options" style="position: absolute; right: 24px; top: 160px; width: 216px; background: #FFFFFF; border-radius: 14px; box-shadow: 0 8px 28px rgba(21,24,28,0.18); padding: 6px 0; display: flex; flex-direction: column">
+    <sc-for list="{{menu}}" as="m" hint-placeholder-count="5">
+      <button type="button" role="menuitem" style="height: 48px; border: 0; background: transparent; display: flex; align-items: center; gap: 14px; padding: 0 16px; font: 500 15px 'Plus Jakarta Sans', sans-serif; color: {{m.color}}; text-align: left">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="{{m.icon}}"></path></svg>
+        {{m.label}}
+      </button>
+    </sc-for>
+  </div>
+
+  <div role="status" style="position: absolute; left: 16px; right: 16px; bottom: 118px; background: #22262B; color: #FFFFFF; border-radius: 12px; padding: 4px 4px 4px 16px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; box-shadow: 0 6px 20px rgba(21,24,28,0.2)">
+    <span>Page deleted</span>
+    <button type="button" style="height: 44px; padding: 0 14px; border: 0; background: transparent; color: #7FD3C8; font: 700 14px 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em">UNDO</button>
+  </div>
+
+  <div style="padding: 14px 20px 32px; background: #F6F7F5; border-top: 1px solid #E3E5E8">
+    <a href="Export-Sheet.dc.html" style="height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">Create PDF</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      pages: [
+        { n: 1, border: '1px solid #E3E5E8' },
+        { n: 2, border: '2px solid #0D6B62' },
+        { n: 3, border: '1px solid #E3E5E8' },
+        { n: 4, border: '1px solid #E3E5E8' }
+      ],
+      menu: [
+        { label: 'Rotate', icon: 'M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7', color: '#15181C' },
+        { label: 'Duplicate', icon: 'M8 8h12v12H8zM16 8V4H4v12h4', color: '#15181C' },
+        { label: 'Move left', icon: 'M19 12H5M11 6l-6 6 6 6', color: '#15181C' },
+        { label: 'Move right', icon: 'M5 12h14M13 6l6 6-6 6', color: '#15181C' },
+        { label: 'Delete', icon: 'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3', color: '#B42318' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

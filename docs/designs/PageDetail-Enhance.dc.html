@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Page detail — enhance</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7FD3C8}a:hover{color:#A8E3DB}
+input[type=range]{accent-color:#3FC7B5}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #15181C; color: #FFFFFF; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="display: flex; align-items: center; padding: 24px 0 8px 4px">
+    <a href="Editor.dc.html" aria-label="Back to pages" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="flex: 1; text-align: center; font-size: 16px; font-weight: 600">Page 2 of 5</div>
+    <button type="button" aria-label="More options (Reset page)" style="width: 48px; height: 48px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="12" cy="19" r="1.8"></circle></svg>
+    </button>
+    <a href="Editor.dc.html" style="height: 40px; padding: 0 14px; margin-right: 8px; display: flex; align-items: center; border-radius: 10px; background: #0D6B62; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 700">Done</a>
+  </header>
+
+  <div style="height: 360px; display: flex; align-items: center; justify-content: center; padding: 8px 0">
+    <div aria-label="Page preview, {{modeLabel}} mode" role="img" style="width: 248px; height: 340px; background: {{paper}}; box-sizing: border-box; padding: 30px 26px; display: flex; flex-direction: column; gap: 11px; filter: {{filter}}; box-shadow: 0 6px 24px rgba(0,0,0,0.4)">
+      <div style="height: 11px; width: 55%; background: {{ink}}; border-radius: 3px"></div>
+      <div style="height: 6px; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 6px; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 6px; width: 82%; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 44px; border-radius: 4px; background: #E9C9A0; opacity: 0.85"></div>
+      <div style="height: 6px; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 6px; width: 64%; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 6px; background: {{ink2}}; border-radius: 3px"></div>
+      <div style="height: 6px; width: 74%; background: {{ink2}}; border-radius: 3px"></div>
+    </div>
+  </div>
+
+  <div role="radiogroup" aria-label="Enhancement mode" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 8px 20px 4px">
+    <sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+      <button type="button" role="radio" aria-checked="{{m.checked}}" onClick="{{m.pick}}" style="border: 0; background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; color: {{m.labelColor}}; font: 600 13px 'Plus Jakarta Sans', sans-serif">
+        <span style="width: 64px; height: 76px; border-radius: 10px; box-sizing: border-box; border: {{m.ring}}; padding: 4px; display: flex">
+          <span style="flex: 1; border-radius: 6px; background: {{m.paper}}; filter: {{m.filter}}; padding: 9px 8px; display: flex; flex-direction: column; gap: 5px">
+            <span style="height: 4px; width: 60%; background: {{m.ink}}; border-radius: 2px"></span>
+            <span style="height: 3px; background: {{m.ink2}}; border-radius: 2px"></span>
+            <span style="height: 3px; background: {{m.ink2}}; border-radius: 2px"></span>
+            <span style="height: 10px; background: #E9C9A0; border-radius: 2px"></span>
+          </span>
+        </span>
+        {{m.label}}
+      </button>
+    </sc-for>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 4px; padding: 10px 12px 0 20px">
+    <div style="display: flex; align-items: center; gap: 4px"><label style="flex: 1; display: flex; align-items: center; gap: 12px; height: 44px; font-size: 14px; color: #D5D8DC">
+      <span style="width: 82px">Brightness</span>
+      <input type="range" min="-100" max="100" value="0" style="flex: 1">
+    </label><button type="button" aria-label="Reset brightness" style="width: 44px; height: 44px; border: 0; background: transparent; color: #D5D8DC; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a8 8 0 1 1 2.3 5.7"></path><path d="M4 4v7h7"></path></svg></button></div>
+    <div style="display: flex; align-items: center; gap: 4px"><label style="flex: 1; display: flex; align-items: center; gap: 12px; height: 44px; font-size: 14px; color: #D5D8DC">
+      <span style="width: 82px">Contrast</span>
+      <input type="range" min="-100" max="100" value="20" style="flex: 1">
+    </label><button type="button" aria-label="Reset contrast" style="width: 44px; height: 44px; border: 0; background: transparent; color: #D5D8DC; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a8 8 0 1 1 2.3 5.7"></path><path d="M4 4v7h7"></path></svg></button></div>
+  </div>
+
+  <div style="display: flex; justify-content: center; padding: 6px 20px 0">
+    <button type="button" style="height: 44px; padding: 0 16px; border-radius: 10px; border: 1.5px solid #4A5058; background: transparent; color: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif">Apply to all pages</button>
+  </div>
+
+  <nav aria-label="Edit tools" style="margin-top: auto; display: flex; border-top: 1px solid #2A2F35; padding: 6px 12px 24px">
+    <a href="PageDetail-Crop.dc.html" style="flex: 1; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #B9BEC4; text-decoration: none; font-size: 13px; font-weight: 600">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v13a2 2 0 0 0 2 2h13"></path><path d="M3 6h13a2 2 0 0 1 2 2v13"></path></svg>Crop
+    </a>
+    <button type="button" style="flex: 1; height: 64px; border: 0; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #B9BEC4; font: 600 13px 'Plus Jakarta Sans', sans-serif">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg>Rotate
+    </button>
+    <a href="PageDetail-Enhance.dc.html" aria-current="page" style="flex: 1; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #3FC7B5; text-decoration: none; font-size: 13px; font-weight: 700">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="M5 5l1.5 1.5"></path><path d="M17.5 17.5L19 19"></path><path d="M5 19l1.5-1.5"></path><path d="M17.5 6.5L19 5"></path></svg>Enhance
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'auto' };
+  }
+  renderVals() {
+    const looks = {
+      original: { label: 'Original', paper: '#E9E2D2', ink: '#7D7F82', ink2: '#B9B7B0', filter: 'none' },
+      auto: { label: 'Auto', paper: '#FFFFFF', ink: '#3A3D42', ink2: '#9EA3A9', filter: 'none' },
+      gray: { label: 'Grayscale', paper: '#F7F7F7', ink: '#3A3D42', ink2: '#9EA3A9', filter: 'grayscale(1)' },
+      bw: { label: 'B&W', paper: '#FFFFFF', ink: '#000000', ink2: '#000000', filter: 'grayscale(1) contrast(3)' }
+    };
+    const cur = looks[this.state.mode];
+    const modes = Object.keys(looks).map((k) => {
+      const on = k === this.state.mode;
+      return Object.assign({}, looks[k], {
+        checked: on ? 'true' : 'false',
+        ring: on ? '2.5px solid #3FC7B5' : '2.5px solid transparent',
+        labelColor: on ? '#3FC7B5' : '#D5D8DC',
+        pick: () => this.setState({ mode: k })
+      });
+    });
+    return { modes, paper: cur.paper, ink: cur.ink, ink2: cur.ink2, filter: cur.filter, modeLabel: cur.label };
+  }
+}
+</script>
+</body>
+</html>

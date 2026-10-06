@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Camera access off</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#7FD3C8}a:hover{color:#A8E3DB}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #0E1012; color: #FFFFFF; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+  <header style="padding: 24px 8px 0">
+    <a href="Home-Empty.dc.html" aria-label="Close camera" style="width: 48px; height: 48px; border-radius: 24px; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg>
+    </a>
+  </header>
+
+  <main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 0 36px; text-align: center">
+    <div style="width: 72px; height: 72px; border-radius: 20px; background: #22262B; color: #B9BEC4; display: flex; align-items: center; justify-content: center">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle><path d="M3 3l18 18"></path></svg>
+    </div>
+    <h1 style="margin: 0; font-size: 22px; font-weight: 700">Camera access is off</h1>
+    <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B9BEC4">You can still import images from your phone. To scan, allow camera access in Settings.</p>
+  </main>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding: 0 20px 36px">
+    <a href="Editor.dc.html" style="height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">Import images</a>
+    <button type="button" style="height: 52px; border-radius: 14px; border: 1.5px solid #4A5058; background: transparent; color: #FFFFFF; font: 600 15px 'Plus Jakarta Sans', sans-serif">Open settings</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

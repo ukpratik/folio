@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only exported files can be shared (LLD §10). -->
+<paths>
+    <files-path name="exports" path="documents/" />
+    <cache-path name="share" path="work/share/" />
+</paths>

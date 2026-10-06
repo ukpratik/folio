@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How Folio protects your privacy</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="display: flex; align-items: center; padding: 24px 4px 8px">
+    <a href="Settings.dc.html" aria-label="Back" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #15181C">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="font-size: 17px; font-weight: 600">Privacy</div>
+  </header>
+
+  <div style="padding: 8px 24px 0; display: flex; flex-direction: column; gap: 14px">
+    <div style="width: 56px; height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+    </div>
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em">Your documents never leave your phone</h1>
+  </div>
+
+  <ul style="list-style: none; margin: 20px 0 0; padding: 0 24px; display: flex; flex-direction: column; gap: 16px">
+    <sc-for list="{{points}}" as="p" hint-placeholder-count="6">
+      <li style="display: flex; gap: 12px; align-items: flex-start">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D6B62" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        <span style="font-size: 15px; line-height: 1.5"><b>{{p.lead}}</b> {{p.rest}}</span>
+      </li>
+    </sc-for>
+  </ul>
+
+  <p style="margin: auto 24px 32px; padding: 14px 16px; border-radius: 14px; background: #FFFFFF; font-size: 13px; line-height: 1.55; color: #545B63">When you share a file or save it to a cloud folder (like Google Drive), the app you choose receives it. Folio itself never uploads it.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      points: [
+        { lead: 'No internet access.', rest: 'Folio doesn’t have Android’s internet permission, so it can’t upload anything.' },
+        { lead: 'No account, no ads, no tracking.', rest: 'We collect nothing about you or your documents.' },
+        { lead: 'Made on your phone.', rest: 'Scanning, cropping and PDF creation all happen here.' },
+        { lead: 'No cloud backup.', rest: 'Folio’s files are excluded from Android backup.' },
+        { lead: 'Hidden photo data removed.', rest: 'Location and camera details are stripped from your PDFs.' },
+        { lead: 'Camera only when you scan.', rest: 'No other permissions.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

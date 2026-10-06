@@ -1,0 +1,331 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Camera-Permission.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S2a · Camera permission rationale",
+      "w": 390,
+      "x": 940,
+      "y": 1260
+    },
+    "Camera-Scan.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S2b · Camera — document detected",
+      "w": 390,
+      "x": 1410,
+      "y": 1260
+    },
+    "Delete-Dialog.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "Delete document dialog",
+      "w": 390,
+      "x": 940,
+      "y": 4872
+    },
+    "Editor-PageMenu.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S3b · Page menu + Undo snackbar",
+      "w": 390,
+      "x": 470,
+      "y": 2464
+    },
+    "Editor.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S3a · Page editor",
+      "w": 390,
+      "x": 0,
+      "y": 2464
+    },
+    "Export-MoreOptions.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S5b · Export — More options",
+      "w": 390,
+      "x": 470,
+      "y": 3668
+    },
+    "Export-Sheet.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S5a · Export settings",
+      "w": 390,
+      "x": 0,
+      "y": 3668
+    },
+    "Home-Empty.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S1a · Home — first launch",
+      "w": 390,
+      "x": 0,
+      "y": 1260
+    },
+    "Home-Recents.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S1b · Home — with recents",
+      "w": 390,
+      "x": 470,
+      "y": 1260
+    },
+    "Main.dc.html": {
+      "h": 900,
+      "title": "Foundations & components",
+      "w": 1280,
+      "x": 0,
+      "y": 0
+    },
+    "PageDetail-Crop.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S4a · Page detail — Crop",
+      "w": 390,
+      "x": 940,
+      "y": 2464
+    },
+    "PageDetail-Enhance.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S4b · Page detail — Enhance",
+      "w": 390,
+      "x": 1410,
+      "y": 2464
+    },
+    "Privacy.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S8b · Privacy explainer",
+      "w": 390,
+      "x": 470,
+      "y": 4872
+    },
+    "Processing.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S6 · Processing",
+      "w": 390,
+      "x": 940,
+      "y": 3668
+    },
+    "Result-Success.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S7a · Result — target met",
+      "w": 390,
+      "x": 1410,
+      "y": 3668
+    },
+    "Result-TargetMissed.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S7b · Result — target not met",
+      "w": 390,
+      "x": 1880,
+      "y": 3668
+    },
+    "Settings.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "S8a · Settings",
+      "w": 390,
+      "x": 0,
+      "y": 4872
+    },
+    "Foundations-Dark.dc.html": {
+      "x": 1360,
+      "y": 0,
+      "w": 640,
+      "h": 900,
+      "title": "Foundations — dark theme roles"
+    },
+    "Camera-Denied.dc.html": {
+      "x": 1880,
+      "y": 1260,
+      "w": 390,
+      "h": 844,
+      "title": "S2c · Camera access off",
+      "is_interactive": true
+    },
+    "Import-Progress.dc.html": {
+      "x": 1880,
+      "y": 2464,
+      "w": 390,
+      "h": 844,
+      "title": "S3c · Adding photos (import in progress)",
+      "is_interactive": true
+    },
+    "Result-OverLimit.dc.html": {
+      "x": 2350,
+      "y": 3668,
+      "w": 390,
+      "h": 844,
+      "title": "S7c · Result — kept file over limit",
+      "is_interactive": true
+    },
+    "Preview.dc.html": {
+      "x": 2820,
+      "y": 3668,
+      "w": 390,
+      "h": 844,
+      "title": "S7d · PDF preview",
+      "is_interactive": true
+    },
+    "Sheets-Dialogs.dc.html": {
+      "x": 1410,
+      "y": 4872,
+      "w": 1680,
+      "h": 844,
+      "title": "Sheets & dialogs",
+      "is_interactive": true
+    },
+    "Error-States.dc.html": {
+      "x": 0,
+      "y": 6076,
+      "w": 1250,
+      "h": 844,
+      "title": "Errors & edge states",
+      "is_interactive": true
+    },
+    "Result-JPG.dc.html": {
+      "x": 3290,
+      "y": 3668,
+      "w": 390,
+      "h": 844,
+      "title": "S7e · Result — JPG images (FR-24)",
+      "is_interactive": true
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-06T14:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "s0": {
+      "fill": "orange",
+      "maxH": 560,
+      "text": "How to use this canvas\n\n• Each row is one part of the flow. Screens are 390×844 (phone, portrait).\n• Press Play on a screen to click through the prototype: buttons link to the next screen.\n• Requirement IDs (FR-xx) come from Folio_PRD_v1.1/01-product-requirements.md. Detailed behaviour is in 02-ux-design-spec.md.\n• Build with Material 3 components, themed with the tokens on the Foundations board. Dark theme = same roles mapped to dark values (engineering derives these from the M3 tonal palette for the accent #0D6B62).\n• All icons are placeholders for Material Symbols Rounded (same names given in the Foundations board).",
+      "w": 380,
+      "x": 2080,
+      "y": 0
+    },
+    "s1": {
+      "fill": "orange",
+      "maxH": 600,
+      "text": "S1 Home — FR-25, FR-30\n• Scan + Import images are the only primary actions, in the thumb zone.\n• Privacy line is fixed. No onboarding (D-24). Long names ellipsize.\n• Row tap: draft → Editor, exported → Result. Row ⋮ menu: see Sheets & dialogs.\n• Failed export shows an \"Export didn't finish\" chip on the row.\n\nS2 Camera — FR-02, FR-03, FR-31\n• Permission: first time = rationale sheet → system dialog. If shouldShowRequestPermissionRationale is false after a denial (permanently denied), skip the dialog and show S2c.\n• Live outline = Canvas quad over CameraX preview, smoothed. No auto-crop toggle.\n• Hints: \"Point at a document\" → \"Hold steady\"; \"More light needed\" when dark.\n• Close with pages → Keep/Discard dialog (Sheets & dialogs).",
+      "w": 360,
+      "x": 2350,
+      "y": 1260
+    },
+    "s2": {
+      "fill": "orange",
+      "maxH": 600,
+      "text": "S3 Editor — FR-06–FR-10, FR-26\n• Reorder: LazyVerticalGrid + sh.calvin.reorderable (Apache-2.0). Page ⋮ has Move left/right + TalkBack custom actions.\n• Delete is immediate + Undo snackbar ~5 s. Every change autosaves to Room.\n• Import shows placeholders + \"Adding 12 photos…\" (S3c); skipped files → toast.\n\nS4 Page detail — FR-04, FR-08, FR-11–FR-13\n• ONE commit model: everything autosaves; Done (top) returns to the editor. No Apply button.\n• Same header on every tab: back, Page x of n, ⋮ (Reset page), Done.\n• Crop corners commit on finger-up; pager swipe is disabled on the Crop tab.\n• Loupe = cached preview drawn at 2× (no extra render). Handle nudge step = 1% of image.\n• Enhance chips = static icons/illustrations, not live renders. Preview ≈1080 px, sliders debounced ~150 ms.\n• Apply to all pages = one Room transaction, thumbnails regenerate lazily, Undo snackbar; overwrites brightness/contrast.",
+      "w": 360,
+      "x": 2350,
+      "y": 2464
+    },
+    "s3": {
+      "fill": "orange",
+      "maxH": 620,
+      "text": "S5 Export sheet — FR-14–FR-18, FR-24\n• Defaults: Max size = None, Quality = Balanced. Create is always enabled.\n• Max size sits above Quality (primary persona's key control). When a size is set: \"Folio will lower quality if needed to fit\" (target overrides preset).\n• Custom → inline number field + KB/MB, 50 KB–50 MB.\n• Use ModalBottomSheet + FilterChip in FlowRow; sheet scrolls at 200% font.\n\nS6 Processing — FR-19\n• \"Page x of n\" then \"Making it smaller…\". System/predictive back = Cancel. Cancel keeps the draft.\n\nS7 Result — FR-18, FR-20–FR-23\n• Share is primary. Save → system Save-to picker; snackbar \"Saved\" (folder name only if the provider exposes it).\n• Target missed is never silent. Keeping an over-limit file shows the warning badge (S7c), never a ✓.\n• Thumbnail opens the PdfRenderer preview (S7d).\n\nS7e JPG result — FR-24 (P0, D-34)\n• One file per page: name_01.jpg… Max size applies per image.\n• Share sends all images (ACTION_SEND_MULTIPLE). Save to folder uses the system folder picker (OPEN_DOCUMENT_TREE).",
+      "w": 360,
+      "x": 3760,
+      "y": 3668
+    },
+    "s4": {
+      "fill": "orange",
+      "maxH": 420,
+      "text": "S8 Settings — FR-34\n• Help & FAQ deferred to v1.1 (D-35).\n• Standard M3 ListItems. Feedback opens the email app. Licences via AboutLibraries.\n• Privacy page Back returns to wherever it was opened from (Home or Settings).\n\nDialogs — FR-06, FR-23, FR-25\n• All are standard M3 AlertDialog / ModalBottomSheet / DropdownMenu.\n• Rename: 100-char counter; / : * ? \" < > | replaced with _; empty name disables Rename.\n\nAll screens: edge-to-edge (targetSdk 35) with explicit insets; check 360 dp width and 200% font; predictive back supported.",
+      "w": 360,
+      "x": 3170,
+      "y": 4872
+    },
+    "t0": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "Folio: Doc Maker — MVP design handoff (v1.1)",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "1 · Start & capture",
+      "w": 240,
+      "x": 0,
+      "y": 1000
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "2 · Edit pages",
+      "w": 240,
+      "x": 0,
+      "y": 2204
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 3680,
+      "text": "3 · Export & result",
+      "w": 240,
+      "x": 0,
+      "y": 3408
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "4 · Manage & settings",
+      "w": 240,
+      "x": 0,
+      "y": 4612
+    },
+    "t5": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "5 · Errors & edge states",
+      "w": 240,
+      "x": 0,
+      "y": 5816
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Home-Empty.dc.html",
+    "Home-Recents.dc.html",
+    "Camera-Permission.dc.html",
+    "Camera-Scan.dc.html",
+    "Editor.dc.html",
+    "Editor-PageMenu.dc.html",
+    "PageDetail-Crop.dc.html",
+    "PageDetail-Enhance.dc.html",
+    "Export-Sheet.dc.html",
+    "Export-MoreOptions.dc.html",
+    "Processing.dc.html",
+    "Result-Success.dc.html",
+    "Result-TargetMissed.dc.html",
+    "Settings.dc.html",
+    "Privacy.dc.html",
+    "Delete-Dialog.dc.html",
+    "Foundations-Dark.dc.html",
+    "Camera-Denied.dc.html",
+    "Import-Progress.dc.html",
+    "Result-OverLimit.dc.html",
+    "Preview.dc.html",
+    "Sheets-Dialogs.dc.html",
+    "Error-States.dc.html",
+    "Result-JPG.dc.html"
+  ],
+  "pages": [],
+  "title": "Folio: Doc Maker — MVP Designs"
+}

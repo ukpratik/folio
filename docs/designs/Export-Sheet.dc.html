@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Export settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0D6B62}a:hover{color:#0A524B}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; background: #F6F7F5; color: #15181C; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; overflow: hidden">
+
+  <div aria-hidden="true" style="padding: 32px 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+    <div style="grid-column: 1 / 3; font-size: 17px; font-weight: 600; padding-bottom: 8px">Folio_20261006_1430</div>
+    <div style="height: 176px; background: #FFFFFF; border-radius: 12px"></div>
+    <div style="height: 176px; background: #FFFFFF; border-radius: 12px"></div>
+  </div>
+  <a href="Editor.dc.html" aria-label="Close export settings" style="position: absolute; inset: 0; background: rgba(14,16,18,0.48)"></a>
+
+  <section role="dialog" aria-labelledby="expTitle" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 12px 20px 28px; display: flex; flex-direction: column; gap: 16px; max-height: 790px; overflow-y: auto">
+    <div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #C9CDD2"></div>
+    <h2 id="expTitle" style="margin: 0; font-size: 22px; font-weight: 700">Create PDF</h2>
+
+    <label style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Name</span>
+      <span style="display: flex; align-items: center; height: 50px; border: 1.5px solid #C9CDD2; border-radius: 12px; padding: 0 14px; box-sizing: border-box">
+        <input type="text" value="Folio_20261006_1430" style="flex: 1; min-width: 0; border: 0; outline: none; font: 500 15px 'Plus Jakarta Sans', sans-serif; color: #15181C; background: transparent">
+        <span style="font-size: 14px; color: #6B7280">.pdf</span>
+      </span>
+    </label>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Format</span>
+      <div role="radiogroup" aria-label="Format" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: #EEF0F2; border-radius: 12px; padding: 4px">
+        <button type="button" role="radio" aria-checked="true" style="height: 40px; border: 0; border-radius: 9px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(21,24,28,0.12); font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #15181C">PDF</button>
+        <button type="button" role="radio" aria-checked="false" style="height: 40px; border: 0; border-radius: 9px; background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #545B63">JPG images</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Max file size</span>
+      <div role="radiogroup" aria-label="Max file size" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{sizes}}" as="s" hint-placeholder-count="8">
+          <button type="button" role="radio" aria-checked="{{s.checked}}" onClick="{{s.pick}}" style="height: 40px; padding: 0 14px; border-radius: 10px; border: {{s.border}}; background: {{s.bg}}; color: {{s.fg}}; font: 600 14px 'Plus Jakarta Sans', sans-serif">{{s.label}}</button>
+        </sc-for>
+      </div>
+        <sc-if value="{{isCustom}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; gap: 8px; align-items: flex-start">
+            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+              <span style="display: flex; align-items: center; height: 48px; border: 2px solid #0D6B62; border-radius: 12px; padding: 0 14px; box-sizing: border-box">
+                <input type="text" inputmode="decimal" value="300" aria-label="Custom size" style="flex: 1; min-width: 0; border: 0; outline: none; font: 600 16px 'Plus Jakarta Sans', sans-serif; color: #15181C; background: transparent">
+              </span>
+              <span style="font-size: 12px; color: #545B63">Between 50 KB and 50 MB</span>
+            </label>
+            <div role="radiogroup" aria-label="Unit" style="display: flex; background: #EEF0F2; border-radius: 12px; padding: 4px; height: 48px; box-sizing: border-box">
+              <button type="button" role="radio" aria-checked="true" style="width: 52px; border: 0; border-radius: 9px; background: #FFFFFF; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #15181C">KB</button>
+              <button type="button" role="radio" aria-checked="false" style="width: 52px; border: 0; border-radius: 9px; background: transparent; font: 600 14px 'Plus Jakarta Sans', sans-serif; color: #545B63">MB</button>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{hasTarget}}" hint-placeholder-val="{{false}}">
+          <span style="font-size: 13px; color: #545B63">Folio will lower quality if needed to fit.</span>
+        </sc-if>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; color: #545B63">Quality</span>
+      <div role="radiogroup" aria-label="Quality" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{qualities}}" as="q" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{q.checked}}" onClick="{{q.pick}}" style="height: 44px; border-radius: 10px; border: {{q.border}}; background: {{q.bg}}; color: {{q.fg}}; font: 600 14px 'Plus Jakarta Sans', sans-serif">{{q.label}}</button>
+        </sc-for>
+      </div>
+      <span style="font-size: 13px; color: #545B63">{{qualityHint}}</span>
+    </div>
+
+    <a href="Export-MoreOptions.dc.html" style="display: flex; align-items: center; justify-content: space-between; height: 48px; border-top: 1px solid #E3E5E8; color: #15181C; text-decoration: none; font-size: 15px; font-weight: 600">
+      <span>More options</span>
+      <span style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #545B63">A4 · Auto · No margins
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+      </span>
+    </a>
+
+    <a href="Processing.dc.html" style="height: 56px; border-radius: 16px; background: #0D6B62; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">Create</a>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { quality: 'Balanced', size: 'None' };
+  }
+  chip(on) {
+    return on
+      ? { border: '1.5px solid #0D6B62', bg: '#0D6B62', fg: '#FFFFFF', checked: 'true' }
+      : { border: '1.5px solid #C9CDD2', bg: '#FFFFFF', fg: '#15181C', checked: 'false' };
+  }
+  renderVals() {
+    const hints = {
+      Small: 'Smallest file, good for uploads',
+      Balanced: 'Good quality, small file',
+      High: 'Best quality for printing'
+    };
+    const qualities = ['Small', 'Balanced', 'High'].map((q) =>
+      Object.assign({ label: q, pick: () => this.setState({ quality: q }) }, this.chip(q === this.state.quality)));
+    const sizes = ['None', '100 KB', '200 KB', '500 KB', '1 MB', '2 MB', '5 MB', 'Custom'].map((s) =>
+      Object.assign({ label: s, pick: () => this.setState({ size: s }) }, this.chip(s === this.state.size)));
+    return { qualities, sizes, qualityHint: hints[this.state.quality], isCustom: this.state.size === 'Custom', hasTarget: this.state.size !== 'None' };
+  }
+}
+</script>
+</body>
+</html>

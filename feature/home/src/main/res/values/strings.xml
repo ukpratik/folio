@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_title">Folio</string>
+    <string name="home_settings">Settings</string>
+    <string name="home_scan">Scan</string>
+    <string name="home_import">Import images</string>
+    <string name="home_privacy_line">Works offline. Your documents never leave your phone.</string>
+    <string name="home_empty_title">Turn photos of documents into a clean PDF</string>
+    <string name="home_empty_body">Scan pages or pick photos. Folio crops and cleans them, and helps you fit upload size limits.</string>
+    <string name="home_draft">Draft</string>
+    <string name="home_pdf_ready">PDF ready</string>
+    <string name="home_export_interrupted">Export didn\'t finish</string>
+    <string name="settings_title">Settings</string>
+    <string name="privacy_title">How Folio protects your privacy</string>
+    <string name="privacy_headline">Your documents never leave your phone</string>
+    <string name="privacy_body">Folio has no internet access, no account, no ads and no tracking. Everything happens on your phone, and Folio doesn\'t back up your documents to any cloud. When you share or save a file to another app, that app receives it.</string>
+    <string name="back">Back</string>
+</resources>

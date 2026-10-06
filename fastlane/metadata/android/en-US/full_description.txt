@@ -1,0 +1,13 @@
+Turn photos and paper documents into clean, ready-to-submit PDFs in seconds — completely offline.
+
+<b>Scan or import</b>
+Scan with your camera with automatic edge detection, or import photos from your gallery. You can even share photos to Folio from WhatsApp or any app.
+
+<b>Fix it fast</b>
+Auto-crop and straighten pages, rotate, reorder, duplicate or delete pages. Make text clearer with Auto, Grayscale or B&W modes.
+
+<b>Fit any size limit</b>
+Need a PDF under 100 KB, 200 KB or 1 MB for an exam, job or government form? Pick the limit and Folio does the rest. Export as PDF or JPG images.
+
+<b>Truly private</b>
+Folio has no internet permission, so your documents never leave your phone. No account. No ads. No tracking. Free and open source (GPL-3.0).
