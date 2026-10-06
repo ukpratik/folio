@@ -59,6 +59,24 @@ class OpenCvEnhancerAndRendererTest {
         listOf(src, auto, gray).forEach(Mat::release)
     }
 
+    /** Regression: a per-channel stretch turned a blue stamp black and tinted white paper yellow. */
+    @Test fun autoKeepsColoursNatural() {
+        val pixels = IntArray(300 * 400) { i ->
+            val x = i % 300
+            val y = i / 300
+            if (x in 60..240 && y in 80..160) Color.rgb(40, 80, 200) else Color.rgb(242, 242, 236)
+        }
+        val src = rgbOf(Bitmap.createBitmap(pixels, 300, 400, Bitmap.Config.ARGB_8888))
+        val auto = enhancer.enhance(src, EnhancementMode.AUTO, Adjustments())
+        val blue = auto.get(120, 150)
+        val paper = auto.get(300, 150)
+        assertThat(blue[2]).isGreaterThan(blue[0] + 80) // still clearly blue
+        assertThat(blue[2]).isGreaterThan(blue[1] + 60)
+        assertThat(Math.abs(paper[0] - paper[2])).isLessThan(15.0) // paper stays neutral
+        assertThat(paper[1]).isGreaterThan(230.0)
+        listOf(src, auto).forEach(Mat::release)
+    }
+
     @Test fun grayscaleIsSingleChannelAndAdjustmentsBrighten() {
         val src = rgbOf(SyntheticImages.washedOut(100, 100))
         val gray = enhancer.enhance(src, EnhancementMode.GRAYSCALE, Adjustments())

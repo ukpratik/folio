@@ -38,7 +38,9 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
         )
         cameraScreen(onBack = { nav.popBackStack() })
         editorScreen(
-            onBack = { nav.popBackStack() },
+            onClose = { nav.popBackStack() },
+            onScan = { nav.navigate(CameraDestination(it.value)) },
+            onOpenPage = { _, _ -> /* Page detail arrives in M4. */ },
             onCreatePdf = { nav.navigate(ExportDestination(it.value)) },
         )
         exportScreen(onBack = { nav.popBackStack() })

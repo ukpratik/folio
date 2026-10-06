@@ -7,6 +7,7 @@ import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
 import io.github.ukpratik.folio.core.model.Quad
+import io.github.ukpratik.folio.core.model.Rotation
 import io.github.ukpratik.folio.core.model.UserPreferences
 import kotlinx.coroutines.flow.Flow
 
@@ -28,6 +29,12 @@ interface PageRepository {
     suspend fun maxOrder(documentId: DocumentId): Int
     suspend fun insertAll(pages: List<Page>)
     suspend fun setStatus(id: PageId, status: PageStatus)
+
+    /** Sets the rotation and bumps the edit version (thumbnail cache key). */
+    suspend fun setRotation(id: PageId, rotation: Rotation)
+
+    /** Inserts [page] and rewrites the document's order to [orderedIds] in one transaction. */
+    suspend fun insertAndReorder(page: Page, orderedIds: List<PageId>)
 
     /** Marks an imported page READY with its detected corners. Never resurrects a deleted row. */
     suspend fun completeImport(id: PageId, autoCorners: Quad?, corners: Quad?)

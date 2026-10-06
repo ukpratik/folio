@@ -20,6 +20,10 @@ internal val LightColors = lightColorScheme(
     outline = Color(0xFFC9CDD2),
     outlineVariant = Color(0xFFE3E5E8),
     error = Color(0xFFB42318),
+    // Snackbar (design: dark surface, teal action).
+    inverseSurface = Color(0xFF22262B),
+    inverseOnSurface = Color.White,
+    inversePrimary = Color(0xFF7FD3C8),
 )
 
 internal val DarkColors = darkColorScheme(
@@ -36,6 +40,9 @@ internal val DarkColors = darkColorScheme(
     outline = Color(0xFF3A4146),
     outlineVariant = Color(0xFF2A2F33),
     error = Color(0xFFFFB4AB),
+    inverseSurface = Color(0xFFE6E8EA),
+    inverseOnSurface = Color(0xFF15181C),
+    inversePrimary = Color(0xFF0D6B62),
 )
 
 /** Warning colours (not part of the M3 scheme). Always pair with an icon and text. */

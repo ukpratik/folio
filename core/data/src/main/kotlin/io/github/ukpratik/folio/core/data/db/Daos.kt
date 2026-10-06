@@ -52,6 +52,15 @@ interface PageDao {
     )
     suspend fun completeImport(id: String, autoCorners: String?, corners: String?)
 
+    @Query("UPDATE page SET rotation = :degrees, edit_version = edit_version + 1 WHERE id = :id")
+    suspend fun setRotation(id: String, degrees: Int)
+
+    @Transaction
+    suspend fun insertAndReorder(page: PageEntity, orderedIds: List<String>) {
+        insertAll(listOf(page))
+        reorder(orderedIds)
+    }
+
     @Query("UPDATE page SET status = :status WHERE id = :id")
     suspend fun setStatus(id: String, status: String)
 

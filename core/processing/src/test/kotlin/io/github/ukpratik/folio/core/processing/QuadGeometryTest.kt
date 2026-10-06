@@ -41,6 +41,13 @@ class QuadGeometryTest {
         assertThat(QuadGeometry.isConfident(rightHalf, 600, 800)).isFalse()
     }
 
+    @Test fun insetMovesCornersTowardsTheCentre() {
+        val square = listOf(Px(0.0, 0.0), Px(100.0, 0.0), Px(100.0, 100.0), Px(0.0, 100.0))
+        val inset = QuadGeometry.inset(square, kotlin.math.sqrt(2.0))
+        assertThat(inset[0].x).isWithin(1e-9).of(1.0)
+        assertThat(inset[2].y).isWithin(1e-9).of(99.0)
+    }
+
     @Test fun outputSizeAveragesOppositeEdges() {
         val rect = listOf(Px(0.0, 0.0), Px(400.0, 0.0), Px(400.0, 300.0), Px(0.0, 300.0))
         assertThat(QuadGeometry.outputSize(rect)).isEqualTo(400 to 300)

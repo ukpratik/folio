@@ -77,6 +77,21 @@ object QuadGeometry {
         return interiorAnglesDeg(corners).all { it in MIN_ANGLE_DEG..MAX_ANGLE_DEG }
     }
 
+    /**
+     * Moves each corner [px] pixels towards the centroid. Edge detection plus dilation places the outline a
+     * pixel or two outside the paper; without this the crop keeps a thin line of table along the edges.
+     */
+    fun inset(c: List<Px>, px: Double): List<Px> {
+        val cx = c.sumOf { it.x } / c.size
+        val cy = c.sumOf { it.y } / c.size
+        return c.map { p ->
+            val dx = cx - p.x
+            val dy = cy - p.y
+            val len = hypot(dx, dy)
+            if (len <= px) p else Px(p.x + dx / len * px, p.y + dy / len * px)
+        }
+    }
+
     /** Size of the flattened page: the average lengths of opposite edges. */
     fun outputSize(c: List<Px>): Pair<Int, Int> {
         fun dist(a: Px, b: Px) = hypot(a.x - b.x, a.y - b.y)

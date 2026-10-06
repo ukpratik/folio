@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
+    implementation(libs.coil.core)
 }

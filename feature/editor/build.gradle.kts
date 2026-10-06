@@ -2,3 +2,7 @@
 plugins {
     id("folio.android.feature")
 }
+
+dependencies {
+    implementation(libs.reorderable)
+}

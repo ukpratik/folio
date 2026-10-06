@@ -488,3 +488,15 @@ Changes from the design above, made during implementation:
 - **`PageRepository.upsert` was removed.** Imports finish with a targeted `completeImport` UPDATE (status, corners, `edit_version + 1`), so a page deleted during import can never be resurrected. Edits will use similar targeted updates (M3/M4).
 - **Mat lifetimes:** every OpenCV `Mat` is created through `withMats { track(...) }` and released in `finally`. `keep()` hands ownership to the caller.
 - **The OpenCV version is pinned to 4.9.0.** See the ADR-0009 implementation note (SVE SIGILL on Apple-silicon emulators).
+
+## 14. Implementation notes — M3 (page editor)
+
+- **Thumbnails:** Coil 3 with `PageThumbnailFetcherFactory` (renders through `PageRenderer`) and `PageThumbnailKeyer` (`sourceId:pageId:editVersion:size`). **Memory cache only** (15% of the app's memory class). A disk cache isn't needed because renders at about 480 px are fast and the preview-base LRU in the renderer absorbs repeats. This differs from ADR-0016's disk cache, so revisit if scrolling large documents shows jank. The ImageLoader registers no network components.
+- **Grid reorder:** `sh.calvin.reorderable` on `LazyVerticalGrid`. The visible order is local while dragging and committed **once** on drop through `MovePage`. The page ⋮ menu and TalkBack custom actions (Move left/right, Rotate, Duplicate, Delete) give the same operations without dragging.
+- **Duplicate** inserts the copy and rewrites the dense order in **one Room transaction** (`insertAndReorder`). The copy shares the source file and gets a new `editVersion` timeline.
+- **Undo:** `SnackbarHostState.showUndo()` in `:core:ui` keeps the snackbar for **5 s** (FR-09; M3's Short is 4 s). It is reused by later screens. Soft-deleted rows are purged by startup recovery.
+- **Leaving an empty draft deletes it** (decision D-42) so Recents never shows 0-page documents. Drafts with pages show "Saved as draft".
+- **Auto enhancement was rewritten** after an on-device bug: a per-channel stretch turned a blue stamp black and tinted paper yellow. Auto now white-balances from the brightest 10% of pixels (the paper; gains clamped 0.85–1.2) and applies **one** luminance-based stretch to all channels, which preserves hue. A regression test covers it.
+- **Detected corners are inset by 2.5 px** (at analysis scale) to remove the thin line of table that Canny plus dilation left along the crop edges.
+- **The grid has no item fade-in.** Placement animation stays for reordering. Note: the software-rendered emulator stalls frames until input, so screenshots taken without a tap can show mid-animation states. That is an emulator artefact, not an app bug.
+- **Screenshot tests:** Roborazzi (Robolectric, native graphics) is wired through the feature convention plugin. Golden images live in `feature/*/src/test/screenshots/`. Record with `./gradlew testDebugUnitTest -Proborazzi.test.record=true`; verify with `verifyRoborazziDebug`.

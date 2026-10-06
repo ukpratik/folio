@@ -73,7 +73,9 @@ internal class OpenCvEdgeDetector @Inject constructor(private val runtime: OpenC
                 track(Mat()).also { Imgproc.threshold(blurred, it, 0.0, 255.0, Imgproc.THRESH_BINARY + Imgproc.THRESH_OTSU) }
             }
         }
-        val corners = passes.firstNotNullOfOrNull { pass -> bestQuad(pass(), gray.cols(), gray.rows()) } ?: return null
+        val corners = passes.firstNotNullOfOrNull { pass -> bestQuad(pass(), gray.cols(), gray.rows()) }
+            ?.let { QuadGeometry.inset(it, EDGE_INSET_PX) }
+            ?: return null
 
         val confidence = (QuadGeometry.area(corners) / (gray.cols().toDouble() * gray.rows())).toFloat()
         return Detection(QuadGeometry.toQuad(corners, gray.cols(), gray.rows()), confidence)
@@ -116,5 +118,7 @@ internal class OpenCvEdgeDetector @Inject constructor(private val runtime: OpenC
         /** Keeps Canny thresholds sensible on very dark frames. */
         const val MIN_MEDIAN = 20.0
         const val LOW_CANNY = 30.0
+        /** Canny edge (≈1 px) + 3×3 dilation (≈1 px), at analysis scale. */
+        const val EDGE_INSET_PX = 2.5
     }
 }

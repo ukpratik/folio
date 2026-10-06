@@ -34,19 +34,35 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
         }
     }
 
-    /** Gray-world white balance → per-channel 1–99 % stretch → mild unsharp mask. */
+    /**
+     * Document-aware auto (FR-12, "keep colours natural"):
+     * 1. White balance from the *paper*: the brightest 10 % of pixels should be neutral. Gains are clamped so a
+     *    genuinely cream page or a coloured certificate is only nudged, never recoloured.
+     * 2. One contrast stretch (1st–99th luminance percentile) applied identically to all channels, which
+     *    preserves hue. A per-channel stretch would turn a blue stamp black.
+     * 3. A mild unsharp mask.
+     */
     private fun MatScope.auto(rgb: Mat): Mat {
+        val gray = track(Mat())
+        Imgproc.cvtColor(rgb, gray, Imgproc.COLOR_RGB2GRAY)
+        val (low, high) = percentiles(gray, 0.01, 0.99)
+        val paperThreshold = percentiles(gray, PAPER_PERCENTILE, PAPER_PERCENTILE).first
+
+        val paperMask = track(Mat())
+        Imgproc.threshold(gray, paperMask, paperThreshold - 1, 255.0, Imgproc.THRESH_BINARY)
         val channels = mutableListOf<Mat>()
         Core.split(rgb, channels)
         channels.forEach { track(it) }
-        val means = channels.map { Core.mean(it).`val`[0].coerceAtLeast(1.0) }
-        val gray = means.average()
-        channels.forEachIndexed { i, ch ->
-            ch.convertTo(ch, -1, (gray / means[i]).coerceIn(0.7, 1.4), 0.0)
-            stretch(ch)
-        }
+        val paper = channels.map { Core.mean(it, paperMask).`val`[0].coerceAtLeast(1.0) }
+        val neutral = paper.average()
+        channels.forEachIndexed { i, ch -> ch.convertTo(ch, -1, (neutral / paper[i]).coerceIn(MIN_GAIN, MAX_GAIN), 0.0) }
         val balanced = track(Mat())
         Core.merge(channels, balanced)
+
+        if (high - low >= MIN_RANGE) {
+            val alpha = 255.0 / (high - low)
+            balanced.convertTo(balanced, -1, alpha, -low * alpha)
+        }
         return sharpen(balanced)
     }
 
@@ -68,18 +84,22 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
         return bw
     }
 
-    /** Linear stretch so the 1st percentile → 0 and the 99th → 255. Histogram from a 4× downsample for speed. */
+    /** Linear stretch so the 1st percentile → 0 and the 99th → 255 (single-channel images). */
     private fun MatScope.stretch(channel: Mat) {
+        val (low, high) = percentiles(channel, 0.01, 0.99)
+        if (high - low < MIN_RANGE) return
+        val alpha = 255.0 / (high - low)
+        channel.convertTo(channel, -1, alpha, -low * alpha)
+    }
+
+    /** Two percentiles of a single-channel image, from a 4× downsampled histogram for speed. */
+    private fun MatScope.percentiles(channel: Mat, lowFraction: Double, highFraction: Double): Pair<Double, Double> {
         val small = track(Mat())
         Imgproc.resize(channel, small, Size(channel.cols() / 4.0 + 1, channel.rows() / 4.0 + 1), 0.0, 0.0, Imgproc.INTER_AREA)
         val hist = track(Mat())
         Imgproc.calcHist(listOf(small), MatOfInt(0), track(Mat()), hist, MatOfInt(256), MatOfFloat(0f, 256f), false)
         val total = small.total().toDouble()
-        val low = percentile(hist, total, 0.01)
-        val high = percentile(hist, total, 0.99)
-        if (high - low < MIN_RANGE) return
-        val alpha = 255.0 / (high - low)
-        channel.convertTo(channel, -1, alpha, -low * alpha)
+        return percentile(hist, total, lowFraction) to percentile(hist, total, highFraction)
     }
 
     private fun percentile(hist: Mat, total: Double, fraction: Double): Double {
@@ -102,5 +122,9 @@ internal class OpenCvEnhancer @Inject constructor(private val runtime: OpenCvRun
     private companion object {
         /** Skip the stretch for near-uniform channels (it would amplify noise). */
         const val MIN_RANGE = 16.0
+        /** Pixels at or above this luminance percentile are treated as paper for white balance. */
+        const val PAPER_PERCENTILE = 0.90
+        const val MIN_GAIN = 0.85
+        const val MAX_GAIN = 1.2
     }
 }

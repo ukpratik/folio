@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.timber)
     // Maven AAR for now; a slim core+imgproc source build replaces it before F-Droid (ADR-0009, ADR-0021).
     implementation(libs.opencv)
+    implementation(libs.coil.core)
 
     testImplementation(project(":core:testing"))
     testImplementation(libs.robolectric)

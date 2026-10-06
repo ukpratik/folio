@@ -7,6 +7,7 @@ import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
 import io.github.ukpratik.folio.core.model.Quad
+import io.github.ukpratik.folio.core.model.Rotation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -41,6 +42,15 @@ class FakePageRepository(private val clock: FakeClock = FakeClock()) : PageRepos
 
     override suspend fun insertAll(pages: List<Page>) {
         rows.value = rows.value + pages.associate { it.id to Row(it) }
+    }
+
+    override suspend fun setRotation(id: PageId, rotation: Rotation) = edit(id) {
+        it.copy(page = it.page.copy(rotation = rotation, editVersion = it.page.editVersion + 1))
+    }
+
+    override suspend fun insertAndReorder(page: Page, orderedIds: List<PageId>) {
+        insertAll(listOf(page))
+        reorder(page.documentId, orderedIds)
     }
 
     override suspend fun completeImport(id: PageId, autoCorners: Quad?, corners: Quad?) = edit(id) {

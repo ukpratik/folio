@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="editor_back">Back</string>
+    <string name="editor_cancel">Cancel</string>
+    <string name="editor_more_options">More options</string>
     <string name="editor_create_pdf">Create PDF</string>
-    <string name="editor_page_ready">Ready</string>
-    <string name="editor_page_importing">Adding…</string>
-    <string name="editor_page_failed">Couldn\'t add</string>
-    <string name="editor_page_row">Page %1$d · %2$s</string>
-    <plurals name="editor_page_count">
-        <item quantity="one">%1$d page</item>
-        <item quantity="other">%1$d pages</item>
+    <string name="editor_add_pages">Add pages</string>
+    <string name="editor_add_scan">Scan with camera</string>
+    <string name="editor_add_scan_short">Scan</string>
+    <string name="editor_add_import">Import images</string>
+    <string name="editor_page_description">Page %1$d</string>
+    <string name="editor_page_options">Page %1$d options</string>
+    <string name="editor_rotate">Rotate</string>
+    <string name="editor_duplicate">Duplicate</string>
+    <string name="editor_move_left">Move left</string>
+    <string name="editor_move_right">Move right</string>
+    <string name="editor_delete">Delete</string>
+    <string name="editor_page_deleted">Page deleted</string>
+    <string name="editor_undo">UNDO</string>
+    <string name="editor_saved_draft">Saved as draft</string>
+    <string name="editor_page_limit">You can add up to %1$d pages per document.</string>
+    <string name="editor_empty_title">No pages yet</string>
+    <string name="editor_empty_body">Scan or import to add pages.</string>
+    <string name="editor_delete_document">Delete document</string>
+    <string name="editor_delete_title">Delete “%1$s”?</string>
+    <string name="editor_delete_body">This removes it from Folio. Copies you saved or shared elsewhere aren\'t affected.</string>
+    <string name="import_count">%1$d of %2$d</string>
+    <string name="rename_title">Rename</string>
+    <string name="rename_label">File name</string>
+    <string name="rename_confirm">Rename</string>
+    <string name="rename_empty">Name can\'t be empty.</string>
+    <string name="rename_hint_count">Symbols like / : * ? become _ · %1$d / %2$d</string>
+    <plurals name="editor_subtitle">
+        <item quantity="one">%1$d page · Hold and drag a page to reorder</item>
+        <item quantity="other">%1$d pages · Hold and drag a page to reorder</item>
     </plurals>
-    <plurals name="import_adding">
-        <item quantity="one">Adding %1$d photo… %2$d done</item>
-        <item quantity="other">Adding %1$d photos… %2$d done</item>
+    <plurals name="import_adding_title">
+        <item quantity="one">Adding %1$d photo…</item>
+        <item quantity="other">Adding %1$d photos…</item>
     </plurals>
     <plurals name="import_failed">
         <item quantity="one">%1$d image couldn\'t be added (unsupported or damaged).</item>
