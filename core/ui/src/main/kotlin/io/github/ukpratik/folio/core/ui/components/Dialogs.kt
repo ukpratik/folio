@@ -19,7 +19,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.github.ukpratik.folio.core.ui.R
 
-/** Standard M3 confirm dialog (Delete document, Reset page, Keep pages…). */
+/**
+ * Standard M3 confirm dialog (Delete document, Reset page, Keep pages…).
+ * [onDismiss] runs on outside tap / back; [onDismissButton] runs only when the second button is pressed —
+ * keep them separate when that button does something (e.g. "Discard"), so a stray tap never destroys work.
+ */
 @Composable
 fun ConfirmDialog(
     title: String,
@@ -29,6 +33,7 @@ fun ConfirmDialog(
     onDismiss: () -> Unit,
     destructive: Boolean = false,
     dismissLabel: String = stringResource(R.string.cancel),
+    onDismissButton: () -> Unit = onDismiss,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -40,7 +45,7 @@ fun ConfirmDialog(
                 colors = if (destructive) ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error) else ButtonDefaults.textButtonColors(),
             ) { Text(confirmLabel) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(dismissLabel) } },
+        dismissButton = { TextButton(onClick = onDismissButton) { Text(dismissLabel) } },
     )
 }
 

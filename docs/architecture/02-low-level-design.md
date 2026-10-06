@@ -513,3 +513,17 @@ Changes from the design above, made during implementation:
   - **B&W** adaptive threshold hollowed out solid dark areas, so a filled block became an outline. Pixels below 80% of the ink/paper midpoint (Otsu split) are now kept black.
   - Mode selector: four equal icon tiles with labels underneath. Chips truncated "Grayscale" at 390 dp.
 - **Known minor issue:** a faint 1 px dotted edge can remain on one side of tightly cropped B&W pages. Track in QA (T01/T10).
+
+## 16. Implementation notes — M5 (camera)
+
+- **Permission flow (LLD §6.2):** `CameraPermission.resolve(granted, requestedBefore, shouldShowRationale)` is pure and unit-tested. "Requested before" is stored in DataStore because `shouldShowRequestPermissionRationale` is false both before the first ask and after "Don't ask again".
+  - On entry, a first-time or once-denied user sees the **S2a rationale**; a permanently denied user goes straight to **S2c**.
+  - After a denial in the moment, the user sees **S2c**: Import images (Photo Picker, no permission needed) or Open settings (app-details screen).
+- **CameraX:** Preview, ImageAnalysis (about 640×480, `KEEP_ONLY_LATEST`, single thread) and ImageCapture (`MAXIMIZE_QUALITY`, capped at about 12 MP). All use **4:3**, and the preview is `FIT_CENTER`, so the overlay maps directly onto a 3:4 fit rect. `ProcessCameraProvider.awaitInstance` (camera-lifecycle extension).
+- **`DocumentFrameAnalyzer`** (in `:feature:capture`, an Android adapter) feeds the **Y plane** with row stride to `EdgeDetector`, then `QuadSmoother`. It rotates the result to display orientation (`FrameGeometry.rotate`, unit-tested) and computes mean luma for "More light needed".
+- **Batch capture:**
+  - Shots go to `cache/work/capture*.jpg` (wiped on startup).
+  - Pages are created only on **Done** or **Keep**, through the same `StartDocumentFromImages` / `AddPages` use cases as imports. A new scan replaces the camera with its editor in the back stack; scanning into an existing document returns to it.
+- **Safety fix:** `ConfirmDialog` gained `onDismissButton`. Previously "Discard" was wired to `onDismiss`, which also fires on outside-tap and would have silently deleted scanned pages.
+- **Theme:** M3 `surfaceContainer*` roles are now neutral. Cards and sheets had a lilac tint.
+- **Not yet verified:** live outline detection on a real document through the camera. The emulator's emulated camera shows a synthetic scene. The detector, rotation and smoothing are covered by tests; the end-to-end check goes to QA's device pass (T01–T14).

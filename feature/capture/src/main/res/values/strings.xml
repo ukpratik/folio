@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="camera_close">Close camera</string>
+    <string name="camera_capture">Capture page</string>
+    <string name="camera_done">Done</string>
+    <string name="camera_torch_on">Turn torch on</string>
+    <string name="camera_torch_off">Turn torch off</string>
+    <string name="camera_hint_point">Point at a document</string>
+    <string name="camera_hint_steady">Hold steady</string>
+    <string name="camera_hint_dark">More light needed</string>
+    <string name="camera_capture_failed">Couldn\'t take the photo. Try again.</string>
+    <string name="camera_unavailable">Camera isn\'t available right now.</string>
+    <string name="camera_page_limit">You can add up to %1$d pages per document.</string>
+    <string name="camera_keep_body">They\'ll be saved as a draft you can finish later.</string>
+    <string name="camera_keep">Keep</string>
+    <string name="camera_discard">Discard</string>
+    <string name="camera_rationale_title">Allow camera to scan documents</string>
+    <string name="camera_rationale_body">Folio uses your camera only while you scan. Photos stay on your phone and are never uploaded.</string>
+    <string name="camera_rationale_footnote">Next, Android will ask you to confirm.</string>
+    <string name="camera_continue">Continue</string>
+    <string name="camera_not_now">Not now</string>
+    <string name="camera_denied_title">Camera access is off</string>
+    <string name="camera_denied_body">You can still import images from your phone. To scan, allow camera access in Settings.</string>
+    <string name="camera_import">Import images</string>
+    <string name="camera_open_settings">Open settings</string>
+    <plurals name="camera_keep_title">
+        <item quantity="one">Keep %1$d scanned page?</item>
+        <item quantity="other">Keep %1$d scanned pages?</item>
+    </plurals>
+    <plurals name="camera_done_description">
+        <item quantity="one">Done, %1$d page captured</item>
+        <item quantity="other">Done, %1$d pages captured</item>
+    </plurals>
+</resources>

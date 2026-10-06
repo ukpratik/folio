@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.ukpratik.folio.feature.editor.detail
 
+import io.github.ukpratik.folio.core.ui.geometry.FitRect
 import com.google.common.truth.Truth.assertThat
 import io.github.ukpratik.folio.core.model.PointF01
 import io.github.ukpratik.folio.feature.editor.detail.CropMath.point

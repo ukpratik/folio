@@ -3,23 +3,11 @@ package io.github.ukpratik.folio.feature.editor.detail
 
 import io.github.ukpratik.folio.core.model.PointF01
 import io.github.ukpratik.folio.core.model.Quad
+import io.github.ukpratik.folio.core.ui.geometry.FitRect
 import kotlin.math.hypot
-import kotlin.math.min
 
 /** Corner identity, clockwise from top-left (matches [Quad]). */
 enum class Corner { TL, TR, BR, BL }
-
-/** Where the image is drawn inside the crop canvas (ContentScale.Fit). */
-data class FitRect(val left: Float, val top: Float, val width: Float, val height: Float) {
-    companion object {
-        fun fit(imageWidth: Int, imageHeight: Int, canvasWidth: Float, canvasHeight: Float): FitRect {
-            val scale = min(canvasWidth / imageWidth, canvasHeight / imageHeight)
-            val w = imageWidth * scale
-            val h = imageHeight * scale
-            return FitRect((canvasWidth - w) / 2, (canvasHeight - h) / 2, w, h)
-        }
-    }
-}
 
 /** Pure crop-handle maths (FR-04), kept out of Compose so it's unit-tested on the JVM. */
 object CropMath {

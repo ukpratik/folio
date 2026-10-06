@@ -9,6 +9,7 @@ import io.github.ukpratik.folio.feature.capture.CameraDestination
 import io.github.ukpratik.folio.feature.capture.cameraScreen
 import io.github.ukpratik.folio.feature.editor.detail.navigateToPageDetail
 import io.github.ukpratik.folio.feature.editor.detail.pageDetailScreen
+import io.github.ukpratik.folio.feature.editor.EditorDestination
 import io.github.ukpratik.folio.feature.editor.editorScreen
 import io.github.ukpratik.folio.feature.editor.navigateToEditor
 import io.github.ukpratik.folio.feature.export.ExportDestination
@@ -38,7 +39,17 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
             onOpenPrivacy = { nav.navigate(PrivacyDestination) },
             onBack = { nav.popBackStack() },
         )
-        cameraScreen(onBack = { nav.popBackStack() })
+        cameraScreen(
+            onClose = { nav.popBackStack() },
+            onOpenEditor = { id, isNew ->
+                if (isNew) {
+                    // A new scan replaces the camera with its editor, so Back goes Home.
+                    nav.navigate(EditorDestination(id.value)) { popUpTo<CameraDestination> { inclusive = true } }
+                } else {
+                    nav.popBackStack() // back to the editor we came from; it observes the new pages
+                }
+            },
+        )
         editorScreen(
             onClose = { nav.popBackStack() },
             onScan = { nav.navigate(CameraDestination(it.value)) },
