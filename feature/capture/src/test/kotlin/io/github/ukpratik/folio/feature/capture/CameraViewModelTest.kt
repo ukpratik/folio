@@ -43,7 +43,7 @@ class CameraViewModelTest {
         prefs,
         files,
         AddPages(pages, documents, engine, clock),
-        StartDocumentFromImages(CreateDocument(documents, clock), AddPages(pages, documents, engine, clock)),
+        StartDocumentFromImages(CreateDocument(documents, FakePreferencesRepository(), clock), AddPages(pages, documents, engine, clock)),
     )
 
     @Test fun firstVisitShowsRationaleAndRememberingTheAskLeadsToDeniedScreen() = runTest {

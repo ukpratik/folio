@@ -52,7 +52,7 @@ class HomeViewModelTest {
         pages,
         exports,
         preferences,
-        StartDocumentFromImages(CreateDocument(documents, clock), AddPages(pages, documents, engine, clock)),
+        StartDocumentFromImages(CreateDocument(documents, FakePreferencesRepository(), clock), AddPages(pages, documents, engine, clock)),
         RenameDocument(documents, files),
         DeleteDocument(documents, files, exports),
         SaveExport(documents, destinations, preferences),

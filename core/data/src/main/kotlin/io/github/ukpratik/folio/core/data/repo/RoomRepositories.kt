@@ -21,7 +21,6 @@ import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
 import io.github.ukpratik.folio.core.model.Quad
 import io.github.ukpratik.folio.core.model.Rotation
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -34,9 +33,8 @@ internal class RoomDocumentRepository @Inject constructor(
 
     override fun observe(id: DocumentId): Flow<Document?> = dao.observe(id.value).map { it?.toModel() }
 
-    override suspend fun create(title: String): Document {
+    override suspend fun create(title: String, settings: ExportSettings): Document {
         val now = clock.nowMillis()
-        val settings = ExportSettings(pageSize = ExportSettings.defaultPageSizeFor(Locale.getDefault().country))
         val entity = newDocumentEntity(DocumentId.new(), title, settings, now)
         dao.upsert(entity)
         return entity.toModel()

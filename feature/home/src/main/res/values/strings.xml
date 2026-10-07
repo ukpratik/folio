@@ -31,10 +31,5 @@
     <string name="home_save_failed">Something went wrong saving the file.</string>
     <string name="rename_empty">Name can\'t be empty.</string>
     <string name="home_export_interrupted">Export didn\'t finish</string>
-    <string name="settings_title">Settings</string>
-    <string name="privacy_title">How Folio protects your privacy</string>
-    <string name="privacy_headline">Your documents never leave your phone</string>
-    <string name="privacy_body">Folio has no internet access, no account, no ads and no tracking. Everything happens on your phone, and Folio doesn\'t back up your documents to any cloud. When you share or save a file to another app, that app receives it.</string>
-    <string name="back">Back</string>
     <string name="import_page_limit">You can add up to %1$d pages per document.</string>
 </resources>

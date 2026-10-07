@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# CI gates from ADR-0017: build, tests, lint, privacy (permissions).
+# CI gates from ADR-0017: build, tests, lint, privacy (permissions), licences, size.
 name: CI
 
 on:
@@ -44,8 +44,15 @@ jobs:
       - name: Lint
         run: ./gradlew lintPlayDebug lintFdroidDebug
 
-      - name: Build release APKs (unsigned)
+      # Also the licence gate: AboutLibraries strict mode fails the release build on any licence
+      # outside the GPL-compatible allowlist in app/build.gradle.kts (ADR-0023).
+      - name: Build release APKs (unsigned) + licence gate
         run: ./gradlew assemblePlayRelease assembleFdroidRelease
+
+      - name: Size gate — Play download ≤ 25 MB (NFR-08)
+        run: |
+          ./gradlew bundlePlayRelease
+          scripts/check-size.sh app/build/outputs/bundle/playRelease/app-play-release.aab
 
       - name: Privacy gate — permissions allowlist (ADR-0013)
         run: scripts/check-permissions.sh app/build/outputs/apk/*/release/*.apk

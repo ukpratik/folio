@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.Flow
 interface DocumentRepository {
     fun observeRecents(): Flow<List<Document>>
     fun observe(id: DocumentId): Flow<Document?>
-    suspend fun create(title: String): Document
+    suspend fun create(title: String, settings: ExportSettings): Document
     suspend fun rename(id: DocumentId, title: String)
     suspend fun touch(id: DocumentId)
     suspend fun delete(id: DocumentId)

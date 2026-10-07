@@ -623,3 +623,37 @@ Changes from the design above, made during implementation:
     - **Missed target:** a noisy page aimed at 100 KB showed the card; Try B&W re-exported, then Keep showed the over-limit badge.
     - **JPG:** export, then Save to folder ("Saved to Documents").
   - **Not verified on the device:** cancel during processing. One-page exports finish in under a second; cancel is covered by the coordinator and ViewModel tests.
+
+## 19. Implementation notes — M8 (settings, privacy, polish, release readiness)
+
+- **`:feature:settings`** (D-47) owns Settings, Privacy and Licences. Home only links to them.
+  - **Build facts:** `AppInfo` (`:core:model`) carries version, store link, feedback address and the licence resource id. `:app` provides it from `BuildConfig`, so features never touch the app's `BuildConfig` or `R`.
+  - **Defaults (D-46):** page size and quality are saved through `PreferencesRepository`, and `CreateDocument` applies them to new documents. Page size follows the region (A4, or Letter in US/CA) until the user picks one.
+  - **Send feedback:** `ACTION_SENDTO mailto:` with only the app version, Android version and phone model. The recipient is the `folio.feedbackEmail` Gradle property; if it is blank, the user types one.
+  - **Rate:** opens `BuildConfig.RATE_URL` per flavour. The Play `market://` link falls back to the web listing when no store app is installed.
+- **Licences:** the AboutLibraries Android plugin on `:app` runs in `offlineMode`, with no remote fetch and no timestamp in the output, so builds stay reproducible.
+  - **Licence texts:** committed SPDX texts in `app/aboutlibraries/licenses/`. The bundled font is a manual entry in `app/aboutlibraries/libraries/`.
+  - **Release gate:** strict mode fails the release build on any licence outside Apache-2.0, MIT, BSD-2/3-Clause and OFL-1.1. Current release set: 170 libraries (168 Apache-2.0, 2 BSD-3-Clause, 1 MIT) plus the font (OFL-1.1).
+  - **Shrinking:** `res/raw/keep.xml` keeps the generated JSON from AGP 9's resource shrinking (verified in the release APK).
+- **Debug only:** StrictMode (disk and network on the main thread, leaked closeables and SQLite objects; logs only) and LeakCanary 2.14 (`debugImplementation`). Release APKs still declare only CAMERA.
+- **Baseline Profile (`:baselineprofile`, ADR-0019):**
+  - `StartupProfileGenerator` records launch → Home → Settings. The result (about 20k rules) is merged into `app/src/main/generated/baselineProfiles/`, so both flavours ship it (`assets/dexopt/baseline.prof`).
+  - **Regenerate:** `./gradlew :app:generatePlayReleaseBaselineProfile` (needs an API 33+ device or emulator).
+  - **`StartupBenchmark`, emulator, 10 cold starts:**
+
+    | Mode | Time to first frame |
+    |---|---|
+    | No compilation | median 4,987 ms |
+    | Baseline Profile | median 440 ms (342–941 ms) |
+
+    The NFR-03 gate (≤ 1.5 s) is measured on the reference phone.
+- **Accessibility pass:**
+  - Every icon-only button has a label, and icons next to text are decorative (`null`).
+  - New 200 % font-scale screenshots at 360 dp cover Home recents, the export sheet and the target-missed result. They found one bug: an "Export didn't finish" tag pushed the page count off the row; that row is now a FlowRow.
+  - Chip groups wrap, and the export sheet scrolls.
+- **Dark theme:** screenshots in dark exist for Editor, Export sheet, Result, Home and Settings. Page detail and Camera are always dark.
+- **CI:**
+  - **`ci.yml`:** licence gate (part of the release build) and size gate (`scripts/check-size.sh`: bundletool `get-size total` per ABI, fails above 25 MB). Current Play download: arm64 11.0 MB, armeabi-v7a 10.0 MB.
+  - **`nightly.yml`:** runs `:core:processing:connectedDebugAndroidTest` (the OpenCV pipeline and export end-to-end) on an x86_64 API 34 emulator. The app APK is ARM-only, so device tests live in library modules.
+- **Release smoke test:** the R8-minified Play release, signed with the debug key, installed and worked on the emulator (licences screen, import, export to PDF).
+- **Tests:** 175 JVM tests passing, including CreateDocument defaults, Settings ViewModel, and Settings/Privacy screenshots in light and dark.

@@ -20,9 +20,11 @@ import io.github.ukpratik.folio.feature.export.ResultDestination
 import io.github.ukpratik.folio.feature.export.exportGraph
 import io.github.ukpratik.folio.feature.export.sheet.ExportSheetRoute
 import io.github.ukpratik.folio.feature.home.HomeDestination
-import io.github.ukpratik.folio.feature.home.PrivacyDestination
-import io.github.ukpratik.folio.feature.home.SettingsDestination
 import io.github.ukpratik.folio.feature.home.homeGraph
+import io.github.ukpratik.folio.feature.settings.LicencesDestination
+import io.github.ukpratik.folio.feature.settings.PrivacyDestination
+import io.github.ukpratik.folio.feature.settings.SettingsDestination
+import io.github.ukpratik.folio.feature.settings.settingsGraph
 import kotlinx.coroutines.flow.Flow
 
 /** Composes the feature graphs. Features never reference each other; all cross-feature navigation lives here. */
@@ -43,7 +45,11 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
             onOpenExported = { nav.navigate(ResultDestination(it.value)) { launchSingleTop = true } },
             onOpenSettings = { nav.navigate(SettingsDestination) },
             onOpenPrivacy = { nav.navigate(PrivacyDestination) },
+        )
+        settingsGraph(
             onBack = { nav.popBackStack() },
+            onOpenPrivacy = { nav.navigate(PrivacyDestination) },
+            onOpenLicences = { nav.navigate(LicencesDestination) },
         )
         cameraScreen(
             onClose = { nav.popBackStack() },

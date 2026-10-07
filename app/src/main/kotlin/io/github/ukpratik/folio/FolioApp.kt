@@ -3,6 +3,7 @@ package io.github.ukpratik.folio
 
 import android.app.Application
 import android.content.Context
+import android.os.StrictMode
 import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.memory.MemoryCache
@@ -34,13 +35,22 @@ class FolioApp : Application(), SingletonImageLoader.Factory {
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+            enableStrictMode()
+        }
         // Off the main thread; only touches data from before this session (LLD §3.4).
         appScope.launch(io) {
             runCatching { recoverOnStartup.get()() }
                 .onSuccess { Timber.d("Startup recovery: %s", it) }
                 .onFailure { Timber.w(it, "Startup recovery failed") }
         }
+    }
+
+    /** Debug builds flag disk/network work on the main thread and leaked closeables (LLD §11). */
+    private fun enableStrictMode() {
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build())
+        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectLeakedClosableObjects().detectLeakedSqlLiteObjects().penaltyLog().build())
     }
 
     /** Coil renders page thumbnails through our engine. No network components are registered (ADR-0013). */

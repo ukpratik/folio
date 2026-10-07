@@ -1,0 +1,14 @@
+{
+  "uniqueId": "com.tokotype:plus-jakarta-sans",
+  "name": "Plus Jakarta Sans",
+  "description": "The app's typeface, bundled in the APK.",
+  "website": "https://github.com/tokotype/PlusJakartaSans",
+  "developers": [
+    {
+      "name": "Tokotype"
+    }
+  ],
+  "licenses": [
+    "OFL-1.1"
+  ]
+}

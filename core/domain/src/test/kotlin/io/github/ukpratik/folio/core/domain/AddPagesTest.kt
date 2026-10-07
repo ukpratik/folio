@@ -15,6 +15,7 @@ import io.github.ukpratik.folio.core.testing.FakeClock
 import io.github.ukpratik.folio.core.testing.FakeDocumentRepository
 import io.github.ukpratik.folio.core.testing.FakeImportEngine
 import io.github.ukpratik.folio.core.testing.FakePageRepository
+import io.github.ukpratik.folio.core.testing.FakePreferencesRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -46,7 +47,7 @@ class AddPagesTest {
     }
 
     @Test fun startFromImagesCreatesDraftNamedByTimestamp() = runTest {
-        val start = StartDocumentFromImages(CreateDocument(documents, clock), addPages)
+        val start = StartDocumentFromImages(CreateDocument(documents, FakePreferencesRepository(), clock), addPages)
         val outcome = start(sources(2))
         assertThat(outcome).isInstanceOf(Outcome.Success::class.java)
         assertThat(documents.all.single().title).startsWith("Folio_")

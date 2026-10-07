@@ -20,9 +20,11 @@ class FakeDocumentRepository(private val clock: FakeClock = FakeClock()) : Docum
 
     override fun observe(id: DocumentId): Flow<Document?> = docs.map { it[id] }
 
-    override suspend fun create(title: String): Document {
+    suspend fun create(title: String): Document = create(title, ExportSettings())
+
+    override suspend fun create(title: String, settings: ExportSettings): Document {
         val now = Instant.ofEpochMilli(clock.nowMillis())
-        val doc = Document(DocumentId.new(), title, DocumentStatus.DRAFT, now, now, ExportSettings())
+        val doc = Document(DocumentId.new(), title, DocumentStatus.DRAFT, now, now, settings)
         docs.value = docs.value + (doc.id to doc)
         return doc
     }

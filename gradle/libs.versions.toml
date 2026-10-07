@@ -32,6 +32,10 @@ reorderable = "3.1.0"
 materialIcons = "1.7.8"
 roborazzi = "1.76.0"
 androidxTestRunner = "1.7.0"
+aboutLibraries = "15.2.0"
+leakcanary = "2.14"
+benchmark = "1.5.0"
+uiautomator = "2.4.0"
 # Test
 junit = "4.13.2"
 truth = "1.4.5"
@@ -87,6 +91,10 @@ opencv = { module = "org.opencv:opencv", version.ref = "opencv" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+androidx-benchmark-macro = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
@@ -110,3 +118,6 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutLibraries" }
+android-test = { id = "com.android.test", version.ref = "agp" }
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "benchmark" }

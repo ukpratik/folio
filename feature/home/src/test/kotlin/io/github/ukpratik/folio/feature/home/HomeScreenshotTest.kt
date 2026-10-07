@@ -74,4 +74,7 @@ class HomeScreenshotTest {
     @Test fun homeRecentsDark() = capture("home_recents_dark", recents, dark = true)
 
     @Test fun homeEmpty() = capture("home_empty", HomeState(loading = false))
+
+    @Test @Config(qualifiers = "w360dp-h740dp-xxhdpi", fontScale = 2f)
+    fun homeRecentsAt200PercentFont() = capture("home_recents_font200", recents)
 }

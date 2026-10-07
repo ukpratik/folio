@@ -7,6 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import io.github.ukpratik.folio.core.data.db.FolioDatabase
 import io.github.ukpratik.folio.core.data.repo.RoomDocumentRepository
 import io.github.ukpratik.folio.core.data.repo.RoomPageRepository
+import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
@@ -33,7 +34,7 @@ class RoomPageRepositoryTest {
     @After fun close() = db.close()
 
     @Test fun orderingCountsAndCascade() = runTest {
-        val doc = documents.create("Doc")
+        val doc = documents.create("Doc", ExportSettings())
         assertThat(pages.maxOrder(doc.id)).isEqualTo(-1)
         pages.insertAll((0..2).map { Page(PageId("p$it"), doc.id, it, "s$it", status = PageStatus.IMPORTING, createdAt = 50) })
 
@@ -52,7 +53,7 @@ class RoomPageRepositoryTest {
     }
 
     @Test fun quadsAndStatusRoundTrip() = runTest {
-        val doc = documents.create("Doc")
+        val doc = documents.create("Doc", ExportSettings())
         val page = Page(PageId("p"), doc.id, 0, "s", status = PageStatus.IMPORTING)
         pages.insertAll(listOf(page))
         pages.setStatus(page.id, PageStatus.READY)
@@ -60,9 +61,9 @@ class RoomPageRepositoryTest {
     }
 
     @Test fun coversUseTheFirstLivePageAndLiveCount() = runTest {
-        val a = documents.create("A")
-        val b = documents.create("B")
-        documents.create("Empty")
+        val a = documents.create("A", ExportSettings())
+        val b = documents.create("B", ExportSettings())
+        documents.create("Empty", ExportSettings())
         pages.insertAll((0..2).map { Page(PageId("a$it"), a.id, it, "s$it", status = PageStatus.READY) })
         pages.insertAll(listOf(Page(PageId("b0"), b.id, 0, "t", status = PageStatus.READY)))
         pages.softDelete(PageId("a0"))

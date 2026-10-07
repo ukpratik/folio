@@ -10,6 +10,9 @@ import io.github.ukpratik.folio.core.domain.concurrency.DefaultDispatcher
 import io.github.ukpratik.folio.core.domain.concurrency.IoDispatcher
 import io.github.ukpratik.folio.core.domain.time.Clock
 import io.github.ukpratik.folio.core.domain.time.SessionInfo
+import io.github.ukpratik.folio.BuildConfig
+import io.github.ukpratik.folio.R
+import io.github.ukpratik.folio.core.model.AppInfo
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +37,14 @@ object AppModule {
     fun clock(): Clock = object : Clock {
         override fun nowMillis(): Long = System.currentTimeMillis()
     }
+
+    @Provides @Singleton
+    fun appInfo(): AppInfo = AppInfo(
+        versionName = BuildConfig.VERSION_NAME,
+        rateUrl = BuildConfig.RATE_URL,
+        feedbackEmail = BuildConfig.FEEDBACK_EMAIL,
+        licencesResId = R.raw.aboutlibraries,
+    )
 
     @Provides @Singleton
     fun session(clock: Clock): SessionInfo = SessionInfo(startedAtMillis = clock.nowMillis())

@@ -94,4 +94,11 @@ class ExportScreenshotTest {
         val export = ExportResult(ExportFormat.JPG, files.map { it.path }, ByteSize(sizes.sum()), 3, ByteSize.kb(200), true, Instant.EPOCH)
         result("result_jpg", ResultState(true, "Marksheet_Class12", export, files))
     }
+
+    @Test @Config(qualifiers = "w360dp-h740dp-xxhdpi", fontScale = 2f)
+    fun sheetAt200PercentFont() = capture("export_sheet_font200") { ExportSheetContent(sheet) {} }
+
+    @Test @Config(qualifiers = "w360dp-h740dp-xxhdpi", fontScale = 2f)
+    fun resultMissedAt200PercentFont() =
+        result("result_target_missed_font200", ResultState(true, "Marksheet_Class12", pdf(142_000, 100_000, false), showAlternatives = true))
 }
