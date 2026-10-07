@@ -33,7 +33,7 @@ Status on 7 Oct 2026: every P0 requirement in `01-product-requirements.md` is bu
 
 ## Open before release (not QA blockers)
 
-- Feedback email address (`folio.feedbackEmail` in `gradle.properties`) is not set yet.
+- Feedback email is set to pratikuk99@gmail.com (`folio.feedbackEmail` in `gradle.properties`).
 - Release signing keys and Play Console setup.
 - F-Droid: build OpenCV from source instead of the Maven AAR (ADR-0009).
 - GitHub: push to `ukpratik/folio` once that account is logged in.
