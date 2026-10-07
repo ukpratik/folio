@@ -27,6 +27,29 @@ interface DocumentDao {
 
     @Query("DELETE FROM document WHERE id = :id")
     suspend fun delete(id: String)
+
+    @Query("SELECT * FROM document WHERE id = :id")
+    suspend fun get(id: String): DocumentEntity?
+
+    @Query(
+        "UPDATE document SET exp_format = :format, exp_page_size = :pageSize, exp_orientation = :orientation, " +
+            "exp_margin = :margin, exp_quality = :quality, exp_target_bytes = :target WHERE id = :id",
+    )
+    suspend fun saveExportSettings(
+        id: String, format: String, pageSize: String, orientation: String, margin: String, quality: String, target: Long?,
+    )
+
+    @Query("UPDATE document SET export_interrupted = :running WHERE id = :id")
+    suspend fun setExportRunning(id: String, running: Boolean)
+
+    @Query(
+        "UPDATE document SET status = 'EXPORTED', out_format = :format, out_path = :paths, out_size = :size, " +
+            "out_pages = :pages, out_target = :target, out_target_met = :targetMet, out_at = :at, " +
+            "export_interrupted = 0, updated_at = :at WHERE id = :id",
+    )
+    suspend fun markExported(
+        id: String, format: String, paths: String, size: Long, pages: Int, target: Long?, targetMet: Boolean?, at: Long,
+    )
 }
 
 @Dao

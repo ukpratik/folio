@@ -5,6 +5,7 @@ import io.github.ukpratik.folio.core.domain.repository.DocumentRepository
 import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.DocumentStatus
+import io.github.ukpratik.folio.core.model.ExportResult
 import io.github.ukpratik.folio.core.model.ExportSettings
 import java.time.Instant
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +33,16 @@ class FakeDocumentRepository(private val clock: FakeClock = FakeClock()) : Docum
 
     override suspend fun delete(id: DocumentId) {
         docs.value = docs.value - id
+    }
+
+    override suspend fun get(id: DocumentId): Document? = docs.value[id]
+
+    override suspend fun saveExportSettings(id: DocumentId, settings: ExportSettings) = update(id) { it.copy(exportSettings = settings) }
+
+    override suspend fun setExportRunning(id: DocumentId, running: Boolean) = update(id) { it.copy(exportInterrupted = running) }
+
+    override suspend fun markExported(id: DocumentId, result: ExportResult) = update(id) {
+        it.copy(status = DocumentStatus.EXPORTED, lastExport = result, updatedAt = result.at, exportInterrupted = false)
     }
 
     private fun update(id: DocumentId, change: (Document) -> Document) {

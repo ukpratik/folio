@@ -35,6 +35,12 @@ jobs:
       - name: Unit tests
         run: ./gradlew test --stacktrace
 
+      - name: Validate generated PDFs with qpdf (ADR-0010)
+        run: |
+          sudo apt-get install -y --no-install-recommends qpdf
+          ls core/processing/build/golden-pdfs/*.pdf
+          for f in core/processing/build/golden-pdfs/*.pdf; do qpdf --check "$f" > /dev/null || { echo "qpdf failed: $f"; exit 1; }; done
+
       - name: Lint
         run: ./gradlew lintPlayDebug lintFdroidDebug
 

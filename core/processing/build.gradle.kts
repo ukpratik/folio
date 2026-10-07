@@ -20,7 +20,9 @@ dependencies {
     testImplementation(project(":core:testing"))
     testImplementation(libs.robolectric)
     testImplementation(libs.turbine)
+    testImplementation(libs.pdfbox) // parse our PDFs in tests (test-only, Apache-2.0)
 
+    androidTestImplementation(project(":core:testing"))
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.truth)

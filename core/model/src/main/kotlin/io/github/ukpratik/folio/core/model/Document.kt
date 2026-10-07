@@ -13,14 +13,17 @@ data class Document(
     val updatedAt: Instant,
     val exportSettings: ExportSettings,
     val lastExport: ExportResult? = null,
+    /** An export started and never finished (process death) — or is running right now. */
+    val exportInterrupted: Boolean = false,
 )
 
+/** The latest export of a document. [paths] is one PDF, or one JPG per page (FR-24). */
 data class ExportResult(
-    val path: String,
+    val format: ExportFormat,
+    val paths: List<String>,
     val size: ByteSize,
     val pageCount: Int,
     val target: ByteSize?,
     val targetMet: Boolean?,
     val at: Instant,
-    val interrupted: Boolean = false,
 )

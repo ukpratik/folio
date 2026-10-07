@@ -61,5 +61,5 @@ private fun Document.toUi() = RecentUi(
     id = id,
     title = title,
     isDraft = status == DocumentStatus.DRAFT,
-    exportInterrupted = lastExport?.interrupted == true,
+    exportInterrupted = exportInterrupted,
 )

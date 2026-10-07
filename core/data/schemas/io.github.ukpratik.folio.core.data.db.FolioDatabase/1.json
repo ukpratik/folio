@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "682a9c85cb9272f344cee81df96e5f64",
+    "identityHash": "883de41c5ff606fe6a3f0d769b8e12a9",
     "entities": [
       {
         "tableName": "document",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `status` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `exp_format` TEXT NOT NULL, `exp_page_size` TEXT NOT NULL, `exp_orientation` TEXT NOT NULL, `exp_margin` TEXT NOT NULL, `exp_quality` TEXT NOT NULL, `exp_target_bytes` INTEGER, `out_path` TEXT, `out_size` INTEGER, `out_pages` INTEGER, `out_target` INTEGER, `out_target_met` INTEGER, `out_at` INTEGER, `export_interrupted` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `status` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, `exp_format` TEXT NOT NULL, `exp_page_size` TEXT NOT NULL, `exp_orientation` TEXT NOT NULL, `exp_margin` TEXT NOT NULL, `exp_quality` TEXT NOT NULL, `exp_target_bytes` INTEGER, `out_format` TEXT, `out_path` TEXT, `out_size` INTEGER, `out_pages` INTEGER, `out_target` INTEGER, `out_target_met` INTEGER, `out_at` INTEGER, `export_interrupted` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -72,6 +72,11 @@
             "fieldPath": "expTargetBytes",
             "columnName": "exp_target_bytes",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "outFormat",
+            "columnName": "out_format",
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "outPath",
@@ -268,7 +273,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '682a9c85cb9272f344cee81df96e5f64')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '883de41c5ff606fe6a3f0d769b8e12a9')"
     ]
   }
 }

@@ -10,6 +10,7 @@ sealed interface FolioError {
     data object CameraUnavailable : FolioError
     data object SaveTargetUnavailable : FolioError
     data object InvalidTitle : FolioError
+    data object NothingToExport : FolioError
     data class Unexpected(val cause: Throwable) : FolioError
 }
 

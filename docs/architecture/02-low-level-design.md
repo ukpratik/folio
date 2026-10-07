@@ -527,3 +527,46 @@ Changes from the design above, made during implementation:
 - **Safety fix:** `ConfirmDialog` gained `onDismissButton`. Previously "Discard" was wired to `onDismiss`, which also fires on outside-tap and would have silently deleted scanned pages.
 - **Theme:** M3 `surfaceContainer*` roles are now neutral. Cards and sheets had a lilac tint.
 - **Not yet verified:** live outline detection on a real document through the camera. The emulator's emulated camera shows a synthetic scene. The detector, rotation and smoothing are covered by tests; the end-to-end check goes to QA's device pass (T01–T14).
+
+## 17. Implementation notes — M6 (export engine)
+
+- **Domain:** `ExportEngine` (`states: StateFlow<Map<DocumentId, ExportState>>`, `start` / `cancel` / `acknowledge`) and the `ExportDocument` use case, which saves the sheet's settings and then starts the engine.
+  - `ExportState` is `Running(phase, pagesDone, pageCount)`, `Succeeded`, `TargetMissed(result, smallest)`, `Failed(FolioError)` or `Cancelled`.
+  - `FolioError.NothingToExport` is new.
+- **Persistence:**
+  - `ExportResult` holds the format, all output paths (newline-joined in `out_path`, plus a new `out_format` column), size, page count, target and whether it was met.
+  - "Export didn't finish" is `Document.exportInterrupted`. It is set when an export starts and cleared on success or cancel; a process death leaves it set for startup recovery.
+  - Room schema v1 is still unreleased, so it was changed in place.
+- **`StreamingPdfWriter`:**
+  - PDF 1.4 with object numbering 1 catalog, 2 pages, 3 info, then 3 objects per page.
+  - JPEG bytes are copied straight into a `DCTDecode` stream, never re-encoded. The colour space is chosen from the SOF component count (Gray/RGB/CMYK).
+  - Info dictionary: Title (UTF-16BE with BOM when non-ASCII), Producer and CreationDate. The xref is built from a counting stream.
+  - Only one page's file is open at a time.
+- **`SizeOptimizer`** (ADR-0011):
+  - **No target:** every page at the preset.
+  - **JPG export:** each image gets the whole target.
+  - **PDF with a target:**
+    - The budget is the target minus `overheadBytes` (about 520 B per page plus a fixed part).
+    - **Planning pass:** each page is rendered at half DPI and encoded twice. The preset-quality size weights that page's share of the budget. The minimum-quality size, scaled by DPI², predicts which DPI ladder steps (300/200/150/120/100) can fit at all, and steps predicted to fail by more than 25% are skipped.
+    - **Per page:** a binary search over quality 35…preset; unused budget carries forward to the next page.
+    - **Floor:** at 100 dpi / q35 the smallest encode is kept from the same render, and the result is `TargetMissed`.
+- **`ExportCoordinator`:**
+  - **Concurrency and pages:** single flight per document on the processing dispatcher. It exports only `READY` pages.
+  - **Free-space check:** `(target or 2 MB × pages) × 2 + 20 MB`.
+  - **Files:** each page is encoded to a work file. The output is written with `writeAtomically` (temp file, then rename) into `out/`, and stale outputs from an earlier export in the other format are deleted. JPG files are named `title_01.jpg` and so on.
+  - **Cancellation** keeps the previous export and clears the flag. Any other throwable, including OOM, becomes `Failed(Unexpected)`. Work files are always deleted.
+- **Measured on the `folio_api36` emulator** (10 synthetic 2000×2600 "photographed" pages, every 3rd B&W):
+
+  | Case | Result | Time |
+  |---|---|---|
+  | Balanced, no target | 2.9 MB | 3.4–4.8 s (NFR-04 ≤ 10 s ✔) |
+  | 2 MB target, 10 pages | 1998 KB ✔ | 13.3 s |
+  | 500 KB, 5 pages | 498 KB ✔ | 6.4 s |
+  | 100 KB, 1 page | 98 KB ✔ | 1.2 s |
+  | 100 KB, 10 pages (impossible) | 825 KB, reported as missed | 8.1 s (was 32 s before DPI prediction) |
+
+  The synthetic pages are photo-noisy, about 82 KB each even at the floor. Real scans of printed text compress much smaller. A targeted export of 10 pages can exceed 10 s, so the processing screen (M7) must show per-page progress.
+- **Tests:**
+  - **JVM:** the writer is checked with PDFBox (page sizes, order, images, Gray, UTF-16 title, overhead). Optimiser: fits, carry-forward, floor, per-image. Coordinator: success, target met or missed, JPG naming and stale cleanup, cancel, low storage, nothing to export.
+  - **Instrumented:** `ExportEndToEndTest`.
+  - **CI:** runs `qpdf --check` on every PDF the writer tests produce (`core/processing/build/golden-pdfs/`).

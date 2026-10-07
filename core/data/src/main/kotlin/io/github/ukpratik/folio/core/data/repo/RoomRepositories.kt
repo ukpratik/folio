@@ -13,6 +13,7 @@ import io.github.ukpratik.folio.core.domain.time.Clock
 import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Enhancement
+import io.github.ukpratik.folio.core.model.ExportResult
 import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
@@ -45,6 +46,20 @@ internal class RoomDocumentRepository @Inject constructor(
     override suspend fun touch(id: DocumentId) = dao.touch(id.value, clock.nowMillis())
 
     override suspend fun delete(id: DocumentId) = dao.delete(id.value)
+
+    override suspend fun get(id: DocumentId): Document? = dao.get(id.value)?.toModel()
+
+    override suspend fun saveExportSettings(id: DocumentId, settings: ExportSettings) = dao.saveExportSettings(
+        id.value, settings.format.name, settings.pageSize.name, settings.orientation.name,
+        settings.margin.name, settings.quality.name, settings.target?.bytes,
+    )
+
+    override suspend fun setExportRunning(id: DocumentId, running: Boolean) = dao.setExportRunning(id.value, running)
+
+    override suspend fun markExported(id: DocumentId, result: ExportResult) = dao.markExported(
+        id.value, result.format.name, result.paths.joinToString("\n"), result.size.bytes, result.pageCount,
+        result.target?.bytes, result.targetMet, result.at.toEpochMilli(),
+    )
 }
 
 internal class RoomPageRepository @Inject constructor(

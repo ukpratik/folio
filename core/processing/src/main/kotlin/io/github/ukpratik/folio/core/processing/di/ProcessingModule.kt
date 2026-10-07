@@ -10,7 +10,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.github.ukpratik.folio.core.domain.concurrency.ProcessingDispatcher
+import io.github.ukpratik.folio.core.domain.engine.ExportEngine
 import io.github.ukpratik.folio.core.domain.engine.ImportEngine
+import io.github.ukpratik.folio.core.processing.export.ExportCoordinator
+import io.github.ukpratik.folio.core.processing.export.RasterizerFactory
+import io.github.ukpratik.folio.core.processing.export.RendererRasterizerFactory
 import io.github.ukpratik.folio.core.processing.ProcessingConfig
 import io.github.ukpratik.folio.core.processing.detect.EdgeDetector
 import io.github.ukpratik.folio.core.processing.detect.OpenCvEdgeDetector
@@ -62,4 +66,8 @@ internal abstract class ProcessingBindsModule {
     @Binds abstract fun renderer(impl: OpenCvPageRenderer): PageRenderer
 
     @Binds abstract fun importAnalyzer(impl: EdgeDetectingImportAnalyzer): ImportAnalyzer
+
+    @Binds abstract fun exportEngine(impl: ExportCoordinator): ExportEngine
+
+    @Binds abstract fun rasterizers(impl: RendererRasterizerFactory): RasterizerFactory
 }

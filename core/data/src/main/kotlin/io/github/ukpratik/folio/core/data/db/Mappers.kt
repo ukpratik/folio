@@ -36,19 +36,20 @@ internal fun DocumentEntity.toModel() = Document(
         quality = QualityPreset.valueOf(expQuality),
         target = expTargetBytes?.let(::ByteSize),
     ),
-    lastExport = if (outPath != null && outSize != null && outPages != null && outAt != null) {
+    lastExport = if (outFormat != null && outPath != null && outSize != null && outPages != null && outAt != null) {
         ExportResult(
-            path = outPath,
+            format = ExportFormat.valueOf(outFormat),
+            paths = outPath.split('\n'),
             size = ByteSize(outSize),
             pageCount = outPages,
             target = outTarget?.let(::ByteSize),
             targetMet = outTargetMet,
             at = Instant.ofEpochMilli(outAt),
-            interrupted = exportInterrupted,
         )
     } else {
         null
     },
+    exportInterrupted = exportInterrupted,
 )
 
 internal fun newDocumentEntity(id: DocumentId, title: String, settings: ExportSettings, now: Long) = DocumentEntity(

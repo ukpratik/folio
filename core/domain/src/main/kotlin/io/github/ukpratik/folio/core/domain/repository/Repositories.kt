@@ -4,6 +4,8 @@ package io.github.ukpratik.folio.core.domain.repository
 import io.github.ukpratik.folio.core.model.Document
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Enhancement
+import io.github.ukpratik.folio.core.model.ExportResult
+import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageId
 import io.github.ukpratik.folio.core.model.PageStatus
@@ -19,6 +21,17 @@ interface DocumentRepository {
     suspend fun rename(id: DocumentId, title: String)
     suspend fun touch(id: DocumentId)
     suspend fun delete(id: DocumentId)
+    suspend fun get(id: DocumentId): Document?
+
+    /** Remembered per document (UX S5: "settings used last time for this document are remembered"). */
+    suspend fun saveExportSettings(id: DocumentId, settings: ExportSettings)
+
+    /**
+     * Marks an export as running (true) or not (false). If the process dies mid-export the flag stays set,
+     * which is how Recents knows to show "Export didn't finish" (LLD §3.4).
+     */
+    suspend fun setExportRunning(id: DocumentId, running: Boolean)
+    suspend fun markExported(id: DocumentId, result: ExportResult)
 }
 
 interface PageRepository {

@@ -24,7 +24,12 @@ class FakeDocumentFiles(val root: File = Files.createTempDirectory("folio-test")
 
     override suspend fun <T> writeAtomically(target: File, block: suspend (OutputStream) -> T): T {
         target.parentFile?.mkdirs()
-        return target.outputStream().use { block(it) }
+        val tmp = File(target.parentFile, target.name + ".tmp")
+        return try {
+            tmp.outputStream().use { block(it) }.also { check(tmp.renameTo(target)) }
+        } finally {
+            tmp.delete()
+        }
     }
 
     override suspend fun deleteSource(doc: DocumentId, sourceId: String) {
@@ -40,5 +45,7 @@ class FakeDocumentFiles(val root: File = Files.createTempDirectory("folio-test")
         work.deleteRecursively()
     }
 
-    override fun freeBytes(): Long = Long.MAX_VALUE
+    var free: Long = Long.MAX_VALUE
+
+    override fun freeBytes(): Long = free
 }

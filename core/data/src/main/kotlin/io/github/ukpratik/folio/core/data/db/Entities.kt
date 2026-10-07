@@ -21,6 +21,8 @@ data class DocumentEntity(
     @ColumnInfo(name = "exp_margin") val expMargin: String,
     @ColumnInfo(name = "exp_quality") val expQuality: String,
     @ColumnInfo(name = "exp_target_bytes") val expTargetBytes: Long?,
+    @ColumnInfo(name = "out_format") val outFormat: String? = null,
+    /** One path per line: a PDF, or one JPG per page. */
     @ColumnInfo(name = "out_path") val outPath: String? = null,
     @ColumnInfo(name = "out_size") val outSize: Long? = null,
     @ColumnInfo(name = "out_pages") val outPages: Int? = null,
