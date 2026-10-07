@@ -657,3 +657,21 @@ Changes from the design above, made during implementation:
   - **`nightly.yml`:** runs `:core:processing:connectedDebugAndroidTest` (the OpenCV pipeline and export end-to-end) on an x86_64 API 34 emulator. The app APK is ARM-only, so device tests live in library modules.
 - **Release smoke test:** the R8-minified Play release, signed with the debug key, installed and worked on the emulator (licences screen, import, export to PDF).
 - **Tests:** 175 JVM tests passing, including CreateDocument defaults, Settings ViewModel, and Settings/Privacy screenshots in light and dark.
+
+## 20. Feedback round 1 (device testing, 7 Oct 2026)
+
+- **Crop handles (S4a) felt laggy.**
+  - **Causes:** the drag used `detectDragGestures`, which waits for touch slop (about 8 dp) before moving, then snapped the corner under the finger. Also, every move recomposed the editor, including the four TalkBack handle nodes.
+  - **Fix:** a custom `awaitEachGesture` + `drag`, so the corner moves from the first touch and keeps the finger-to-handle offset (no jump). The working quad is read only in draw and layout lambdas (`Canvas`, `Modifier.offset {}`), so a drag only redraws.
+- **Save to device** on the Result screen is now a full-width filled button directly under Share. Rename and Edit stay as small actions.
+- **Feedback email** is pre-filled through `EXTRA_EMAIL` as well as the `mailto:` address, because some email apps read only one. Previously the address was URL-encoded (`%40`), which some apps don't decode. Folio has no internet, so the user still taps Send in their email app.
+- **Update prompts (D-48):**
+  - **Check:** `AppUpdates` (domain) runs on every `onResume`.
+  - **Rule:** `DecideUpdatePrompt` (pure, unit-tested) returns REQUIRE for Play priority ≥ 4. Otherwise it returns OFFER, respecting `UserPreferences.updateReminder` (every launch / daily / weekly) and the time of the last "Later".
+  - **Implementations:** `src/play` uses `PlayAppUpdates` (Play Core `app-update-ktx` 2.1.0, immediate flow; an update the user already started is treated as required). `src/fdroid` uses a no-op. Settings shows "Remind me about updates" only when `AppInfo.supportsUpdatePrompts`.
+  - **Gates:**
+    - The licence allowlist permits `PCSDKToS` only for `com.google.android.play` and `ASDKL` only for `com.google.android.gms`.
+    - The F-Droid runtime classpath has 0 Google artifacts.
+    - Both release APKs still declare only CAMERA, and the Play download is 11.0 MB.
+  - **Testing:** in-app updates only work for builds installed from Play, so use Play's internal app sharing or the internal testing track. Sideloaded builds skip the prompt silently.
+- **Dependabot:** ignores `org.opencv:opencv` (pinned at 4.9.0, ADR-0009 note).

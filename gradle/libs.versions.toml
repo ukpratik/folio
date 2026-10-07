@@ -36,6 +36,7 @@ aboutLibraries = "15.2.0"
 leakcanary = "2.14"
 benchmark = "1.5.0"
 uiautomator = "2.4.0"
+playAppUpdate = "2.1.0"
 # Test
 junit = "4.13.2"
 truth = "1.4.5"
@@ -91,6 +92,7 @@ opencv = { module = "org.opencv:opencv", version.ref = "opencv" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 androidx-benchmark-macro = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "benchmark" }

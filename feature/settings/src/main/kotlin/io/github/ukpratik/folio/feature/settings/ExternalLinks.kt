@@ -15,12 +15,13 @@ import io.github.ukpratik.folio.core.model.AppInfo
  */
 internal fun Context.sendFeedback(info: AppInfo) {
     val body = getString(R.string.feedback_body, info.versionName, Build.VERSION.RELEASE, Build.MANUFACTURER, Build.MODEL)
-    val uri = Uri.parse("mailto:" + Uri.encode(info.feedbackEmail))
-        .buildUpon()
-        .appendQueryParameter("subject", getString(R.string.feedback_subject))
-        .appendQueryParameter("body", body)
-        .build()
-    startOrToast(Intent(Intent.ACTION_SENDTO, uri), R.string.no_email_app)
+    // The address goes in both the mailto: URI and EXTRA_EMAIL: some email apps only read one of them.
+    val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:${info.feedbackEmail}")).apply {
+        if (info.feedbackEmail.isNotBlank()) putExtra(Intent.EXTRA_EMAIL, arrayOf(info.feedbackEmail))
+        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback_subject))
+        putExtra(Intent.EXTRA_TEXT, body)
+    }
+    startOrToast(intent, R.string.no_email_app)
 }
 
 /** "Rate Folio": Play Store app (market://) with a web fallback, or the F-Droid page. */

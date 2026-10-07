@@ -39,10 +39,12 @@ android {
         create("play") {
             dimension = "store"
             buildConfigField("String", "RATE_URL", "\"market://details?id=io.github.ukpratik.folio\"")
+            buildConfigField("boolean", "UPDATE_PROMPTS", "true")
         }
         create("fdroid") {
             dimension = "store"
             buildConfigField("String", "RATE_URL", "\"https://f-droid.org/packages/io.github.ukpratik.folio/\"")
+            buildConfigField("boolean", "UPDATE_PROMPTS", "false")
         }
     }
 
@@ -80,6 +82,11 @@ aboutLibraries {
         // Everything shipped must be GPL-3.0-compatible. A new licence fails the build until reviewed.
         strictMode = com.mikepenz.aboutlibraries.plugin.StrictMode.FAIL
         allowedLicenses.addAll("Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "OFL-1.1")
+        // D-48: Google's in-app update library, Play build only. Allowed for these Google groups and nothing else.
+        allowedLicensesMap = mapOf(
+            "PCSDKToS" to listOf("com.google.android.play"),
+            "ASDKL" to listOf("com.google.android.gms"),
+        )
     }
 }
 
@@ -104,6 +111,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
     implementation(libs.coil.core)
+
+    // Play build only (D-48): update prompts via the Play Store app. Closed source, so never in the F-Droid build.
+    "playImplementation"(libs.play.app.update.ktx)
 
     // Debug only: finds leaked screens/ViewModels. Never in release (permission gate checks release APKs).
     debugImplementation(libs.leakcanary)

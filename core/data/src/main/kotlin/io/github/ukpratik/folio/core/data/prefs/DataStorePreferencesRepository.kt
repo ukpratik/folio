@@ -6,12 +6,14 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.ukpratik.folio.core.domain.repository.PreferencesRepository
 import io.github.ukpratik.folio.core.model.PageSize
 import io.github.ukpratik.folio.core.model.QualityPreset
+import io.github.ukpratik.folio.core.model.UpdateReminder
 import io.github.ukpratik.folio.core.model.UserPreferences
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,6 +37,8 @@ internal class DataStorePreferencesRepository @Inject constructor(
             prefs[QUALITY] = next.defaultQuality.name
             prefs[CAMERA_ASKED] = next.cameraPermissionRequested
             prefs.putOrRemove(SAVE_FOLDER, next.lastSaveFolderUri)
+            prefs[UPDATE_REMINDER] = next.updateReminder.name
+            next.lastUpdatePromptAt.let { at -> if (at == null) prefs.remove(UPDATE_PROMPTED_AT) else prefs[UPDATE_PROMPTED_AT] = at }
         }
     }
 
@@ -43,6 +47,9 @@ internal class DataStorePreferencesRepository @Inject constructor(
         defaultQuality = this[QUALITY]?.let { name -> QualityPreset.entries.firstOrNull { it.name == name } } ?: QualityPreset.BALANCED,
         cameraPermissionRequested = this[CAMERA_ASKED] ?: false,
         lastSaveFolderUri = this[SAVE_FOLDER],
+        updateReminder = this[UPDATE_REMINDER]?.let { name -> UpdateReminder.entries.firstOrNull { it.name == name } }
+            ?: UpdateReminder.EVERY_LAUNCH,
+        lastUpdatePromptAt = this[UPDATE_PROMPTED_AT],
     )
 
     private fun androidx.datastore.preferences.core.MutablePreferences.putOrRemove(key: Preferences.Key<String>, value: String?) {
@@ -54,5 +61,7 @@ internal class DataStorePreferencesRepository @Inject constructor(
         val QUALITY = stringPreferencesKey("default_quality")
         val CAMERA_ASKED = booleanPreferencesKey("camera_permission_requested")
         val SAVE_FOLDER = stringPreferencesKey("last_save_folder")
+        val UPDATE_REMINDER = stringPreferencesKey("update_reminder")
+        val UPDATE_PROMPTED_AT = longPreferencesKey("update_prompted_at")
     }
 }

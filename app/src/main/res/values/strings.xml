@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Folio</string>
+    <string name="update_title">A new version of Folio is ready</string>
+    <string name="update_body">Update now to get the latest fixes and improvements. It only takes a moment, and your documents stay as they are.</string>
+    <string name="update_required_title">Please update Folio</string>
+    <string name="update_required_body">This update contains an important fix. Update now to keep using Folio. Your documents stay as they are.</string>
+    <string name="update_now">Update</string>
+    <string name="update_later">Later</string>
 </resources>

@@ -9,4 +9,14 @@ data class UserPreferences(
     /** Distinguishes "never asked" from "permanently denied" for the camera permission. */
     val cameraPermissionRequested: Boolean = false,
     val lastSaveFolderUri: String? = null,
+    /** How often to remind about a non-critical update (Play build only). Critical updates are always required. */
+    val updateReminder: UpdateReminder = UpdateReminder.EVERY_LAUNCH,
+    /** When the user last tapped "Later" on an update prompt (epoch millis). */
+    val lastUpdatePromptAt: Long? = null,
 )
+
+enum class UpdateReminder(val intervalMillis: Long) {
+    EVERY_LAUNCH(0),
+    DAILY(24 * 60 * 60 * 1000L),
+    WEEKLY(7 * 24 * 60 * 60 * 1000L),
+}

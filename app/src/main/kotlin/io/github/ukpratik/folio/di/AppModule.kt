@@ -44,6 +44,7 @@ object AppModule {
         rateUrl = BuildConfig.RATE_URL,
         feedbackEmail = BuildConfig.FEEDBACK_EMAIL,
         licencesResId = R.raw.aboutlibraries,
+        supportsUpdatePrompts = BuildConfig.UPDATE_PROMPTS,
     )
 
     @Provides @Singleton

@@ -9,6 +9,7 @@ import io.github.ukpratik.folio.core.model.AppInfo
 import io.github.ukpratik.folio.core.model.ExportSettings
 import io.github.ukpratik.folio.core.model.PageSize
 import io.github.ukpratik.folio.core.model.QualityPreset
+import io.github.ukpratik.folio.core.model.UpdateReminder
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,12 +23,14 @@ data class SettingsState(
     /** What new documents get: the saved choice, or the region default (PRD §8). */
     val pageSize: PageSize = PageSize.A4,
     val quality: QualityPreset = QualityPreset.BALANCED,
+    val updateReminder: UpdateReminder = UpdateReminder.EVERY_LAUNCH,
     val appInfo: AppInfo,
 )
 
 sealed interface SettingsIntent {
     data class SetPageSize(val pageSize: PageSize) : SettingsIntent
     data class SetQuality(val quality: QualityPreset) : SettingsIntent
+    data class SetUpdateReminder(val reminder: UpdateReminder) : SettingsIntent
 }
 
 /** S8 (FR-34): defaults for new documents. Existing documents keep their own remembered settings. */
@@ -43,6 +46,7 @@ class SettingsViewModel @Inject constructor(
             loaded = true,
             pageSize = prefs.defaultPageSize ?: ExportSettings.defaultPageSizeFor(region),
             quality = prefs.defaultQuality,
+            updateReminder = prefs.updateReminder,
             appInfo = appInfo,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsState(appInfo = appInfo))
@@ -52,6 +56,8 @@ class SettingsViewModel @Inject constructor(
             when (intent) {
                 is SettingsIntent.SetPageSize -> preferences.update { it.copy(defaultPageSize = intent.pageSize) }
                 is SettingsIntent.SetQuality -> preferences.update { it.copy(defaultQuality = intent.quality) }
+                // A new choice starts fresh, so the next update is offered on the next launch.
+                is SettingsIntent.SetUpdateReminder -> preferences.update { it.copy(updateReminder = intent.reminder, lastUpdatePromptAt = null) }
             }
         }
     }

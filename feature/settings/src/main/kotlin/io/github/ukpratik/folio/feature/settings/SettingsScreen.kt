@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,6 +55,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.ukpratik.folio.core.model.PageSize
 import io.github.ukpratik.folio.core.model.QualityPreset
+import io.github.ukpratik.folio.core.model.UpdateReminder
 
 @Composable
 internal fun SettingsRoute(
@@ -75,7 +77,7 @@ internal fun SettingsRoute(
     )
 }
 
-private enum class Picker { PAGE_SIZE, QUALITY }
+private enum class Picker { PAGE_SIZE, QUALITY, UPDATES }
 
 /** S8 Settings (FR-34). Help & FAQ is deferred to v1.1 (D-35). */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,6 +110,13 @@ internal fun SettingsScreen(
                 Row(Icons.Outlined.Description, stringResource(R.string.settings_page_size), stringResource(state.pageSize.labelRes)) { picker = Picker.PAGE_SIZE }
                 RowDivider()
                 Row(Icons.Outlined.Tune, stringResource(R.string.settings_quality), stringResource(state.quality.labelRes)) { picker = Picker.QUALITY }
+            }
+            if (state.appInfo.supportsUpdatePrompts) {
+                Group(stringResource(R.string.settings_updates)) {
+                    Row(Icons.Outlined.SystemUpdate, stringResource(R.string.settings_update_reminders), stringResource(state.updateReminder.labelRes)) {
+                        picker = Picker.UPDATES
+                    }
+                }
             }
             Group(stringResource(R.string.settings_privacy)) {
                 Row(Icons.Outlined.Lock, stringResource(R.string.privacy_title), stringResource(R.string.settings_privacy_sub), onPrivacy)
@@ -145,6 +154,15 @@ internal fun SettingsScreen(
             supporting = { stringResource(it.hintRes) },
             onSelect = { onIntent(SettingsIntent.SetQuality(it)) },
             onDismiss = { picker = null },
+        )
+        Picker.UPDATES -> ChoiceDialog(
+            title = stringResource(R.string.settings_update_reminders),
+            options = UpdateReminder.entries,
+            selected = state.updateReminder,
+            label = { stringResource(it.labelRes) },
+            onSelect = { onIntent(SettingsIntent.SetUpdateReminder(it)) },
+            onDismiss = { picker = null },
+            footer = stringResource(R.string.settings_update_critical_note),
         )
         null -> Unit
     }
@@ -186,6 +204,7 @@ private fun <T> ChoiceDialog(
     onSelect: (T) -> Unit,
     onDismiss: () -> Unit,
     supporting: (@Composable (T) -> String)? = null,
+    footer: String? = null,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -209,6 +228,14 @@ private fun <T> ChoiceDialog(
                         }
                     }
                 }
+                footer?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 12.dp),
+                    )
+                }
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) } },
@@ -221,6 +248,13 @@ internal val PageSize.labelRes: Int
         PageSize.LETTER -> R.string.page_size_letter
         PageSize.LEGAL -> R.string.page_size_legal
         PageSize.FIT -> R.string.page_size_fit
+    }
+
+private val UpdateReminder.labelRes: Int
+    get() = when (this) {
+        UpdateReminder.EVERY_LAUNCH -> R.string.update_every_launch
+        UpdateReminder.DAILY -> R.string.update_daily
+        UpdateReminder.WEEKLY -> R.string.update_weekly
     }
 
 internal val QualityPreset.labelRes: Int

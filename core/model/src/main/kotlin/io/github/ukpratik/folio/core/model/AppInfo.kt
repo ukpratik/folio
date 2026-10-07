@@ -13,4 +13,6 @@ data class AppInfo(
     val feedbackEmail: String,
     /** Raw resource with the generated open-source licence list (AboutLibraries). */
     val licencesResId: Int,
+    /** Play build only: update prompts come from the Play Store app (F-Droid's client handles its own). */
+    val supportsUpdatePrompts: Boolean = false,
 )

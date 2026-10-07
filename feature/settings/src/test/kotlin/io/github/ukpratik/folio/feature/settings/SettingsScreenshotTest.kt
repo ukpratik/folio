@@ -21,7 +21,7 @@ import org.robolectric.annotation.GraphicsMode
 class SettingsScreenshotTest {
     @get:Rule val compose = createComposeRule()
 
-    private val state = SettingsState(loaded = true, pageSize = PageSize.A4, appInfo = AppInfo("1.0.0", "", "", 0))
+    private val state = SettingsState(loaded = true, pageSize = PageSize.A4, appInfo = AppInfo("1.0.0", "", "", 0, supportsUpdatePrompts = true))
 
     private fun capture(name: String, dark: Boolean = false, content: @androidx.compose.runtime.Composable () -> Unit) {
         compose.setContent { FolioTheme(darkTheme = dark) { content() } }

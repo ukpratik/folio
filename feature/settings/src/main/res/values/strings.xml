@@ -6,6 +6,12 @@
     <string name="settings_defaults">Defaults for new documents</string>
     <string name="settings_page_size">Page size</string>
     <string name="settings_quality">Quality</string>
+    <string name="settings_updates">Updates</string>
+    <string name="settings_update_reminders">Remind me about updates</string>
+    <string name="update_every_launch">Every time I open Folio</string>
+    <string name="update_daily">Once a day</string>
+    <string name="update_weekly">Once a week</string>
+    <string name="settings_update_critical_note">Important fixes are always installed right away.</string>
     <string name="settings_privacy">Privacy</string>
     <string name="settings_privacy_sub">Works offline, nothing uploaded</string>
     <string name="settings_about">About</string>

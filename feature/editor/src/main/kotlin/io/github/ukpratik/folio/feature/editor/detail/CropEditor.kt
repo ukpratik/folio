@@ -3,7 +3,9 @@ package io.github.ukpratik.folio.feature.editor.detail
 
 import io.github.ukpratik.folio.core.ui.geometry.FitRect
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -51,6 +53,10 @@ private val Accent = Color(0xFF3FC7B5)
  * S4a crop: the unedited source with 4 draggable corners (48 dp touch), dimmed outside the crop, and a 2×
  * loupe while dragging. Corners commit once on finger-up (D-29). Each corner is also a focusable TalkBack node
  * with 1 % nudge actions (UX §7).
+ *
+ * Smoothness: a corner follows the finger from the first touch (no drag slop), keeping the offset between the
+ * finger and the handle so it never jumps under the finger. The dragged quad is only read in draw and layout
+ * lambdas, so a drag redraws the canvas without recomposing anything.
  */
 @Composable
 internal fun CropEditor(
@@ -59,10 +65,11 @@ internal fun CropEditor(
     onCommit: (Quad) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var working by remember(corners) { mutableStateOf(corners ?: CropMath.FULL_IMAGE) }
-    var active by remember { mutableStateOf<Corner?>(null) }
+    val working = remember(corners) { mutableStateOf(corners ?: CropMath.FULL_IMAGE) }
+    val active = remember { mutableStateOf<Corner?>(null) }
     val density = LocalDensity.current
     val touchPx = with(density) { HandleTouch.toPx() } * 1.5f
+    val latestCommit by rememberUpdatedState(onCommit)
 
     BoxWithConstraints(modifier.fillMaxSize()) {
         val canvasW = with(density) { maxWidth.toPx() }
@@ -73,41 +80,43 @@ internal fun CropEditor(
             Modifier
                 .fillMaxSize()
                 .pointerInput(rect) {
-                    detectDragGestures(
-                        onDragStart = { start -> active = CropMath.nearestCorner(working, start.x, start.y, rect, touchPx) },
-                        onDrag = { change, _ ->
-                            active?.let { corner ->
-                                change.consume()
-                                working = working.with(corner, CropMath.toImage(change.position.x, change.position.y, rect))
-                            }
-                        },
-                        onDragEnd = {
-                            if (active != null) onCommit(working)
-                            active = null
-                        },
-                        onDragCancel = { active = null },
-                    )
+                    awaitEachGesture {
+                        val down = awaitFirstDown(requireUnconsumed = false)
+                        val corner = CropMath.nearestCorner(working.value, down.position.x, down.position.y, rect, touchPx)
+                            ?: return@awaitEachGesture
+                        down.consume()
+                        val (cx, cy) = CropMath.toScreen(working.value.point(corner), rect)
+                        val grab = Offset(cx, cy) - down.position
+                        active.value = corner
+                        val completed = drag(down.id) { change ->
+                            change.consume()
+                            val at = change.position + grab
+                            working.value = working.value.with(corner, CropMath.toImage(at.x, at.y, rect))
+                        }
+                        active.value = null
+                        if (completed) latestCommit(working.value)
+                    }
                 },
         ) {
+            val quad = working.value
             image?.let { drawFitted(it, rect) }
-            drawCrop(working, rect)
-            active?.let { corner -> image?.let { drawLoupe(it, rect, working.point(corner), LoupeRadius.toPx()) } }
+            drawCrop(quad, rect)
+            active.value?.let { corner -> image?.let { drawLoupe(it, rect, quad.point(corner), LoupeRadius.toPx()) } }
         }
 
         // Invisible, focusable handles for TalkBack and keyboard users.
         Corner.entries.forEach { corner ->
-            HandleNode(corner, working, rect) { moved ->
-                working = moved
-                onCommit(moved)
+            HandleNode(corner, { working.value }, rect) { moved ->
+                working.value = moved
+                latestCommit(moved)
             }
         }
     }
 }
 
 @Composable
-private fun HandleNode(corner: Corner, quad: Quad, rect: FitRect, onMove: (Quad) -> Unit) {
+private fun HandleNode(corner: Corner, quad: () -> Quad, rect: FitRect, onMove: (Quad) -> Unit) {
     val density = LocalDensity.current
-    val (x, y) = CropMath.toScreen(quad.point(corner), rect)
     val half = with(density) { HandleTouch.toPx() } / 2
     val label = stringResource(
         when (corner) {
@@ -123,15 +132,19 @@ private fun HandleNode(corner: Corner, quad: Quad, rect: FitRect, onMove: (Quad)
     val right = stringResource(R.string.detail_nudge_right)
     Box(
         Modifier
-            .offset { IntOffset((x - half).roundToInt(), (y - half).roundToInt()) }
+            .offset {
+                // Layout-phase read: following a drag moves the node without recomposing.
+                val (x, y) = CropMath.toScreen(quad().point(corner), rect)
+                IntOffset((x - half).roundToInt(), (y - half).roundToInt())
+            }
             .size(HandleTouch)
             .semantics {
                 contentDescription = label
                 customActions = listOf(
-                    CustomAccessibilityAction(up) { onMove(CropMath.nudge(quad, corner, 0f, -CropMath.NUDGE)); true },
-                    CustomAccessibilityAction(down) { onMove(CropMath.nudge(quad, corner, 0f, CropMath.NUDGE)); true },
-                    CustomAccessibilityAction(left) { onMove(CropMath.nudge(quad, corner, -CropMath.NUDGE, 0f)); true },
-                    CustomAccessibilityAction(right) { onMove(CropMath.nudge(quad, corner, CropMath.NUDGE, 0f)); true },
+                    CustomAccessibilityAction(up) { onMove(CropMath.nudge(quad(), corner, 0f, -CropMath.NUDGE)); true },
+                    CustomAccessibilityAction(down) { onMove(CropMath.nudge(quad(), corner, 0f, CropMath.NUDGE)); true },
+                    CustomAccessibilityAction(left) { onMove(CropMath.nudge(quad(), corner, -CropMath.NUDGE, 0f)); true },
+                    CustomAccessibilityAction(right) { onMove(CropMath.nudge(quad(), corner, CropMath.NUDGE, 0f)); true },
                 )
             },
     )

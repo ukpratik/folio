@@ -298,8 +298,13 @@ private fun Actions(export: ExportResult, onShare: () -> Unit, onSave: () -> Uni
             onClick = onShare,
             icon = Icons.Outlined.Share,
         )
+        // Saving is as important as sharing (people re-upload the same file later): same weight as Share.
+        FolioPrimaryButton(
+            text = stringResource(if (isPdf) R.string.result_save else R.string.result_save_folder),
+            onClick = onSave,
+            icon = Icons.Outlined.Download,
+        )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-            ActionButton(Icons.Outlined.Download, stringResource(if (isPdf) R.string.result_save else R.string.result_save_folder), onSave)
             if (isPdf) ActionButton(Icons.Outlined.DriveFileRenameOutline, stringResource(R.string.result_rename), onRename)
             ActionButton(Icons.Outlined.Edit, stringResource(R.string.result_edit), onEdit)
         }
