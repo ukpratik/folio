@@ -11,6 +11,7 @@ import io.github.ukpratik.folio.core.domain.repository.DocumentRepository
 import io.github.ukpratik.folio.core.domain.repository.PageRepository
 import io.github.ukpratik.folio.core.domain.time.Clock
 import io.github.ukpratik.folio.core.model.Document
+import io.github.ukpratik.folio.core.model.DocumentCover
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Enhancement
 import io.github.ukpratik.folio.core.model.ExportResult
@@ -70,6 +71,10 @@ internal class RoomPageRepository @Inject constructor(
         dao.observe(documentId.value).map { list -> list.map { it.toModel() } }
 
     override suspend fun get(id: PageId): Page? = dao.get(id.value)?.toModel()
+
+    override fun observeCovers(): Flow<Map<DocumentId, DocumentCover>> = dao.observeCovers().map { rows ->
+        rows.associate { row -> DocumentId(row.page.documentId) to DocumentCover(row.pageCount, row.page.toModel()) }
+    }
 
     override suspend fun count(documentId: DocumentId): Int = dao.count(documentId.value)
 

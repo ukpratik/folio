@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- S5 Export settings -->
+    <string name="export_sheet_title">Create PDF</string>
+    <string name="export_name">Name</string>
+    <string name="export_format">Format</string>
+    <string name="format_pdf">PDF</string>
+    <string name="format_jpg">JPG images</string>
+    <string name="export_max_size">Max file size</string>
+    <string name="export_max_size_per_image">Max size per image</string>
+    <string name="size_none">None</string>
+    <string name="size_custom">Custom</string>
+    <string name="export_custom_label">Size</string>
+    <string name="export_custom_hint">Between 50 KB and 50 MB</string>
+    <string name="export_custom_error">Enter a size between 50 KB and 50 MB</string>
+    <string name="unit_kb">KB</string>
+    <string name="unit_mb">MB</string>
+    <string name="export_target_hint">Folio will lower quality if needed to fit.</string>
+    <string name="export_quality">Quality</string>
+    <string name="quality_small">Small</string>
+    <string name="quality_balanced">Balanced</string>
+    <string name="quality_high">High</string>
+    <string name="quality_small_hint">Smallest file, good for uploads</string>
+    <string name="quality_balanced_hint">Good quality, small file</string>
+    <string name="quality_high_hint">Best quality for printing</string>
+    <string name="export_more_options">More options</string>
+    <string name="export_more_summary">%1$s · %2$s · %3$s</string>
+    <string name="export_page_size">Page size</string>
+    <string name="export_page_size_hint">Default follows your region (A4 in India).</string>
+    <string name="page_size_a4">A4</string>
+    <string name="page_size_letter">Letter</string>
+    <string name="page_size_legal">Legal</string>
+    <string name="page_size_fit">Fit to image</string>
+    <string name="export_orientation">Orientation</string>
+    <string name="export_orientation_hint">Auto turns each page to match its photo.</string>
+    <string name="orientation_auto">Auto</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_landscape">Landscape</string>
+    <string name="export_margins">Margins</string>
+    <string name="margin_none">None</string>
+    <string name="margin_small">Small</string>
+    <string name="margin_summary_none">No margins</string>
+    <string name="margin_summary_small">Small margins</string>
+    <string name="export_create">Create</string>
+    <string name="export_create_images">Create images</string>
+
+    <!-- S6 Processing -->
+    <string name="processing_pdf">Creating your PDF…</string>
+    <string name="processing_images">Creating your images…</string>
+    <string name="processing_shrinking">Making it smaller…</string>
+    <string name="processing_page">Page %1$d of %2$d</string>
+    <string name="processing_preparing">Getting your pages ready</string>
+    <string name="processing_fitting">Fitting under %1$s</string>
+    <string name="processing_on_device">Made on your phone. Nothing is uploaded.</string>
+    <string name="processing_cancel">Cancel</string>
+    <string name="error_storage_title">Not enough storage</string>
+    <string name="error_storage_body">Free up about %1$s and try again. Your pages are safe.</string>
+    <string name="error_failed_title">Couldn\'t create the PDF</string>
+    <string name="error_failed_body">Something went wrong. Your pages are safe — nothing was lost.</string>
+    <string name="error_close">Close</string>
+    <string name="error_retry">Try again</string>
+    <string name="error_back_to_pages">Back to pages</string>
+
+    <!-- S7 Result -->
+    <string name="result_pdf_ready">PDF ready</string>
+    <string name="result_images_ready">Images ready</string>
+    <string name="result_almost_there">Almost there</string>
+    <string name="result_close">Close</string>
+    <string name="result_tap_to_preview">Tap to preview</string>
+    <string name="result_preview_description">Preview the PDF</string>
+    <plurals name="result_pages_size">
+        <item quantity="one">%1$d page · %2$s</item>
+        <item quantity="other">%1$d pages · %2$s</item>
+    </plurals>
+    <plurals name="result_images_size_range">
+        <item quantity="one">%1$d image · %2$s</item>
+        <item quantity="other">%1$d images · %2$s each</item>
+    </plurals>
+    <string name="result_under">Under %1$s</string>
+    <string name="result_each_under">Each under %1$s</string>
+    <string name="result_over_limit">Over your %1$s limit</string>
+    <string name="result_over_limit_hint">The website may reject this file. Try black &amp; white or fewer pages to make it smaller.</string>
+    <string name="result_missed_title">Couldn\'t get under %1$s</string>
+    <string name="result_missed_body">The smallest file that keeps text readable is %1$s. Try one of these:</string>
+    <string name="result_try_bw">Try black &amp; white</string>
+    <string name="result_remove_pages">Remove pages</string>
+    <string name="result_keep">Keep the %1$s file</string>
+    <string name="result_missed_tip">Tip: for limits of 100 KB or less, black &amp; white works best for text.</string>
+    <string name="result_share">Share</string>
+    <plurals name="result_share_images">
+        <item quantity="one">Share %1$d image</item>
+        <item quantity="other">Share %1$d images</item>
+    </plurals>
+    <string name="result_save">Save to device</string>
+    <string name="result_save_folder">Save to folder</string>
+    <string name="result_rename">Rename</string>
+    <string name="result_edit">Edit</string>
+    <string name="saved">Saved</string>
+    <string name="saved_to">Saved to %1$s</string>
+    <string name="save_unavailable">Couldn\'t save there. Choose another folder.</string>
+    <string name="save_failed">Something went wrong saving the file.</string>
+    <string name="file_missing">This file is no longer available. Create it again.</string>
+    <string name="rename_empty">Name can\'t be empty.</string>
+
+    <!-- S7d Preview -->
+    <string name="preview_page_of">Page %1$d of %2$d</string>
+    <string name="preview_back">Back</string>
+    <string name="preview_page_description">Page %1$d</string>
+</resources>

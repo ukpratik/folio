@@ -54,22 +54,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Limits
 import io.github.ukpratik.folio.core.model.PageId
-import io.github.ukpratik.folio.core.ui.components.ConfirmDialog
+import io.github.ukpratik.folio.core.ui.components.DeleteDocumentDialog
 import io.github.ukpratik.folio.core.ui.components.EmptyState
 import io.github.ukpratik.folio.core.ui.components.FolioPrimaryButton
 import io.github.ukpratik.folio.core.ui.components.FolioSecondaryButton
+import io.github.ukpratik.folio.core.ui.components.RenameDialog
 import io.github.ukpratik.folio.core.ui.components.showUndo
 import io.github.ukpratik.folio.core.ui.text.resolveWith
 import kotlinx.coroutines.launch
+import io.github.ukpratik.folio.core.ui.R as CoreUiR
 
 @Composable
 internal fun EditorRoute(
     onClose: () -> Unit,
     onScan: (DocumentId) -> Unit,
     onOpenPage: (DocumentId, PageId) -> Unit,
-    onCreatePdf: (DocumentId) -> Unit,
+    exportSheet: @Composable (DocumentId, onDismiss: () -> Unit) -> Unit,
     viewModel: EditorViewModel = hiltViewModel(),
 ) {
+    var showExport by rememberSaveable { mutableStateOf(false) }
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
@@ -105,8 +108,10 @@ internal fun EditorRoute(
         onScan = { onScan(viewModel.documentId) },
         onImport = { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
         onOpenPage = { onOpenPage(viewModel.documentId, it) },
-        onCreatePdf = { onCreatePdf(viewModel.documentId) },
+        onCreatePdf = { showExport = true },
     )
+    // The export sheet belongs to :feature:export; :app plugs it in here (features never depend on each other).
+    if (showExport) exportSheet(viewModel.documentId) { showExport = false }
 }
 
 /** S3a/b/c: stateless; all behaviour arrives through [onIntent] and callbacks. */
@@ -145,7 +150,7 @@ internal fun EditorScreen(
                         Text(state.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f, fill = false))
                         Icon(
                             Icons.Outlined.Edit,
-                            contentDescription = stringResource(R.string.rename_title),
+                            contentDescription = stringResource(CoreUiR.string.rename_title),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(start = 6.dp).size(18.dp),
                         )
@@ -156,7 +161,7 @@ internal fun EditorScreen(
                         Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.editor_more_options))
                     }
                     DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
-                        DropdownMenuItem(text = { Text(stringResource(R.string.rename_title)) }, onClick = { menuOpen = false; showRename = true })
+                        DropdownMenuItem(text = { Text(stringResource(CoreUiR.string.rename_title)) }, onClick = { menuOpen = false; showRename = true })
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.editor_delete_document), color = MaterialTheme.colorScheme.error) },
                             onClick = { menuOpen = false; showDeleteDocument = true },
@@ -231,11 +236,8 @@ internal fun EditorScreen(
     if (showAddSheet) AddPagesSheet(onScan = onScan, onImport = onImport, onDismiss = { showAddSheet = false })
     if (showRename) RenameDialog(state.title, onRename = { onIntent(EditorIntent.Rename(it)) }, onDismiss = { showRename = false })
     if (showDeleteDocument) {
-        ConfirmDialog(
-            title = stringResource(R.string.editor_delete_title, state.title),
-            text = stringResource(R.string.editor_delete_body),
-            confirmLabel = stringResource(R.string.editor_delete),
-            destructive = true,
+        DeleteDocumentDialog(
+            title = state.title,
             onConfirm = { showDeleteDocument = false; onIntent(EditorIntent.DeleteDocument) },
             onDismiss = { showDeleteDocument = false },
         )

@@ -3,6 +3,7 @@ package io.github.ukpratik.folio.core.testing
 
 import io.github.ukpratik.folio.core.domain.repository.PageRepository
 import io.github.ukpratik.folio.core.model.Adjustments
+import io.github.ukpratik.folio.core.model.DocumentCover
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Enhancement
 import io.github.ukpratik.folio.core.model.EnhancementMode
@@ -37,6 +38,10 @@ class FakePageRepository(private val clock: FakeClock = FakeClock()) : PageRepos
         rows.map { all -> all.values.filter { it.deletedAt == null && it.page.documentId == documentId }.map { it.page }.sortedBy { it.order } }
 
     override suspend fun get(id: PageId): Page? = rows.value[id]?.page
+
+    override fun observeCovers(): Flow<Map<DocumentId, DocumentCover>> = rows.map { _ ->
+        live().groupBy { it.documentId }.mapValues { (_, pages) -> DocumentCover(pages.size, pages.minBy { it.order }) }
+    }
 
     override suspend fun count(documentId: DocumentId): Int = live().count { it.documentId == documentId }
 

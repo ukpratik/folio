@@ -570,3 +570,56 @@ Changes from the design above, made during implementation:
   - **JVM:** the writer is checked with PDFBox (page sizes, order, images, Gray, UTF-16 title, overhead). Optimiser: fits, carry-forward, floor, per-image. Coordinator: success, target met or missed, JPG naming and stale cleanup, cancel, low storage, nothing to export.
   - **Instrumented:** `ExportEndToEndTest`.
   - **CI:** runs `qpdf --check` on every PDF the writer tests produce (`core/processing/build/golden-pdfs/`).
+
+## 18. Implementation notes — M7 (export UI, result, share/save)
+
+- **Export sheet (S5)** lives in `:feature:export` but appears over the editor.
+  - **Slot:** the editor exposes an `exportSheet: @Composable (DocumentId, onDismiss)` slot and `:app` fills it with `ExportSheetRoute`, so features still never depend on each other.
+  - **Fresh ViewModel per opening:** the sheet uses a Hilt assisted ViewModel (`@HiltViewModel(assistedFactory)`), keyed per opening, so it always starts from the document's remembered settings. The factory takes the raw id `String`, because Hilt can't generate factories for Kotlin value-class parameters.
+  - **Create:** renames the document if the name changed, saves the settings (`ExportDocument`) and starts the engine. If an export is already running, the sheet goes straight to Processing.
+  - **Custom size:** validated against 50 KB – 50 MB, with an inline error.
+- **Processing (S6)** mirrors `ExportEngine.states[id]`.
+  - **Progress bar:** the planning pass is about 15 %, encoding about 80 %, writing the rest. The status text is a TalkBack live region ("Page 3 of 6"; "Fitting under 500 KB" while shrinking).
+  - **Back:** system and predictive back both call `cancel`. On an error screen, Back simply leaves.
+  - **Hand-off:** finished states are acknowledged, and a `settled` flag stops the follow-up `null` state from firing a second navigation.
+  - **Low storage:** `FolioError.LowStorage` now carries `shortBy`, which feeds "Free up about 40 MB".
+- **Result (S7a–c, S7e):**
+  - **Data:** comes from the persisted `Document.lastExport`, so it is the same screen whether you arrive from Processing or from Recents.
+  - **Target missed:** the FR-18 card shows only when it arrives with `offerAlternatives = true`; *Keep* clears that flag in `SavedStateHandle`. Reopening from Recents shows the over-limit warning badge, never a tick.
+  - **Try black & white:** `ExportInBlackAndWhite` sets every page to B&W and re-exports with the same settings.
+  - **Thumbnail and JPG list:** the page-1 thumbnail is drawn from the real PDF. JPG rows load through Coil from the file.
+- **Preview (S7d):** `PdfPages` wraps the platform `PdfRenderer`.
+  - Every call holds one lock (PdfRenderer allows one open page and isn't thread-safe). Rendering runs on the IO dispatcher, and page width is capped at 1440 px.
+  - Page aspect ratios are read up front so the list lays out before anything renders.
+  - Two-finger pinch zooms (1–4×) and pans horizontally; one finger keeps scrolling.
+- **Share and save:**
+  - **Share:** `Context.shareExport` builds `ACTION_SEND` or `ACTION_SEND_MULTIPLE` with FileProvider URIs (`<applicationId>.files`, exports only), a ClipData copy of the URIs and a read grant.
+  - **Save:** `rememberSaveExportLauncher` picks `CreateDocument("application/pdf")` for a PDF, or `OpenDocumentTree` (starting at the last folder) for JPGs. Both live in `:core:ui` so Home and Result share them.
+  - **Copying:** happens in the domain (`SaveExport` → `SaveDestinations`). The `:core:data` implementation uses `ContentResolver`/`DocumentsContract`, opens with `"wt"` (truncate), and maps a lost destination to `SaveTargetUnavailable` ("Couldn't save there. Choose another folder."). The snackbar shows the folder name when the provider exposes it.
+- **Rename (D-44):** `RenameDocument` also renames the exported files (`ExportFileNames` in `:core:model` is the single naming rule, shared with the coordinator).
+- **Delete:** `DeleteDocument` cancels a running export before deleting.
+- **Recents (S1, FR-25):**
+  - **Row contents:** thumbnail (first live page), name, Draft or "Export didn't finish" tag, "6 pages · 438 KB", and a relative date (Today, 2:30 PM / Yesterday / 2 Oct). Size and date formatting live in `:core:ui/format` and are unit-tested.
+  - **Covers query:** a single Room query (`PageDao.observeCovers`) supplies every document's first live page and live page count.
+  - **"Export didn't finish":** hidden while that export is actually running (combined with the engine state).
+  - **⋮ menu:** Share and Save (exported only), Rename, Delete.
+  - **Tapping a row:** a draft opens the editor; an exported document opens its Result.
+- **Navigation (D-43):**
+  - The Result replaces everything above Home.
+  - Cancel / Back to pages / Remove pages / Edit pop back to an editor that is still on the stack, otherwise open one above Home.
+  - Try B&W replaces the Result with Processing.
+- **Shared UI kit:**
+  - **New components:** `ChoiceChipGroup` (FlowRow FilterChips, radio semantics), `StatusBadge` and `WarningTag` (icon plus text), `RenameDialog` and `DeleteDocumentDialog` (moved from the editor).
+  - **Buttons:** horizontal padding is now 12 dp, so "Scan" and "Import images" with icons fit on one line at about 411 dp.
+- **Schema:** Room v1 was not changed in M7. A dev device that still holds the pre-M6 database must clear app data, because v1 is unreleased and has no migration.
+- **Tests (165 JVM tests, all passing):**
+  - **Use cases:** save PDF or JPGs, unavailable destination, rename renames files, B&W retry, delete cancels export.
+  - **Room:** the covers query.
+  - **ViewModels:** export sheet (prefill, custom range, create, already running), processing (progress, hand-off once, cancel, low storage retry, failure), result (alternatives / keep / badge, save messages, B&W, rename), home (covers, interrupted vs running, menu actions).
+  - **Screenshots:** Roborazzi for S5 (light, dark with custom error, JPG), S6, both error screens, S7 success / missed / over-limit / JPG, and Home recents (light, dark) / empty.
+  - **Emulator walk-through:**
+    - **Export:** 3 pages under 100 KB came out at 34 KB.
+    - **Result actions:** preview, Save to Downloads (`%PDF-1.4`, 33.8 KB), share sheet, rename (output file renamed), Close to Recents, reopen the Result from Recents, and delete (row and files).
+    - **Missed target:** a noisy page aimed at 100 KB showed the card; Try B&W re-exported, then Keep showed the over-limit badge.
+    - **JPG:** export, then Save to folder ("Saved to Documents").
+  - **Not verified on the device:** cancel during processing. One-page exports finish in under a second; cancel is covered by the coordinator and ViewModel tests.

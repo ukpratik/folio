@@ -27,3 +27,6 @@ data class ExportResult(
     val targetMet: Boolean?,
     val at: Instant,
 )
+
+/** What a Recents row shows for a document: its live page count and first page (FR-25). */
+data class DocumentCover(val pageCount: Int, val firstPage: Page)

@@ -58,4 +58,20 @@ class RoomPageRepositoryTest {
         pages.setStatus(page.id, PageStatus.READY)
         assertThat(pages.get(page.id)?.status).isEqualTo(PageStatus.READY)
     }
+
+    @Test fun coversUseTheFirstLivePageAndLiveCount() = runTest {
+        val a = documents.create("A")
+        val b = documents.create("B")
+        documents.create("Empty")
+        pages.insertAll((0..2).map { Page(PageId("a$it"), a.id, it, "s$it", status = PageStatus.READY) })
+        pages.insertAll(listOf(Page(PageId("b0"), b.id, 0, "t", status = PageStatus.READY)))
+        pages.softDelete(PageId("a0"))
+
+        val covers = pages.observeCovers().first()
+
+        assertThat(covers.keys).containsExactly(a.id, b.id)
+        assertThat(covers.getValue(a.id).firstPage.id).isEqualTo(PageId("a1"))
+        assertThat(covers.getValue(a.id).pageCount).isEqualTo(2)
+        assertThat(covers.getValue(b.id).pageCount).isEqualTo(1)
+    }
 }

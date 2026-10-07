@@ -2,6 +2,7 @@
 package io.github.ukpratik.folio.core.domain.repository
 
 import io.github.ukpratik.folio.core.model.Document
+import io.github.ukpratik.folio.core.model.DocumentCover
 import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.core.model.Enhancement
 import io.github.ukpratik.folio.core.model.ExportResult
@@ -36,6 +37,9 @@ interface DocumentRepository {
 
 interface PageRepository {
     fun observePages(documentId: DocumentId): Flow<List<Page>>
+
+    /** Page count and first page of every document, for Recents. Documents without pages are absent. */
+    fun observeCovers(): Flow<Map<DocumentId, DocumentCover>>
     suspend fun get(id: PageId): Page?
     suspend fun count(documentId: DocumentId): Int
 

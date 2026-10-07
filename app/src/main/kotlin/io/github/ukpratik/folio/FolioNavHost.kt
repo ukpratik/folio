@@ -3,17 +3,22 @@ package io.github.ukpratik.folio
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import io.github.ukpratik.folio.core.model.DocumentId
 import io.github.ukpratik.folio.feature.capture.CameraDestination
 import io.github.ukpratik.folio.feature.capture.cameraScreen
+import io.github.ukpratik.folio.feature.editor.EditorDestination
 import io.github.ukpratik.folio.feature.editor.detail.navigateToPageDetail
 import io.github.ukpratik.folio.feature.editor.detail.pageDetailScreen
-import io.github.ukpratik.folio.feature.editor.EditorDestination
 import io.github.ukpratik.folio.feature.editor.editorScreen
 import io.github.ukpratik.folio.feature.editor.navigateToEditor
-import io.github.ukpratik.folio.feature.export.ExportDestination
-import io.github.ukpratik.folio.feature.export.exportScreen
+import io.github.ukpratik.folio.feature.export.PreviewDestination
+import io.github.ukpratik.folio.feature.export.ProcessingDestination
+import io.github.ukpratik.folio.feature.export.ResultDestination
+import io.github.ukpratik.folio.feature.export.exportGraph
+import io.github.ukpratik.folio.feature.export.sheet.ExportSheetRoute
 import io.github.ukpratik.folio.feature.home.HomeDestination
 import io.github.ukpratik.folio.feature.home.PrivacyDestination
 import io.github.ukpratik.folio.feature.home.SettingsDestination
@@ -34,7 +39,8 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
     NavHost(navController = nav, startDestination = HomeDestination) {
         homeGraph(
             onScan = { nav.navigate(CameraDestination()) },
-            onOpenDocument = nav::navigateToEditor,
+            onOpenDraft = nav::navigateToEditor,
+            onOpenExported = { nav.navigate(ResultDestination(it.value)) { launchSingleTop = true } },
             onOpenSettings = { nav.navigate(SettingsDestination) },
             onOpenPrivacy = { nav.navigate(PrivacyDestination) },
             onBack = { nav.popBackStack() },
@@ -54,9 +60,28 @@ fun FolioNavHost(mainEffects: Flow<MainEffect>) {
             onClose = { nav.popBackStack() },
             onScan = { nav.navigate(CameraDestination(it.value)) },
             onOpenPage = nav::navigateToPageDetail,
-            onCreatePdf = { nav.navigate(ExportDestination(it.value)) },
+            exportSheet = { id, onDismiss ->
+                ExportSheetRoute(id, onStarted = { nav.navigate(ProcessingDestination(id.value)) }, onDismiss = onDismiss)
+            },
         )
         pageDetailScreen(onClose = { nav.popBackStack() })
-        exportScreen(onBack = { nav.popBackStack() })
+        exportGraph(
+            // The result replaces everything above Home: Back from a finished document goes Home (S7).
+            onExportFinished = { id, missed ->
+                nav.navigate(ResultDestination(id.value, offerAlternatives = missed)) { popUpTo<HomeDestination>() }
+            },
+            onBackToPages = nav::backToEditor,
+            onReexport = { id -> nav.navigate(ProcessingDestination(id.value)) { popUpTo<HomeDestination>() } },
+            onOpenPreview = { nav.navigate(PreviewDestination(it.value)) },
+            onCloseResult = { nav.popBackStack<HomeDestination>(inclusive = false) },
+            onBack = { nav.popBackStack() },
+        )
+    }
+}
+
+/** Cancel / Remove pages / Edit (UX S6, S7): the editor it came from if it's still there, else a fresh one above Home. */
+private fun NavController.backToEditor(id: DocumentId) {
+    if (!popBackStack<EditorDestination>(inclusive = false)) {
+        navigate(EditorDestination(id.value)) { popUpTo<HomeDestination>() }
     }
 }

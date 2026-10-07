@@ -19,6 +19,7 @@ import io.github.ukpratik.folio.core.model.PageStatus
 import io.github.ukpratik.folio.core.model.Rotation
 import io.github.ukpratik.folio.core.testing.FakeClock
 import io.github.ukpratik.folio.core.testing.FakeDocumentFiles
+import io.github.ukpratik.folio.core.testing.FakeExportEngine
 import io.github.ukpratik.folio.core.testing.FakeDocumentRepository
 import io.github.ukpratik.folio.core.testing.FakeImportEngine
 import io.github.ukpratik.folio.core.testing.FakePageRepository
@@ -45,8 +46,8 @@ class EditorViewModelTest {
             SavedStateHandle(mapOf(EditorDestination.ARG_DOCUMENT_ID to doc.id.value)),
             documents, pages, engine,
             MovePage(pages), RotatePage(pages, documents), DuplicatePage(pages, documents, clock),
-            DeletePage(pages), RestorePage(pages), RenameDocument(documents),
-            AddPages(pages, documents, engine, clock), DeleteDocument(documents, files),
+            DeletePage(pages), RestorePage(pages), RenameDocument(documents, files),
+            AddPages(pages, documents, engine, clock), DeleteDocument(documents, files, FakeExportEngine()),
         )
     }
 

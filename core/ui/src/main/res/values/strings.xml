@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="rename_title">Rename</string>
+    <string name="rename_label">File name</string>
+    <string name="rename_confirm">Rename</string>
+    <string name="rename_hint_count">Symbols like / : * ? become _ · %1$d / %2$d</string>
+    <string name="delete_document_title">Delete “%1$s”?</string>
+    <string name="delete_document_body">This removes it from Folio. Copies you saved or shared elsewhere aren\'t affected.</string>
+    <string name="share_chooser_title">Share</string>
 </resources>

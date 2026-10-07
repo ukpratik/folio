@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.ukpratik.folio.feature.editor
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -21,9 +22,9 @@ fun NavGraphBuilder.editorScreen(
     onClose: () -> Unit,
     onScan: (DocumentId) -> Unit,
     onOpenPage: (DocumentId, PageId) -> Unit,
-    onCreatePdf: (DocumentId) -> Unit,
+    exportSheet: @Composable (DocumentId, onDismiss: () -> Unit) -> Unit,
 ) {
     composable<EditorDestination> {
-        EditorRoute(onClose = onClose, onScan = onScan, onOpenPage = onOpenPage, onCreatePdf = onCreatePdf)
+        EditorRoute(onClose = onClose, onScan = onScan, onOpenPage = onOpenPage, exportSheet = exportSheet)
     }
 }

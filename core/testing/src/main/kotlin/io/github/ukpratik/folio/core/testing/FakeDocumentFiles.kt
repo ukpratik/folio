@@ -32,6 +32,11 @@ class FakeDocumentFiles(val root: File = Files.createTempDirectory("folio-test")
         }
     }
 
+    override suspend fun rename(file: File, newName: String): File {
+        val target = File(file.parentFile, newName)
+        return if (target != file && file.renameTo(target)) target else file
+    }
+
     override suspend fun deleteSource(doc: DocumentId, sourceId: String) {
         sourceFile(doc, sourceId).delete()
     }

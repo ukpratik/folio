@@ -14,6 +14,9 @@ interface DocumentFiles {
     /** Writes to a temp file, fsyncs, then renames over [target]. A failure never leaves a partial [target]. */
     suspend fun <T> writeAtomically(target: File, block: suspend (OutputStream) -> T): T
 
+    /** Renames [file] within its folder and returns the new file (unchanged if the name is the same). */
+    suspend fun rename(file: File, newName: String): File
+
     suspend fun deleteSource(doc: DocumentId, sourceId: String)
     suspend fun deleteDocument(doc: DocumentId)
     suspend fun wipeWorkDir()

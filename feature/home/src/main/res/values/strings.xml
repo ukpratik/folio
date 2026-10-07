@@ -8,7 +8,28 @@
     <string name="home_empty_title">Turn photos of documents into a clean PDF</string>
     <string name="home_empty_body">Scan pages or pick photos. Folio crops and cleans them, and helps you fit upload size limits.</string>
     <string name="home_draft">Draft</string>
-    <string name="home_pdf_ready">PDF ready</string>
+    <string name="home_recent">Recent</string>
+    <string name="home_today_at">Today, %1$s</string>
+    <string name="home_yesterday">Yesterday</string>
+    <plurals name="home_pages">
+        <item quantity="one">%1$d page</item>
+        <item quantity="other">%1$d pages</item>
+    </plurals>
+    <plurals name="home_pages_size">
+        <item quantity="one">%1$d page · %2$s</item>
+        <item quantity="other">%1$d pages · %2$s</item>
+    </plurals>
+    <string name="home_more_options">More options for %1$s</string>
+    <string name="home_share">Share</string>
+    <string name="home_save">Save to device</string>
+    <string name="home_save_folder">Save to folder</string>
+    <string name="home_rename">Rename</string>
+    <string name="home_delete">Delete</string>
+    <string name="home_saved">Saved</string>
+    <string name="home_saved_to">Saved to %1$s</string>
+    <string name="home_save_unavailable">Couldn\'t save there. Choose another folder.</string>
+    <string name="home_save_failed">Something went wrong saving the file.</string>
+    <string name="rename_empty">Name can\'t be empty.</string>
     <string name="home_export_interrupted">Export didn\'t finish</string>
     <string name="settings_title">Settings</string>
     <string name="privacy_title">How Folio protects your privacy</string>

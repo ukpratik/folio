@@ -167,7 +167,9 @@ class ExportCoordinatorTest {
         files.free = 1_000
         engine.start(id, ExportSettings())
         runCurrent()
-        assertThat(engine.states.value[id]).isEqualTo(ExportState.Failed(FolioError.LowStorage))
+        val failed = engine.states.value[id] as ExportState.Failed
+        assertThat(failed.error).isInstanceOf(FolioError.LowStorage::class.java)
+        assertThat((failed.error as FolioError.LowStorage).shortBy.bytes).isGreaterThan(0L)
         assertThat(outDir(id).exists()).isFalse()
     }
 

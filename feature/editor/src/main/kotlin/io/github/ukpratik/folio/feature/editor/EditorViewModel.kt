@@ -19,6 +19,7 @@ import io.github.ukpratik.folio.core.domain.usecase.RenameDocument
 import io.github.ukpratik.folio.core.domain.usecase.RestorePage
 import io.github.ukpratik.folio.core.domain.usecase.RotatePage
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.DocumentStatus
 import io.github.ukpratik.folio.core.model.Limits
 import io.github.ukpratik.folio.core.ui.text.UiText
 import javax.inject.Inject
@@ -60,7 +61,13 @@ class EditorViewModel @Inject constructor(
         pages.observePages(documentId),
         importProgress,
     ) { document, pageList, progress ->
-        EditorState(loaded = true, title = document?.title.orEmpty(), pages = pageList, importing = progress)
+        EditorState(
+            loaded = true,
+            title = document?.title.orEmpty(),
+            isExported = document?.status == DocumentStatus.EXPORTED,
+            pages = pageList,
+            importing = progress,
+        )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EditorState())
 
     private val _effects = Channel<EditorEffect>(Channel.BUFFERED)
@@ -126,7 +133,7 @@ class EditorViewModel @Inject constructor(
             deleteDocument(documentId)
             send(EditorEffect.Close(message = null))
         } else {
-            send(EditorEffect.Close(message = UiText.Res(R.string.editor_saved_draft)))
+            send(EditorEffect.Close(message = if (current.isExported) null else UiText.Res(R.string.editor_saved_draft)))
         }
     }
 

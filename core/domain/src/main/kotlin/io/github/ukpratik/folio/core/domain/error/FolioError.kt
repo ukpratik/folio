@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.ukpratik.folio.core.domain.error
 
+import io.github.ukpratik.folio.core.model.ByteSize
+
 /** Every failure the UI can show. Each maps to one entry in the UX error catalogue (UX spec §8). */
 sealed interface FolioError {
-    data object LowStorage : FolioError
+    /** [shortBy] is roughly how much space to free (UX §8: "Free up about {X} MB"). */
+    data class LowStorage(val shortBy: ByteSize) : FolioError
     data class UnsupportedFormat(val mime: String?) : FolioError
     data class CorruptImage(val cause: Throwable?) : FolioError
     data object TooManyPages : FolioError

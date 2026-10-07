@@ -12,6 +12,8 @@ data class EditorState(
     val title: String = "",
     val pages: List<Page> = emptyList(),
     val importing: ImportProgress? = null,
+    /** Exported documents aren't "drafts"; leaving them shows no "Saved as draft" message. */
+    val isExported: Boolean = false,
 ) {
     val isImporting: Boolean get() = importing?.isRunning == true
 

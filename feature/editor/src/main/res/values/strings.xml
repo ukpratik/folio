@@ -22,14 +22,8 @@
     <string name="editor_empty_title">No pages yet</string>
     <string name="editor_empty_body">Scan or import to add pages.</string>
     <string name="editor_delete_document">Delete document</string>
-    <string name="editor_delete_title">Delete “%1$s”?</string>
-    <string name="editor_delete_body">This removes it from Folio. Copies you saved or shared elsewhere aren\'t affected.</string>
     <string name="import_count">%1$d of %2$d</string>
-    <string name="rename_title">Rename</string>
-    <string name="rename_label">File name</string>
-    <string name="rename_confirm">Rename</string>
     <string name="rename_empty">Name can\'t be empty.</string>
-    <string name="rename_hint_count">Symbols like / : * ? become _ · %1$d / %2$d</string>
     <string name="detail_back">Back to pages</string>
     <string name="detail_title">Page %1$d of %2$d</string>
     <string name="detail_more">More options</string>

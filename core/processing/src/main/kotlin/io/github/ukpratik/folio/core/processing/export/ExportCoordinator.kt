@@ -13,6 +13,7 @@ import io.github.ukpratik.folio.core.domain.repository.PageRepository
 import io.github.ukpratik.folio.core.domain.time.Clock
 import io.github.ukpratik.folio.core.model.ByteSize
 import io.github.ukpratik.folio.core.model.DocumentId
+import io.github.ukpratik.folio.core.model.ExportFileNames
 import io.github.ukpratik.folio.core.model.ExportFormat
 import io.github.ukpratik.folio.core.model.ExportResult
 import io.github.ukpratik.folio.core.model.ExportSettings
@@ -28,7 +29,6 @@ import io.github.ukpratik.folio.core.processing.pdf.StreamingPdfWriter
 import io.github.ukpratik.folio.core.processing.render.PageRenderer
 import java.io.File
 import java.time.Instant
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CancellationException
@@ -101,7 +101,8 @@ internal class ExportCoordinator @Inject constructor(
             val document = documents.get(documentId) ?: return fail(documentId, FolioError.NothingToExport)
             val ready = pages.observePages(documentId).first().filter { it.status == PageStatus.READY }
             if (ready.isEmpty()) return fail(documentId, FolioError.NothingToExport)
-            if (files.freeBytes() < requiredBytes(ready.size, settings)) return fail(documentId, FolioError.LowStorage)
+            val shortBy = requiredBytes(ready.size, settings) - files.freeBytes()
+            if (shortBy > 0) return fail(documentId, FolioError.LowStorage(ByteSize(shortBy)))
 
             documents.setExportRunning(documentId, true)
             val encoded = encodePages(documentId, ready, settings, workFiles)
@@ -182,14 +183,14 @@ internal class ExportCoordinator @Inject constructor(
         val pdfPages = encoded.map { (file, page) ->
             PdfPage(PageGeometry.layout(page.widthPx, page.heightPx, page.dpi, settings.pageSize, settings.orientation, settings.margin), file)
         }
-        val target = files.outputFile(id, "$title.pdf")
+        val target = files.outputFile(id, ExportFileNames.pdf(title))
         files.writeAtomically(target) { out -> StreamingPdfWriter().write(out, title, pdfPages) }
         return target
     }
 
     private suspend fun writeJpgs(id: DocumentId, title: String, encoded: List<EncodedFile>): List<File> =
         encoded.mapIndexed { i, (file, _) ->
-            val target = files.outputFile(id, String.format(Locale.ROOT, "%s_%02d.jpg", title, i + 1))
+            val target = files.outputFile(id, ExportFileNames.jpg(title, i))
             files.writeAtomically(target) { out -> file.inputStream().use { it.copyTo(out) } }
             target
         }

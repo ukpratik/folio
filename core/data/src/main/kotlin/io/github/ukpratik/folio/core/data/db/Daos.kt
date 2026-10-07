@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.ukpratik.folio.core.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
+import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -59,6 +61,14 @@ interface PageDao {
 
     @Query("SELECT * FROM page WHERE id = :id")
     suspend fun get(id: String): PageEntity?
+
+    /** First live page of every document, with the document's live page count (Recents). */
+    @Query(
+        "SELECT p.*, (SELECT COUNT(*) FROM page c WHERE c.document_id = p.document_id AND c.deleted_at IS NULL) " +
+            "AS page_count FROM page p WHERE p.deleted_at IS NULL AND p.order_index = " +
+            "(SELECT MIN(m.order_index) FROM page m WHERE m.document_id = p.document_id AND m.deleted_at IS NULL)",
+    )
+    fun observeCovers(): Flow<List<CoverRow>>
 
     @Query("SELECT COUNT(*) FROM page WHERE document_id = :documentId AND deleted_at IS NULL")
     suspend fun count(documentId: String): Int
@@ -135,3 +145,8 @@ interface PageDao {
     @Query("SELECT * FROM page WHERE deleted_at IS NOT NULL AND deleted_at < :before")
     suspend fun findSoftDeletedBefore(before: Long): List<PageEntity>
 }
+
+data class CoverRow(
+    @Embedded val page: PageEntity,
+    @ColumnInfo(name = "page_count") val pageCount: Int,
+)

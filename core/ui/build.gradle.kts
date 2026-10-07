@@ -8,6 +8,9 @@ dependencies {
     api(project(":core:model"))
     api(libs.coil.compose)
     api(libs.compose.material.icons.extended)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.timber)
 
     testImplementation(libs.robolectric)
     testImplementation(libs.compose.ui.test.junit4)

@@ -48,6 +48,11 @@ internal class FileStore @Inject constructor(
         }
     }
 
+    override suspend fun rename(file: File, newName: String): File = withContext(io) {
+        val target = File(file.parentFile, newName)
+        if (target != file && file.renameTo(target)) target else file
+    }
+
     override suspend fun deleteSource(doc: DocumentId, sourceId: String) {
         withContext(io) { sourceFile(doc, sourceId).delete() }
     }

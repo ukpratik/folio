@@ -13,13 +13,20 @@ import kotlinx.serialization.Serializable
 
 fun NavGraphBuilder.homeGraph(
     onScan: () -> Unit,
-    onOpenDocument: (DocumentId) -> Unit,
+    onOpenDraft: (DocumentId) -> Unit,
+    onOpenExported: (DocumentId) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenPrivacy: () -> Unit,
     onBack: () -> Unit,
 ) {
     composable<HomeDestination> {
-        HomeRoute(onScan = onScan, onOpenDocument = onOpenDocument, onSettings = onOpenSettings, onPrivacy = onOpenPrivacy)
+        HomeRoute(
+            onScan = onScan,
+            onOpenDraft = onOpenDraft,
+            onOpenExported = onOpenExported,
+            onSettings = onOpenSettings,
+            onPrivacy = onOpenPrivacy,
+        )
     }
     composable<SettingsDestination> { SettingsScreen(onBack = onBack, onPrivacy = onOpenPrivacy) }
     composable<PrivacyDestination> { PrivacyScreen(onBack = onBack) }
