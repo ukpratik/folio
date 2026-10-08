@@ -8,6 +8,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import io.github.ukpratik.folio.core.ui.components.DarkScreenSystemBars
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -162,6 +163,7 @@ internal fun CameraScreen(
     onIntent: (CameraIntent) -> Unit,
     preview: @Composable () -> Unit,
 ) {
+    DarkScreenSystemBars()
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f).fillMaxWidth()) { preview() }

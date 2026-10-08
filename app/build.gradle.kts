@@ -14,11 +14,25 @@ android {
     defaultConfig {
         applicationId = "io.github.ukpratik.folio" // permanent after first upload (ADR-0022)
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
         // Settings → Send feedback recipient. Set `folio.feedbackEmail` in gradle.properties; blank lets the user choose.
         buildConfigField("String", "FEEDBACK_EMAIL", "\"${providers.gradleProperty("folio.feedbackEmail").getOrElse("")}\"")
         // Phones are ARM. Dropping x86/x86_64 keeps OpenCV's native code out of the APK (NFR-08).
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
+    }
+
+    // Upload key for Google Play (Play App Signing re-signs for users). Credentials live in
+    // ~/.gradle/gradle.properties, never in the repo; without them release builds stay unsigned (CI, F-Droid).
+    val uploadStore = providers.gradleProperty("folio.upload.storeFile").orNull
+    signingConfigs {
+        if (uploadStore != null) {
+            create("upload") {
+                storeFile = file(uploadStore)
+                storePassword = providers.gradleProperty("folio.upload.storePassword").get()
+                keyAlias = providers.gradleProperty("folio.upload.keyAlias").get()
+                keyPassword = providers.gradleProperty("folio.upload.keyPassword").get()
+            }
+        }
     }
 
     buildTypes {
@@ -29,7 +43,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Signing is configured in CI from secrets; local release builds are unsigned.
+            signingConfigs.findByName("upload")?.let { signingConfig = it }
         }
     }
 

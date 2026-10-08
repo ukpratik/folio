@@ -4,7 +4,7 @@
 
 Folio is a privacy-first Android app. It scans or imports document photos, crops and cleans them, and creates a PDF (or JPG images) that fits upload size limits. It works without internet: the app has **no network permission**, no account, no ads and no tracking.
 
-> **Status:** early development (project skeleton). Not yet on Google Play or F-Droid.
+> **Status:** 1.0.0 ready for release. F-Droid submission in progress; Google Play coming soon. Website and privacy policy: https://ukpratik.github.io/folio/
 
 ## Build
 
@@ -25,13 +25,17 @@ app/                 single activity, navigation, Hilt root, manifest
 core/model           pure Kotlin domain types
 core/domain          use cases + repository interfaces (pure Kotlin)
 core/data            Room, DataStore, app-private file store
-core/processing      image pipeline, edge detection, PDF writer (in progress)
+core/processing      image pipeline, edge detection, size optimiser, PDF writer
 core/ui              theme (light/dark), Plus Jakarta Sans
 core/testing         fakes for tests
-feature/*            home, capture, editor, export
+feature/*            home, capture, editor, export, settings
+baselineprofile/     startup Baseline Profile + cold-start benchmark
+fdroid/              F-Droid metadata (submitted to fdroiddata)
+site/                website + privacy policy (GitHub Pages)
 build-logic/         Gradle convention plugins
 docs/architecture    HLD, LLD, tech stack, ADRs
 docs/designs         design canvas source (HTML artboards)
+docs/release         how to release (F-Droid, Google Play)
 ```
 
 Read [`docs/architecture/README.md`](docs/architecture/README.md) before contributing. Architecture decisions live in [`docs/architecture/adr/`](docs/architecture/adr/).

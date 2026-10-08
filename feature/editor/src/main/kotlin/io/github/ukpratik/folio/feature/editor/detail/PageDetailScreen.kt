@@ -81,6 +81,7 @@ import io.github.ukpratik.folio.core.model.Page
 import io.github.ukpratik.folio.core.model.PageThumbnail
 import io.github.ukpratik.folio.core.model.Rotation
 import io.github.ukpratik.folio.core.ui.components.ConfirmDialog
+import io.github.ukpratik.folio.core.ui.components.DarkScreenSystemBars
 import io.github.ukpratik.folio.core.ui.components.PageImage
 import io.github.ukpratik.folio.core.ui.components.showUndo
 import io.github.ukpratik.folio.core.ui.text.resolveWith
@@ -92,6 +93,7 @@ private const val PREVIEW_PX = 1080
 
 @Composable
 internal fun PageDetailRoute(onClose: () -> Unit, viewModel: PageDetailViewModel = hiltViewModel()) {
+    DarkScreenSystemBars() // S4 is always dark
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }

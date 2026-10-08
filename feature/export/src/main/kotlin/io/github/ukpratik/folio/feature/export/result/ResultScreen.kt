@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -181,10 +182,12 @@ internal fun ResultScreen(
 private fun PdfThumbnail(path: String, onPreview: () -> Unit, small: Boolean) {
     val pages = rememberPdfPages(path.takeUnless { LocalInspectionMode.current })
     val previewLabel = stringResource(R.string.result_preview_description)
+    // Shorter phones: shrink the thumbnail so the name, size and badge stay above the action buttons.
+    val fullWidth = ((LocalConfiguration.current.screenHeightDp - 560) * 0.7f).coerceIn(120f, 200f).dp
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             Modifier
-                .width(if (small) 120.dp else 200.dp)
+                .width(if (small) 120.dp else fullWidth)
                 .clip(RoundedCornerShape(12.dp))
                 .pageOutline()
                 .clickable(onClickLabel = previewLabel, role = Role.Button, onClick = onPreview),

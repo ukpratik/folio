@@ -26,6 +26,8 @@ Status on 7 Oct 2026: every P0 requirement in `01-product-requirements.md` is bu
 
 ## Known issues and limits
 
+- Crop corner dragging is still not fully smooth on a real phone (GitHub issue, planned for a later version).
+
 - A faint 1 px dotted edge can remain on one side of tightly cropped B&W pages (T01/T10).
 - Cancel during export is covered by automated tests only. Short exports finish before Back can be pressed on the emulator.
 - Export-size results on the emulator came from deliberately noisy synthetic pages (about 82 KB per page at the floor). Real printed pages should be much smaller. Please record real numbers.
