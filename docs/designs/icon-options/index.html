@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Folio icon options</title>
+<style>
+@font-face{font-family:PJ;src:url(plus_jakarta_sans.ttf)}
+:root{--ink:#15181C;--muted:#545B63;--line:#E3E5E8}
+body{margin:0;background:#F6F7F5;color:var(--ink);font-family:PJ,system-ui,sans-serif}
+main{max-width:1240px;margin:0 auto;padding:36px 28px 60px}
+h1{font-size:30px;margin:0 0 6px}
+.lead{color:var(--muted);margin:0 0 28px;font-size:16px}
+.opt{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 24px;margin:0 0 18px;display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center}
+.opt.rec{border:2px solid #0D6B62;box-shadow:0 6px 24px rgba(13,107,98,.12)}
+.hero{display:flex;flex-direction:column;align-items:center;gap:10px}
+.hero h2{margin:0;font-size:22px}.hero .k{font-size:13px;color:#0D6B62;font-weight:700;letter-spacing:.08em}
+.hero p{margin:0;color:var(--muted);font-size:13px;text-align:center}
+.badge{background:#0D6B62;color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.strips{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.strip{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.strip .cap{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.75}
+.row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+.lbl{font-size:11px;text-align:center;margin-top:4px}
+.light{background:linear-gradient(135deg,#f3efe7,#e3e9f1)} .light .cap,.light .lbl{color:#333}
+.dark{background:linear-gradient(135deg,#1b2430,#0e1116)} .dark .cap,.dark .lbl{color:#ddd}
+.themed{background:#E9EEEC} .themed .cap,.themed .lbl{color:#333}
+.store{background:#fff;border:1px solid var(--line)} .store .cap{color:#333}
+.app{display:flex;flex-direction:column;align-items:center}
+svg{display:block}
+.storecard{display:flex;gap:12px;align-items:center}
+.storecard .t{font-size:14px;font-weight:700}.storecard .s{font-size:12px;color:#0D6B62}
+</style></head><body><main>
+<h1>Folio app icon: 5 directions</h1>
+<p class="lead">Each icon is shown with the launcher masks Android uses (circle on Pixel, squircle on Samsung, OnePlus and Xiaomi, rounded square), on light and dark wallpapers, at home-screen sizes down to 48 px, as an Android 13+ themed (monochrome) icon, and as the Play Store listing.</p>
+<div id="list"></div>
+</main>
+<script src="icons.js"></script>
+<script>
+const masks = {
+  circle: '<circle cx="54" cy="54" r="54"/>',
+  squircle: '<path d="M54,0C92,0 108,16 108,54S92,108 54,108S0,92 0,54S16,0 54,0z"/>',
+  rsquare: '<rect width="108" height="108" rx="24"/>',
+};
+let n = 0;
+function icon(ic, size, mask, mode) {
+  const id = 'm' + (n++);
+  // Launchers show the middle 72dp of the 108dp adaptive canvas.
+  const bg = mode === 'mono' ? `<rect width="108" height="108" fill="${mode.bg || '#CFE3DE'}"/>` : ic.bg;
+  let fg = ic.fg;
+  if (mode === 'mono-light') return wrap(`<rect width="108" height="108" fill="#CFE6E0"/><g fill="#1F4A44" stroke="#1F4A44">${ic.mono.replaceAll('#000','#1F4A44')}</g>`);
+  if (mode === 'mono-dark') return wrap(`<rect width="108" height="108" fill="#22302D"/><g>${ic.mono.replaceAll('#000','#A9DCD2')}</g>`);
+  return wrap(bg + fg);
+  function wrap(inner) {
+    return `<svg width="${size}" height="${size}" viewBox="18 18 72 72"><defs><clipPath id="${id}" transform="translate(18 18) scale(${72/108})">${masks[mask]}</clipPath></defs><g clip-path="url(#${id})">${inner}</g></svg>`;
+  }
+}
+function storeIcon(ic, size) {
+  const id = 'm' + (n++);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 108 108" style="border-radius:${size*0.2}px;box-shadow:0 1px 3px rgba(0,0,0,.25)"><g>${ic.bg}<g transform="translate(54 54) scale(1.15) translate(-54 -54)">${ic.fg}</g></g></svg>`;
+}
+const rec = 'A';
+document.getElementById('list').innerHTML = ICONS.map(ic => `
+<section class="opt ${ic.key === rec ? 'rec' : ''}">
+  <div class="hero">${icon(ic, 160, 'squircle')}<div class="k">OPTION ${ic.key}</div><h2>${ic.name}</h2><p>${ic.tagline}</p>${ic.key === rec ? '<span class="badge">Recommended</span>' : ''}</div>
+  <div class="strips">
+    <div class="strip light"><div class="cap">Light wallpaper</div><div class="row">
+      ${['circle','squircle','rsquare'].map(m => `<div class="app">${icon(ic, 64, m)}<div class="lbl">Folio</div></div>`).join('')}
+      <div class="app">${icon(ic, 48, 'squircle')}<div class="lbl">48px</div></div></div></div>
+    <div class="strip dark"><div class="cap">Dark wallpaper</div><div class="row">
+      ${['circle','squircle','rsquare'].map(m => `<div class="app">${icon(ic, 64, m)}<div class="lbl">Folio</div></div>`).join('')}
+      <div class="app">${icon(ic, 48, 'circle')}<div class="lbl">48px</div></div></div></div>
+    <div class="strip themed"><div class="cap">Themed (Android 13+)</div><div class="row">
+      <div class="app">${icon(ic, 64, 'circle', 'mono-light')}<div class="lbl">Light</div></div>
+      <div class="app">${icon(ic, 64, 'circle', 'mono-dark')}<div class="lbl">Dark</div></div></div></div>
+    <div class="strip store"><div class="cap">Play Store</div><div class="storecard">${storeIcon(ic, 72)}<div><div class="t">Folio: Doc Maker</div><div class="s">Productivity</div></div></div></div>
+  </div>
+</section>`).join('');
+</script>
+</body></html>

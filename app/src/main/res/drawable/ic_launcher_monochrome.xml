@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icon (Android 13+): single-colour silhouette of "Scan Frame". The system tints it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FF000000"
+        android:pathData="M45,34h14l7,7v24a3,3 0 0 1 -3,3h-18a3,3 0 0 1 -3,-3v-28a3,3 0 0 1 3,-3z" />
+    <path android:strokeColor="#FF000000" android:strokeWidth="4"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M34,38v-8h8 M66,30h8v8 M74,64v8h-8 M42,72h-8v-8" />
+</vector>
