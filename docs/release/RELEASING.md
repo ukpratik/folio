@@ -25,13 +25,17 @@ Upload certificate SHA-256: `B5:BD:DB:7E:2E:99:86:11:8D:CF:2F:7F:08:28:CD:07:0E:
 
 ## F-Droid: first submission (one time)
 
-Prerequisites (done): public source on GitHub, GPL-3.0-or-later, `fdroid` flavour with no Google code, fastlane metadata and images in the repo, tag `v1.0.0`, metadata file `fdroid/io.github.ukpratik.folio.yml` (passes `fdroid lint`; `fdroid scanner` finds 0 problems).
+Prerequisites (done): public source on GitHub, GPL-3.0-or-later, `fdroid` flavour with no Google code, fastlane metadata and images in the repo, tag `v1.0.0`, metadata file `fdroid/io.github.ukpratik.folio.yml`.
+
+Verified locally with fdroidserver 2.4.5 against the public tag: `fdroid lint` is clean, `fdroid scanner` finds 0 problems, and `fdroid build` produces `io.github.ukpratik.folio_1.apk`. That APK passes the permission gate (CAMERA only), launches, and shows no update prompt.
+- `scandelete: build-logic/convention/build` is needed: F-Droid runs `gradle clean` before scanning, which compiles the convention plugins, and the scanner would otherwise flag those generated `.class` files as binaries.
 
 1. Create a GitLab account (gitlab.com) if you don't have one.
 2. Fork https://gitlab.com/fdroid/fdroiddata.
 3. In your fork, add `metadata/io.github.ukpratik.folio.yml` with the contents of `fdroid/io.github.ukpratik.folio.yml` from this repo (in the GitLab web editor: *+ → New file*).
 4. Commit on a new branch named `io.github.ukpratik.folio`, open a **merge request** to `fdroid/fdroiddata`, and choose the **"App inclusion"** template. Tick its checklist (all items are met; see below).
-5. The fdroiddata CI builds the app. Reviewers may ask questions in the MR; answer there. After merge, the app appears in F-Droid within about a week.
+5. When the website should advertise it, change `site/index.html` back to a "Get it on F-Droid" link (https://f-droid.org/packages/io.github.ukpratik.folio/).
+6. The fdroiddata CI builds the app. Reviewers may ask questions in the MR; answer there. After merge, the app appears in F-Droid within about a week.
 
 Checklist answers for the MR template:
 - Source is public and the licence is GPL-3.0-or-later (OSI-approved). ✓
