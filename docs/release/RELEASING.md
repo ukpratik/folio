@@ -10,6 +10,15 @@ Two channels: **F-Droid** (open-source build, F-Droid signs it) and **Google Pla
 4. Commit, then tag and push: `git tag -s v<versionName> -m "Folio <versionName>"` (or `-a` if you don't sign tags) and `git push origin v<versionName>`.
 5. **F-Droid** picks the new tag up automatically (`UpdateCheckMode: Tags`, `AutoUpdateMode: Version`), usually within a few days.
 6. **Play:** `./gradlew bundlePlayRelease` → upload `app/build/outputs/bundle/playRelease/app-play-release.aab` in Play Console (see below).
+7. **Archive** the builds and R8 mappings in `~/Desktop/PersonalProjects/builds/folio/<versionName>/` (outside this repo):
+   ```bash
+   gzip -c app/build/outputs/mapping/playRelease/mapping.txt > /tmp/play-mapping.txt.gz
+   ~/Desktop/PersonalProjects/builds/archive-build.sh folio <versionName> \
+     app/build/outputs/bundle/playRelease/app-play-release.aab=folio-<versionName>-play.aab \
+     app/build/outputs/apk/play/release/app-play-release.apk=folio-<versionName>-play.apk \
+     /tmp/play-mapping.txt.gz=mapping/folio-<versionName>-play-mapping.txt.gz
+   ```
+   Then add a `RELEASE.md` there (copy the previous one and edit).
 
 ## Signing
 
