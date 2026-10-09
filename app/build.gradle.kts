@@ -18,7 +18,17 @@ android {
         // Settings → Send feedback recipient. Set `folio.feedbackEmail` in gradle.properties; blank lets the user choose.
         buildConfigField("String", "FEEDBACK_EMAIL", "\"${providers.gradleProperty("folio.feedbackEmail").getOrElse("")}\"")
         // Phones are ARM. Dropping x86/x86_64 keeps OpenCV's native code out of the APK (NFR-08).
-        ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
+        // F-Droid builds one APK per ABI (`-Pfolio.targetAbi=…`), each with its own versionCode
+        // (versionCode × 10 + ABI digit) so it can offer the right one. Play and local builds keep both ABIs.
+        val abiDigits = mapOf("armeabi-v7a" to 1, "arm64-v8a" to 2)
+        val targetAbi = providers.gradleProperty("folio.targetAbi").orNull
+        if (targetAbi != null) {
+            val digit = requireNotNull(abiDigits[targetAbi]) { "folio.targetAbi must be one of ${abiDigits.keys}" }
+            versionCode = versionCode!! * 10 + digit
+            ndk { abiFilters += targetAbi }
+        } else {
+            ndk { abiFilters += abiDigits.keys }
+        }
     }
 
     // Upload key for Google Play (Play App Signing re-signs for users). Credentials live in
