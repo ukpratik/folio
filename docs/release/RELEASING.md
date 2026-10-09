@@ -34,6 +34,8 @@ Upload certificate SHA-256: `B5:BD:DB:7E:2E:99:86:11:8D:CF:2F:7F:08:28:CD:07:0E:
 
 ## F-Droid: first submission (one time)
 
+**Status:** submitted 9 Oct 2026 as [fdroiddata!51827](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/51827), from the fork `gitlab.com/pratikuk/fdroiddata` (branch `io.github.ukpratik.folio`). F-Droid builds and signs the app (no reproducible builds). There are two builds per release: armeabi-v7a (versionCode ×10 + 1) and arm64-v8a (×10 + 2), selected with `-Pfolio.targetAbi`. To change the metadata during review, edit the file on that branch.
+
 Prerequisites (done): public source on GitHub, GPL-3.0-or-later, `fdroid` flavour with no Google code, fastlane metadata and images in the repo, tag `v1.0.0`, metadata file `fdroid/io.github.ukpratik.folio.yml`.
 
 Verified locally with fdroidserver 2.4.5 against the public tag: `fdroid lint` is clean, `fdroid scanner` finds 0 problems, and `fdroid build` produces `io.github.ukpratik.folio_1.apk`. That APK passes the permission gate (CAMERA only), launches, and shows no update prompt.
