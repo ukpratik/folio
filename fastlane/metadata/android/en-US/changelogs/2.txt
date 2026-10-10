@@ -1,0 +1,3 @@
+• JPG export: the size limit now applies to each image, as intended. Images that are each under the limit are no longer reported as "over" (this also corrects exports made with 1.0.0).
+• "Try black & white" is no longer suggested when every page is already black & white.
+• Clearer messages when images are over the limit.

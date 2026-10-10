@@ -141,6 +141,32 @@ class ExportCoordinatorTest {
         assertThat(outDir(id).list()!!.toList()).containsExactly("Fees_01.jpg", "Fees_02.jpg")
     }
 
+    /** F-Droid review of 1.0.0: the JPG limit is per image; the total of all images must not be compared with it. */
+    @Test fun jpgTargetIsPerImage() = runTest {
+        val engine = coordinator()
+        val id = document(ready = 4)
+        val target = ByteSize.kb(60)
+        engine.start(id, ExportSettings(format = ExportFormat.JPG, target = target))
+        runCurrent()
+
+        val state = engine.states.value[id] as ExportState.Succeeded
+        val sizes = state.result.paths.map { File(it).length() }
+        assertThat(sizes.all { it <= target.bytes }).isTrue()
+        assertThat(sizes.sum()).isGreaterThan(target.bytes) // the case that used to be reported as missed
+        assertThat(state.result.targetMet).isTrue()
+    }
+
+    @Test fun jpgMissReportsTheLargestImage() = runTest {
+        val engine = coordinator()
+        val id = document(ready = 3)
+        engine.start(id, ExportSettings(format = ExportFormat.JPG, target = ByteSize(2_000)))
+        runCurrent()
+
+        val state = engine.states.value[id] as ExportState.TargetMissed
+        assertThat(state.smallest.bytes).isEqualTo(state.result.paths.maxOf { File(it).length() })
+        assertThat(state.result.targetMet).isFalse()
+    }
+
     @Test fun cancelKeepsThePreviousExportAndClearsTheRunningFlag() = runTest {
         val engine = coordinator()
         val id = document(ready = 2)

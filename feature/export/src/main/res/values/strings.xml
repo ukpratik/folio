@@ -79,9 +79,18 @@
     <string name="result_under">Under %1$s</string>
     <string name="result_each_under">Each under %1$s</string>
     <string name="result_over_limit">Over your %1$s limit</string>
+    <plurals name="result_images_over_limit">
+        <item quantity="one">%1$d image is over %2$s</item>
+        <item quantity="other">%1$d images are over %2$s</item>
+    </plurals>
     <string name="result_over_limit_hint">The website may reject this file. Try black &amp; white or fewer pages to make it smaller.</string>
+    <string name="result_over_limit_hint_bw">The website may reject this file. Try fewer pages to make it smaller.</string>
+    <string name="result_over_limit_hint_jpg">The website may reject these images. Try black &amp; white to make them smaller.</string>
+    <string name="result_over_limit_hint_jpg_bw">The website may reject these images. The pages are already black &amp; white, so this is the smallest Folio can make them while keeping text readable.</string>
     <string name="result_missed_title">Couldn\'t get under %1$s</string>
     <string name="result_missed_body">The smallest file that keeps text readable is %1$s. Try one of these:</string>
+    <string name="result_missed_body_jpg">The largest image that keeps text readable is %1$s. Try one of these:</string>
+    <string name="result_keep_images">Keep these images</string>
     <string name="result_try_bw">Try black &amp; white</string>
     <string name="result_remove_pages">Remove pages</string>
     <string name="result_keep">Keep the %1$s file</string>

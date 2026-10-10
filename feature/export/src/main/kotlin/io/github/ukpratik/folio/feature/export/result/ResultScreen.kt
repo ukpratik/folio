@@ -167,7 +167,7 @@ internal fun ResultScreen(
             }
             Summary(state, export, onRename = { showRename = true })
             if (state.showAlternatives) {
-                TargetMissedCard(export, onIntent, onEdit)
+                TargetMissedCard(state, export, onIntent, onEdit)
             } else if (!isPdf) {
                 ImageList(state.files)
             }
@@ -221,11 +221,23 @@ private fun Summary(state: ResultState, export: ExportResult, onRename: () -> Un
         Text(meta(export, state.files), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         val target = export.target
         if (target != null && !state.showAlternatives) {
-            if (export.targetMet == true) {
+            if (state.targetMet == true) {
                 StatusBadge(stringResource(if (isPdf) R.string.result_under else R.string.result_each_under, target.display()), StatusTone.SUCCESS)
             } else {
-                StatusBadge(stringResource(R.string.result_over_limit, target.display()), StatusTone.WARNING)
-                Text(stringResource(R.string.result_over_limit_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                val over = state.imagesOverLimit
+                StatusBadge(
+                    if (isPdf) stringResource(R.string.result_over_limit, target.display())
+                    else pluralStringResource(R.plurals.result_images_over_limit, over, over, target.display()),
+                    StatusTone.WARNING,
+                )
+                // Only suggest black & white while it can still make a difference.
+                val hint = when {
+                    isPdf && !state.allBlackAndWhite -> R.string.result_over_limit_hint
+                    isPdf -> R.string.result_over_limit_hint_bw
+                    !state.allBlackAndWhite -> R.string.result_over_limit_hint_jpg
+                    else -> R.string.result_over_limit_hint_jpg_bw
+                }
+                Text(stringResource(hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -242,10 +254,11 @@ private fun meta(export: ExportResult, files: List<OutputFile>): String = when (
 }
 
 @Composable
-private fun TargetMissedCard(export: ExportResult, onIntent: (ResultIntent) -> Unit, onRemovePages: () -> Unit) {
+private fun TargetMissedCard(state: ResultState, export: ExportResult, onIntent: (ResultIntent) -> Unit, onRemovePages: () -> Unit) {
     val status = LocalStatusColors.current
     val target = export.target?.display().orEmpty()
-    val smallest = export.size.display()
+    val smallest = (state.smallestPossible ?: export.size).display()
+    val isJpg = export.format == ExportFormat.JPG
     Surface(color = status.warningContainer, shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -257,17 +270,28 @@ private fun TargetMissedCard(export: ExportResult, onIntent: (ResultIntent) -> U
                         color = status.onWarningContainer,
                         modifier = Modifier.semantics { heading() },
                     )
-                    Text(stringResource(R.string.result_missed_body, smallest), style = MaterialTheme.typography.bodyMedium, color = status.onWarningContainer)
+                    Text(
+                        stringResource(if (isJpg) R.string.result_missed_body_jpg else R.string.result_missed_body, smallest),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = status.onWarningContainer,
+                    )
                 }
             }
-            FolioPrimaryButton(stringResource(R.string.result_try_bw), { onIntent(ResultIntent.TryBlackAndWhite) })
-            FolioSecondaryButton(stringResource(R.string.result_remove_pages), onRemovePages)
+            // Already all B&W: retrying B&W would give the same file, so don't offer it again.
+            if (!state.allBlackAndWhite) {
+                FolioPrimaryButton(stringResource(R.string.result_try_bw), { onIntent(ResultIntent.TryBlackAndWhite) })
+                FolioSecondaryButton(stringResource(R.string.result_remove_pages), onRemovePages)
+            } else {
+                FolioPrimaryButton(stringResource(R.string.result_remove_pages), onRemovePages)
+            }
             TextButton(onClick = { onIntent(ResultIntent.Keep) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.result_keep, smallest))
+                Text(if (isJpg) stringResource(R.string.result_keep_images) else stringResource(R.string.result_keep, smallest))
             }
         }
     }
-    Text(stringResource(R.string.result_missed_tip), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (!state.allBlackAndWhite) {
+        Text(stringResource(R.string.result_missed_tip), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
 }
 
 @Composable

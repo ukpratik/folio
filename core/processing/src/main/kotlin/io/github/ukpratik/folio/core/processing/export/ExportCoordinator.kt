@@ -116,7 +116,9 @@ internal class ExportCoordinator @Inject constructor(
             removeStaleOutputs(documentId, keep = outputs)
             val size = outputs.sumOf { it.length() }
             val target = settings.target
-            val met = target?.let { size <= it.bytes }
+            // PDF: the one file must fit. JPG (FR-24): the limit is per image, so every file must fit.
+            val largest = outputs.maxOf { it.length() }
+            val met = target?.let { if (settings.format == ExportFormat.JPG) largest <= it.bytes else size <= it.bytes }
             val result = ExportResult(
                 format = settings.format,
                 paths = outputs.map { it.path },
@@ -127,7 +129,7 @@ internal class ExportCoordinator @Inject constructor(
                 at = Instant.ofEpochMilli(clock.nowMillis()),
             )
             documents.markExported(documentId, result)
-            set(documentId, if (met == false) ExportState.TargetMissed(result, ByteSize(size)) else ExportState.Succeeded(result))
+            set(documentId, if (met == false) ExportState.TargetMissed(result, ByteSize(if (settings.format == ExportFormat.JPG) largest else size)) else ExportState.Succeeded(result))
         } catch (e: CancellationException) {
             withContext(NonCancellable) {
                 documents.setExportRunning(documentId, false)
