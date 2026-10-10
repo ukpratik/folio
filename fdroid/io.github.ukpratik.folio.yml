@@ -15,18 +15,18 @@ RepoType: git
 Repo: https://github.com/ukpratik/folio.git
 
 Builds:
-  - versionName: 1.0.0
-    versionCode: 11
-    commit: 9540899f31c1287d9525f2071c30188b4cbc913b
+  - versionName: 1.0.1
+    versionCode: 21
+    commit: f632b2ed12e521730ea215ce9c3492e144cd1b76
     subdir: app
     gradle:
       - fdroid
     gradleprops:
       - folio.targetAbi=armeabi-v7a
 
-  - versionName: 1.0.0
-    versionCode: 12
-    commit: 9540899f31c1287d9525f2071c30188b4cbc913b
+  - versionName: 1.0.1
+    versionCode: 22
+    commit: f632b2ed12e521730ea215ce9c3492e144cd1b76
     subdir: app
     gradle:
       - fdroid
@@ -38,5 +38,5 @@ UpdateCheckMode: Tags
 VercodeOperation:
   - 10*%c + 1
   - 10*%c + 2
-CurrentVersion: 1.0.0
-CurrentVersionCode: 12
+CurrentVersion: 1.0.1
+CurrentVersionCode: 22
