@@ -4,7 +4,7 @@
 
 Folio is a privacy-first Android app. It scans or imports document photos, crops and cleans them, and creates a PDF (or JPG images) that fits upload size limits. It works without internet: the app has **no network permission**, no account, no ads and no tracking.
 
-> **Status:** 1.0.0 ready for release. F-Droid submission in progress; Google Play coming soon. Website and privacy policy: https://ukpratik.github.io/folio/
+> **Status:** 1.0.1 is available on [F-Droid](https://f-droid.org/packages/io.github.ukpratik.folio/). Google Play coming soon. Website and privacy policy: https://ukpratik.github.io/folio/
 
 ## Build
 
@@ -45,6 +45,15 @@ Read [`docs/architecture/README.md`](docs/architecture/README.md) before contrib
 - The release APK may request **only** `android.permission.CAMERA`. Any other permission fails the build.
 - Android backup and device transfer are disabled for all app data.
 - No analytics, crash-reporting or ad SDKs.
+
+## Signing certificates
+
+Folio (`io.github.ukpratik.folio`) is published by its developer, Pratik Ukey ([@ukpratik](https://github.com/ukpratik)). SHA-256 certificate fingerprints:
+
+| Key | Fingerprint |
+|---|---|
+| Google Play upload key (held by the developer) | `B5:BD:DB:7E:2E:99:86:11:8D:CF:2F:7F:08:28:CD:07:0E:AE:05:73:73:F9:CF:2B:C2:DE:2A:4C:0A:6D:A1:6D` |
+| F-Droid build (F-Droid builds from this source and signs with its own key) | `35:0C:A3:D7:5C:DB:72:F2:EE:69:CE:B5:43:86:C2:6C:E1:C3:27:3C:38:D5:2D:81:57:42:67:51:BD:6F:8B:B4` |
 
 ## Licence
 
