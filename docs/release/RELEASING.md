@@ -56,7 +56,7 @@ Checklist answers for the MR template:
 
 ## Google Play: first release (after the organisation account exists)
 
-**Package name on Play: `io.github.ukpratik.folio.play`** (ADR-0025). The F-Droid build stays `io.github.ukpratik.folio`.
+**Package name on Play: `io.github.ukpratik.folio.play`** (ADR-0025). The Play build needs the NDK installed: it ships the NDK's 16 KB-aligned `libc++_shared.so` (ADR-0026). Check alignment before uploading: `zipalign -c -P 16 -v 4 app/build/outputs/apk/play/release/app-play-release.apk`. The F-Droid build stays `io.github.ukpratik.folio`.
 
 1. **Create the app:** name "Folio: Doc Maker", default language English (India) or English (United States), App, Free.
 2. **Play App Signing:** accept Google-managed key. Upload the first AAB; Play registers our upload key from it.

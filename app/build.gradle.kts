@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId = "io.github.ukpratik.folio" // F-Droid; the Play flavour adds ".play" (ADR-0025)
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
         // Settings → Send feedback recipient. Set `folio.feedbackEmail` in gradle.properties; blank lets the user choose.
         buildConfigField("String", "FEEDBACK_EMAIL", "\"${providers.gradleProperty("folio.feedbackEmail").getOrElse("")}\"")
         // Phones are ARM. Dropping x86/x86_64 keeps OpenCV's native code out of the APK (NFR-08).
@@ -77,6 +77,15 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    // 16 KB memory pages (required by Google Play): OpenCV 4.11's AAR bundles a 4 KB-aligned libc++_shared.so.
+    // The Play build ships the NDK's own copy instead (16 KB-aligned and newer, which the NDK's C++ runtime rule
+    // allows: ship the newest libc++ any component was built with). Copied at build time, never committed;
+    // the fdroid flavour keeps OpenCV's copy (ADR-0026).
+    sourceSets.getByName("play").jniLibs.directories.add(layout.buildDirectory.dir("generated/playLibcxx").get().asFile.path)
+    packaging {
+        jniLibs.pickFirsts += "**/libc++_shared.so"
     }
 
     // ADR-0021: keep builds reproducible for F-Droid.
@@ -145,3 +154,18 @@ dependencies {
     // Debug only: finds leaked screens/ViewModels. Never in release (permission gate checks release APKs).
     debugImplementation(libs.leakcanary)
 }
+
+// ADR-0026: copy the NDK's 16 KB-aligned libc++_shared.so for the Play build (see the packaging block above).
+val copyPlayLibcxx = tasks.register<Copy>("copyPlayLibcxx") {
+    val ndk = androidComponents.sdkComponents.ndkDirectory
+    val abis = mapOf("arm64-v8a" to "aarch64-linux-android", "armeabi-v7a" to "arm-linux-androideabi")
+    abis.forEach { (abi, triple) ->
+        from(ndk.map { d -> d.asFileTree.matching { include("toolchains/llvm/prebuilt/*/sysroot/usr/lib/$triple/libc++_shared.so") } }) {
+            eachFile { path = "$abi/$name" }
+            includeEmptyDirs = false
+        }
+    }
+    into(layout.buildDirectory.dir("generated/playLibcxx"))
+}
+tasks.matching { it.name.contains("Play") && (it.name.contains("JniLib") || it.name.contains("NativeLib")) }
+    .configureEach { dependsOn(copyPlayLibcxx) }

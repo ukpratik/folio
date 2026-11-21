@@ -1,0 +1,1 @@
+• Updated the image-processing library (OpenCV 4.11) so Folio runs on newer phones that use 16 KB memory pages.
