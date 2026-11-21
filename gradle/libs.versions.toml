@@ -1,7 +1,7 @@
 [versions]
 # Build — pin latest stable; Dependabot opens monthly upgrade PRs (ADR-0017)
 agp = "9.4.1"
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 ksp = "2.3.12"
 # Android
 compileSdk = "37"
@@ -18,7 +18,7 @@ hiltNavigationCompose = "1.4.0"
 room = "2.8.5"
 datastore = "1.2.1"
 coroutines = "1.11.0"
-serialization = "1.11.0"
+serialization = "1.12.0"
 timber = "5.0.1"
 profileinstaller = "1.4.1"
 javaxInject = "1"
