@@ -12,9 +12,9 @@ android {
     namespace = "io.github.ukpratik.folio"
 
     defaultConfig {
-        applicationId = "io.github.ukpratik.folio" // permanent after first upload (ADR-0022)
-        versionCode = 2
-        versionName = "1.0.1"
+        applicationId = "io.github.ukpratik.folio" // F-Droid; the Play flavour adds ".play" (ADR-0025)
+        versionCode = 3
+        versionName = "1.0.2"
         // Settings → Send feedback recipient. Set `folio.feedbackEmail` in gradle.properties; blank lets the user choose.
         buildConfigField("String", "FEEDBACK_EMAIL", "\"${providers.gradleProperty("folio.feedbackEmail").getOrElse("")}\"")
         // Phones are ARM. Dropping x86/x86_64 keeps OpenCV's native code out of the APK (NFR-08).
@@ -62,7 +62,10 @@ android {
     productFlavors {
         create("play") {
             dimension = "store"
-            buildConfigField("String", "RATE_URL", "\"market://details?id=io.github.ukpratik.folio\"")
+            // Play has its own package name so it never collides with F-Droid's io.github.ukpratik.folio
+            // (Android developer verification only accepts F-Droid's key for that name). ADR-0025.
+            applicationIdSuffix = ".play"
+            buildConfigField("String", "RATE_URL", "\"market://details?id=io.github.ukpratik.folio.play\"")
             buildConfigField("boolean", "UPDATE_PROMPTS", "true")
         }
         create("fdroid") {
@@ -88,7 +91,7 @@ baselineProfile {
     mergeIntoMain = true
 }
 
-// FR-34 licence screen + CI licence gate (ADR-0023): generated at build time, fully offline.
+// FR-34 licence screen + CI licence gate (ADR-0024): generated at build time, fully offline.
 aboutLibraries {
     offlineMode = true
     collect {

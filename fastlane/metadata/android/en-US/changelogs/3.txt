@@ -1,0 +1,1 @@
+• No changes to how Folio works. This release prepares a separate Google Play edition with its own app ID, so the Play and F-Droid versions can be installed side by side.
