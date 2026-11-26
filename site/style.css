@@ -16,3 +16,7 @@ ul { padding-left: 1.2em; }
 li { margin: 6px 0; }
 footer { margin-top: 48px; font-size: 0.9rem; color: var(--muted); }
 .certs code { font-size: 0.8rem; overflow-wrap: anywhere; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
+.badges a { display: inline-block; line-height: 0; }
+.badges img { height: 64px; width: auto; }
+.legal { font-size: 0.8rem; margin: 8px 0 0; }
