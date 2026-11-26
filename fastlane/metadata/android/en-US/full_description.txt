@@ -1,13 +1,34 @@
-Turn photos and paper documents into clean, ready-to-submit PDFs in seconds — completely offline.
+Folio turns paper documents and photos into clean PDFs that fit upload size limits, right on your phone. It has no internet permission, so your documents never leave the device.
+
+Made for the moment a form says "PDF only, maximum 100 KB".
 
 <b>Scan or import</b>
-Scan with your camera with automatic edge detection, or import photos from your gallery. You can even share photos to Folio from WhatsApp or any app.
+• Scan with the camera, with automatic edge detection.
+• Import photos from your gallery, or share images to Folio from WhatsApp, Files or any app.
+• Combine many pages into one PDF.
 
-<b>Fix it fast</b>
-Auto-crop and straighten pages, rotate, reorder, duplicate or delete pages. Make text clearer with Auto, Grayscale or B&W modes.
+<b>Fix pages in seconds</b>
+• Auto-crop and straighten tilted pages.
+• Rotate, reorder, duplicate or delete pages.
+• Make text easier to read with Auto, Grayscale or Black & White modes.
 
 <b>Fit any size limit</b>
-Need a PDF under 100 KB, 200 KB or 1 MB for an exam, job or government form? Pick the limit and Folio does the rest. Export as PDF or JPG images.
+• Set a size limit anywhere from 50 KB to 50 MB, and Folio compresses the file to fit. If a limit is too small for the pages, it tells you and suggests what to try.
+• Export as a PDF, or as JPG images (each image under the limit) when a portal wants photos instead.
+• Useful for exam and job application forms, college admissions, scholarship portals, visa and passport uploads, bank KYC, office paperwork and email attachments.
 
-<b>Truly private</b>
-Folio has no internet permission, so your documents never leave your phone. No account. No ads. No tracking. Free and open source (GPL-3.0).
+<b>Private by design</b>
+• No internet permission: Folio cannot upload your files, even by mistake.
+• No account, no sign-in, no ads, no tracking, no analytics.
+• No watermark on your documents.
+• Your scans are stored in the app's private storage until you export or delete them.
+
+<b>Free and open source</b>
+Folio is free software under the GPL-3.0 licence. The source code is public on GitHub, and the same app is available on F-Droid. There are no paid features and no subscription.
+
+<b>Good to know</b>
+• Works without a network connection, anywhere.
+• Very small size limits mean lower image quality. If text looks soft, try Black & White mode, fewer pages, or a slightly larger limit.
+• Folio does not do OCR (text recognition) yet.
+
+Questions or ideas? Use the email on this page or open an issue on GitHub. If Folio saved you a trip to a cyber café, a rating helps other people find it.
