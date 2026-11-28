@@ -67,6 +67,10 @@ Folio (`io.github.ukpratik.folio`) is published by its developer, Pratik Ukey ([
 | Google Play upload key (held by the developer) | `B5:BD:DB:7E:2E:99:86:11:8D:CF:2F:7F:08:28:CD:07:0E:AE:05:73:73:F9:CF:2B:C2:DE:2A:4C:0A:6D:A1:6D` |
 | F-Droid build (F-Droid builds from this source and signs with its own key) | `35:0C:A3:D7:5C:DB:72:F2:EE:69:CE:B5:43:86:C2:6C:E1:C3:27:3C:38:D5:2D:81:57:42:67:51:BD:6F:8B:B4` |
 
+## Support
+
+Folio is free, with no ads and no tracking. If it's useful to you, you can support its development on [GitHub Sponsors](https://github.com/sponsors/ukpratik). Starring the repo or telling a friend about it helps too.
+
 ## Licence
 
 Folio is free software, licensed under the **GNU General Public License v3.0 or later** — see [`LICENSE`](LICENSE).
